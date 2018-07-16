@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -25,9 +25,6 @@ package thebob.ja2maptool.ui.dialogs.mapselect;
 
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
-import java.io.File;
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
@@ -47,6 +44,10 @@ import javafx.util.StringConverter;
 import thebob.assetloader.vfs.VFSConfig;
 import thebob.assetmanager.AssetManager;
 
+import java.io.File;
+import java.net.URL;
+import java.util.ResourceBundle;
+
 /**
  * FXML Controller class
  *
@@ -54,161 +55,158 @@ import thebob.assetmanager.AssetManager;
  */
 public class MapSelectionDialogView implements FxmlView<MapSelectionDialogViewModel>, Initializable {
 
-    @FXML
-    private TabPane tabs;
+  @FXML
+  private TabPane tabs;
 
-    @FXML
-    private Tab tab_vfs;
+  @FXML
+  private Tab tab_vfs;
 
-    @FXML
-    private Tab tab_file;
+  @FXML
+  private Tab tab_file;
 
-    @FXML
-    private Label file_name;
+  @FXML
+  private Label file_name;
 
-    @FXML
-    private Button file_select;
+  @FXML
+  private Button file_select;
 
-    @FXML
-    private ToggleGroup vfs_type;
+  @FXML
+  private ToggleGroup vfs_type;
 
-    @FXML
-    private RadioButton vfs_mode_local;
+  @FXML
+  private RadioButton vfs_mode_local;
 
-    @FXML
-    private RadioButton vfs_mode_workspace;
+  @FXML
+  private RadioButton vfs_mode_workspace;
 
-    @FXML
-    private ChoiceBox<AssetManager> vfs_picker_workspace;
+  @FXML
+  private ChoiceBox<AssetManager> vfs_picker_workspace;
 
-    @FXML
-    private ChoiceBox<VFSConfig> vfs_picker_local;
+  @FXML
+  private ChoiceBox<VFSConfig> vfs_picker_local;
+  @FXML
+  private TreeView<String> map_list;
+  // MVVMFX inject
+  @InjectViewModel
+  private MapSelectionDialogViewModel viewModel;
+  private Stage showDialog;
 
-    @FXML
-    void select_map_file(MouseEvent event) {
-	FileChooser chooser = new FileChooser();
-	chooser.setTitle("Load map file");
-	File defaultDirectory = new File(".");
+  @FXML
+  void select_map_file(MouseEvent event) {
+    FileChooser chooser = new FileChooser();
+    chooser.setTitle("Load map file");
+    File defaultDirectory = new File(".");
 
-	chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("map files", "*.dat"));
-	chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("all files", "*.*"));
+    chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("map files", "*.dat"));
+    chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("all files", "*.*"));
 
-	chooser.setInitialDirectory(defaultDirectory);
-	File selectedDirectory = chooser.showOpenDialog(file_select.getScene().getWindow());
-	if (selectedDirectory != null) {
-	    viewModel.selectFile(selectedDirectory.getPath());
-	}
-
+    chooser.setInitialDirectory(defaultDirectory);
+    File selectedDirectory = chooser.showOpenDialog(file_select.getScene().getWindow());
+    if (selectedDirectory != null) {
+      viewModel.selectFile(selectedDirectory.getPath());
     }
 
-    @FXML
-    void load_file(MouseEvent event) {
-	if (vfs_type.getSelectedToggle() == vfs_mode_local) {
-	    viewModel.loadFileVFS(vfs_picker_local.getSelectionModel().getSelectedItem());
-	} else {
-	    viewModel.loadFile(vfs_picker_workspace.getSelectionModel().getSelectedItem());
-	}
+  }
+
+  @FXML
+  void load_file(MouseEvent event) {
+    if (vfs_type.getSelectedToggle() == vfs_mode_local) {
+      viewModel.loadFileVFS(vfs_picker_local.getSelectionModel().getSelectedItem());
+    } else {
+      viewModel.loadFile(vfs_picker_workspace.getSelectionModel().getSelectedItem());
+    }
+  }
+
+  @FXML
+  void canceled(MouseEvent event) {
+    showDialog.close();
+  }
+
+  @FXML
+  void load(MouseEvent event) {
+    viewModel.loadVfs(map_list.getSelectionModel().getSelectedItem());
+    showDialog.close();
+  }
+
+  public void setDisplayingStage(Stage showDialog) {
+    this.showDialog = showDialog;
+  }
+
+  @Override
+  public void initialize(URL url, ResourceBundle rb) {
+    map_list.setRoot(viewModel.getMapListRoot());
+
+    // if there's no VFS loaded, default to file tab
+    if (viewModel.getVfs().getManagers().isEmpty()) {
+      tabs.getSelectionModel().select(tab_file);
     }
 
-    @FXML
-    private TreeView<String> map_list;
+    viewModel.subscribe(MapSelectionDialogViewModel.CLOSE_DIALOG_NOTIFICATION, (key, payload) -> {
+      showDialog.close();
+    });
 
-    @FXML
-    void canceled(MouseEvent event) {
-	showDialog.close();
-    }
+    viewModel.subscribe(MapSelectionDialogViewModel.FILE_NAME_CHANGED, (key, payload) -> {
+      file_name.setText((String) payload[0]);
+    });
 
-    @FXML
-    void load(MouseEvent event) {
-	viewModel.loadVfs(map_list.getSelectionModel().getSelectedItem());
-	showDialog.close();
-    }
+    // setup workspace VFS picker
+    vfs_mode_workspace.setDisable(true);
+    vfs_picker_workspace.setDisable(true);
 
-    // MVVMFX inject
-    @InjectViewModel
-    private MapSelectionDialogViewModel viewModel;
+    vfs_picker_workspace.itemsProperty().addListener(event -> { // items are cloned from loaded asset manager list, so update status when list is swapped
+      vfs_mode_workspace.setDisable(vfs_picker_workspace.getItems().isEmpty());
+      vfs_picker_workspace.setDisable(vfs_picker_workspace.getItems().isEmpty());
+      Platform.runLater(() -> vfs_picker_workspace.getSelectionModel().selectFirst());
+    });
+    vfs_picker_workspace.setItems(viewModel.getLoadedVfsList());
 
-    private Stage showDialog;
+    vfs_picker_workspace.setConverter(new StringConverter<AssetManager>() {
+      @Override
+      public String toString(AssetManager object) {
+        return object.getVfs().getPath().getFileName().toString();
+      }
 
-    public void setDisplayingStage(Stage showDialog) {
-	this.showDialog = showDialog;
-    }
+      @Override
+      public AssetManager fromString(String string) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      }
+    });
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-	map_list.setRoot(viewModel.getMapListRoot());
+    // setup map file local VFS picker
+    vfs_mode_local.setDisable(true);
+    vfs_picker_local.setDisable(true);
 
-	// if there's no VFS loaded, default to file tab
-	if (viewModel.getVfs().getManagers().isEmpty()) {
-	    tabs.getSelectionModel().select(tab_file);
-	}
+    vfs_picker_local.setItems(viewModel.getLocalVfsList());
+    vfs_picker_local.getItems().addListener((ListChangeListener.Change<? extends VFSConfig> c) -> {  // bound to an actual observable list which may change
+      if (viewModel.getLocalVfsList().isEmpty()) {
+        vfs_mode_local.setDisable(true);
+        vfs_picker_local.setDisable(true);
+        if (vfs_type.getSelectedToggle() == vfs_mode_local && vfs_mode_workspace.isDisabled() == false) {
+          vfs_type.selectToggle(vfs_mode_workspace);
+        }
+      } else {
+        vfs_mode_local.setDisable(false);
+        vfs_picker_local.setDisable(false);
+        if (vfs_type.getSelectedToggle() == vfs_mode_workspace && vfs_mode_workspace.isDisabled()) {
+          vfs_type.selectToggle(vfs_mode_local);
+        }
+      }
 
-	viewModel.subscribe(MapSelectionDialogViewModel.CLOSE_DIALOG_NOTIFICATION, (key, payload) -> {
-	    showDialog.close();
-	});
+      Platform.runLater(() -> vfs_picker_local.getSelectionModel().selectFirst());
+    });
 
-	viewModel.subscribe(MapSelectionDialogViewModel.FILE_NAME_CHANGED, (key, payload) -> {
-	    file_name.setText((String) payload[0]);
-	});
+    vfs_picker_local.setConverter(new StringConverter<VFSConfig>() {
+      @Override
+      public String toString(VFSConfig object) {
+        return object.getPath().getFileName().toString();
+      }
 
-	// setup workspace VFS picker
-	vfs_mode_workspace.setDisable(true);
-	vfs_picker_workspace.setDisable(true);
+      @Override
+      public VFSConfig fromString(String string) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      }
+    });
 
-	vfs_picker_workspace.itemsProperty().addListener(event -> { // items are cloned from loaded asset manager list, so update status when list is swapped
-	    vfs_mode_workspace.setDisable(vfs_picker_workspace.getItems().isEmpty());
-	    vfs_picker_workspace.setDisable(vfs_picker_workspace.getItems().isEmpty());
-	    Platform.runLater(() -> vfs_picker_workspace.getSelectionModel().selectFirst());
-	});
-	vfs_picker_workspace.setItems(viewModel.getLoadedVfsList());
-
-	vfs_picker_workspace.setConverter(new StringConverter<AssetManager>() {
-	    @Override
-	    public String toString(AssetManager object) {
-		return object.getVfs().getPath().getFileName().toString();
-	    }
-
-	    @Override
-	    public AssetManager fromString(String string) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	    }
-	});
-
-	// setup map file local VFS picker
-	vfs_mode_local.setDisable(true);
-	vfs_picker_local.setDisable(true);
-
-	vfs_picker_local.setItems(viewModel.getLocalVfsList());
-	vfs_picker_local.getItems().addListener((ListChangeListener.Change<? extends VFSConfig> c) -> {	// bound to an actual observable list which may change
-	    if (viewModel.getLocalVfsList().isEmpty()) {
-		vfs_mode_local.setDisable(true);
-		vfs_picker_local.setDisable(true);
-		if (vfs_type.getSelectedToggle() == vfs_mode_local && vfs_mode_workspace.isDisabled() == false) {
-		    vfs_type.selectToggle(vfs_mode_workspace);
-		}
-	    } else {
-		vfs_mode_local.setDisable(false);
-		vfs_picker_local.setDisable(false);
-		if (vfs_type.getSelectedToggle() == vfs_mode_workspace && vfs_mode_workspace.isDisabled()) {
-		    vfs_type.selectToggle(vfs_mode_local);
-		}
-	    }
-
-	    Platform.runLater(() -> vfs_picker_local.getSelectionModel().selectFirst());
-	});
-
-	vfs_picker_local.setConverter(new StringConverter<VFSConfig>() {
-	    @Override
-	    public String toString(VFSConfig object) {
-		return object.getPath().getFileName().toString();
-	    }
-
-	    @Override
-	    public VFSConfig fromString(String string) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	    }
-	});
-
-    }
+  }
 
 }

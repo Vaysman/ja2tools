@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 the_bob.
@@ -23,60 +23,60 @@
  */
 package thebob.assetloader.dat.tileset;
 
-import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
 import thebob.assetloader.dat.tileset.data.TilesetData;
 import thebob.assetloader.dat.tileset.data.TilesetDataFile;
 
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+
 /**
- *
  * @author the_bob
  */
 public class TilesetDataFileLoader {
 
-    private static void trimByteString(byte[] in){
-	    boolean eos = false;
-	    for (int j = 0; j < in.length; j++) {
-		if (eos) {
-		    in[j] = 0;
-		}
-		eos = (in[j] == (byte) 0);
-	    }    
+  private static void trimByteString(byte[] in) {
+    boolean eos = false;
+    for (int j = 0; j < in.length; j++) {
+      if (eos) {
+        in[j] = 0;
+      }
+      eos = (in[j] == (byte) 0);
     }
-    
-    public static TilesetDataFile load(ByteBuffer tilesetDefs) {
-	int nameSize = 32;
+  }
 
-	TilesetDataFile fileData = new TilesetDataFile();
+  public static TilesetDataFile load(ByteBuffer tilesetDefs) {
+    int nameSize = 32;
 
-	fileData.tilesetCount = tilesetDefs.get();   // byte
-	fileData.filesPerTileset = tilesetDefs.getInt();   // int
+    TilesetDataFile fileData = new TilesetDataFile();
 
-	for (int i = 0; i < fileData.tilesetCount; i++) {
-	    TilesetData tilesetData = new TilesetData();
-	    byte[] tilesetNameBytes = new byte[nameSize];
-	    tilesetDefs.get(tilesetNameBytes);	  
-	    
-	    trimByteString(tilesetNameBytes);// trim to the first \0 string terminator. Files are filled with junk.
+    fileData.tilesetCount = tilesetDefs.get();   // byte
+    fileData.filesPerTileset = tilesetDefs.getInt();   // int
 
-	    tilesetData.name = new String(tilesetNameBytes, StandardCharsets.US_ASCII);
-	    tilesetData.ambienceId = tilesetDefs.get();
-	    tilesetData.index = i;
+    for (int i = 0; i < fileData.tilesetCount; i++) {
+      TilesetData tilesetData = new TilesetData();
+      byte[] tilesetNameBytes = new byte[nameSize];
+      tilesetDefs.get(tilesetNameBytes);
 
-	    // System.out.println("\n-> " + tilesetData.name);
+      trimByteString(tilesetNameBytes);// trim to the first \0 string terminator. Files are filled with junk.
 
-	    for (int j = 0; j < fileData.filesPerTileset; j++) {
-		byte[] fileNameBytes = new byte[nameSize];
-		tilesetDefs.get(fileNameBytes);
-		
-		trimByteString(fileNameBytes);
-		
-		String fileName = new String(fileNameBytes, StandardCharsets.US_ASCII).trim();
-		// System.out.println("\t"+j+ " ->\t" + fileName);
-		tilesetData.files.put(j, fileName.length() > 0 ? fileName : null);
-	    }
-	    fileData.tilesets.add(tilesetData);
-	}
-	return fileData;
+      tilesetData.name = new String(tilesetNameBytes, StandardCharsets.US_ASCII);
+      tilesetData.ambienceId = tilesetDefs.get();
+      tilesetData.index = i;
+
+      // System.out.println("\n-> " + tilesetData.name);
+
+      for (int j = 0; j < fileData.filesPerTileset; j++) {
+        byte[] fileNameBytes = new byte[nameSize];
+        tilesetDefs.get(fileNameBytes);
+
+        trimByteString(fileNameBytes);
+
+        String fileName = new String(fileNameBytes, StandardCharsets.US_ASCII).trim();
+        // System.out.println("\t"+j+ " ->\t" + fileName);
+        tilesetData.files.put(j, fileName.length() > 0 ? fileName : null);
+      }
+      fileData.tilesets.add(tilesetData);
     }
+    return fileData;
+  }
 }

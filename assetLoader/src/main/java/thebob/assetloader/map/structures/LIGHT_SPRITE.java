@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 the_bob.
@@ -24,22 +24,19 @@
 package thebob.assetloader.map.structures;
 
 import thebob.assetloader.map.helpers.AutoLoadingMapStruct;
-import java.nio.ByteOrder;
-import javolution.io.Struct;
 
 /**
- *
  * @author the_bob
  */
 public class LIGHT_SPRITE extends AutoLoadingMapStruct {
-    
-    Signed16 iX = new Signed16();
-    Signed16 iY = new Signed16();
-    Signed16 iOldX = new Signed16();
-    Signed16 iOldY = new Signed16();
-    Signed16 iAnimSpeed = new Signed16();
-    Signed32 iTemplate = new Signed32();
-    Unsigned32 uiFlags = new Unsigned32();
-    Unsigned32 uiLightType = new Unsigned32();
-    
+
+  Signed16 iX = new Signed16();
+  Signed16 iY = new Signed16();
+  Signed16 iOldX = new Signed16();
+  Signed16 iOldY = new Signed16();
+  Signed16 iAnimSpeed = new Signed16();
+  Signed32 iTemplate = new Signed32();
+  Unsigned32 uiFlags = new Unsigned32();
+  Unsigned32 uiLightType = new Unsigned32();
+
 }

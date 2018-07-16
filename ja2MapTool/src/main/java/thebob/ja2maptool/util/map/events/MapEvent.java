@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -32,50 +32,49 @@ package thebob.ja2maptool.util.map.events;
  */
 public class MapEvent {
 
-    public enum ChangeType {
-        // Layer events
-        LAYER_ALTERED,
-        // MapLayer events
-        MAP_LOADED, MAP_ALTERED,
-        // TileRenderer events
-        MAP_WINDOW_MOVED, MAP_WINDOW_ZOOMED, MAP_CANVAS_CHANGED,
-        // Selection controller events
-        SELECTION_CHANGED, SELECTION_STARTED, SELECTION_CLEARED,
-        // Clipboard controller events
-        CLIPBOARD_PLACED, CLIPBOARD_FILLED, CLIPBOARD_EMPTIED,
-        // placement management
-        PLACEMENT_ADDED, PLACEMENT_DELETED,
-        PLACEMENT_PICKED, PLACEMENT_CANCELED, // picking a placement either ends in deleting the original and adding a new one or canceling
-        PLACEMENT_HOVERED,
-        PLACEMENT_SELECTED, PLACEMENT_DESELECTED,
-        PLACEMENT_LAYER_SWITCHED, PLACEMENT_LAYER_DELETED, PLACEMENT_LAYER_ADDED, PLACEMENT_LAYER_MOVED,
-        PLACEMENT_LIST_MOVED // Moved a bunch of selected placements - a hint to update lists and status displays
-    }
+  final private ChangeType type;
+  final private MapEventPayload payload;
+  public MapEvent(ChangeType type) {
+    this.type = type;
+    this.payload = null;
+  }
 
-    final private ChangeType type;
-    final private MapEventPayload payload;
+  public MapEvent(ChangeType type, MapEventPayload payload) {
+    this.type = type;
+    this.payload = payload;
+  }
 
-    public MapEvent(ChangeType type) {        
-        this.type = type;
-        this.payload = null;
-    }
+  public ChangeType getType() {
+    return type;
+  }
 
-    public MapEvent(ChangeType type, MapEventPayload payload) {
-        this.type = type;
-        this.payload = payload;
-    }
+  public MapEventPayload getPayload() {
+    return payload;
+  }
 
-    public ChangeType getType() {
-        return type;
-    }
+  @Override
+  public String toString() {
+    return "MapEvent{" + "type=" + type + '}';
+  }
 
-    public MapEventPayload getPayload() {
-        return payload;
-    }
-
-    @Override
-    public String toString() {
-        return "MapEvent{" + "type=" + type + '}';
-    }
+  public enum ChangeType {
+    // Layer events
+    LAYER_ALTERED,
+    // MapLayer events
+    MAP_LOADED, MAP_ALTERED,
+    // TileRenderer events
+    MAP_WINDOW_MOVED, MAP_WINDOW_ZOOMED, MAP_CANVAS_CHANGED,
+    // Selection controller events
+    SELECTION_CHANGED, SELECTION_STARTED, SELECTION_CLEARED,
+    // Clipboard controller events
+    CLIPBOARD_PLACED, CLIPBOARD_FILLED, CLIPBOARD_EMPTIED,
+    // placement management
+    PLACEMENT_ADDED, PLACEMENT_DELETED,
+    PLACEMENT_PICKED, PLACEMENT_CANCELED, // picking a placement either ends in deleting the original and adding a new one or canceling
+    PLACEMENT_HOVERED,
+    PLACEMENT_SELECTED, PLACEMENT_DESELECTED,
+    PLACEMENT_LAYER_SWITCHED, PLACEMENT_LAYER_DELETED, PLACEMENT_LAYER_ADDED, PLACEMENT_LAYER_MOVED,
+    PLACEMENT_LIST_MOVED // Moved a bunch of selected placements - a hint to update lists and status displays
+  }
 
 }

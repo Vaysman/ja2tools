@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -30,98 +30,93 @@ import thebob.assetmanager.AssetManager;
 import thebob.ja2maptool.util.compositor.SelectedTiles;
 
 /**
- *
  * @author the_bob
  */
 public class MapScope implements Scope {
-    public static final String MAP_UPDATED = "MAP_UPDATED";
-    public static final String SELECTION_UPDATED = "SELECTION_UPDATED";
-    
-    public enum MapLoadMode {
-	From_VFS,
-	From_File
-    }
-    
-    String mapName = null;	    // short name for the map
-    String mapAssetPath = null;	    // vfs path for the map
-    MapLoadMode loadMode = null;
-    
-    AssetManager mapAssets = null;
-    
-    Integer tilesetId = null;
-    Tileset tileset = null;
-    MapData mapData = null;
-    
-    SelectedTiles selection = null;
+  public static final String MAP_UPDATED = "MAP_UPDATED";
+  public static final String SELECTION_UPDATED = "SELECTION_UPDATED";
+  String mapName = null;      // short name for the map
+  String mapAssetPath = null;      // vfs path for the map
+  MapLoadMode loadMode = null;
+  AssetManager mapAssets = null;
+  Integer tilesetId = null;
+  Tileset tileset = null;
+  MapData mapData = null;
+  SelectedTiles selection = null;
 
-    public SelectedTiles getSelection() {
-	return selection;
-    }
+  public SelectedTiles getSelection() {
+    return selection;
+  }
 
-    public void setSelection(SelectedTiles selection) {
-	this.selection = selection;
-	publish(SELECTION_UPDATED);
-    }
-    
-    public String getMapName() {
-	return mapName;
-    }
+  public void setSelection(SelectedTiles selection) {
+    this.selection = selection;
+    publish(SELECTION_UPDATED);
+  }
 
-    public void setMapName(String mapName) {
-	this.mapName = mapName;
-    }
+  public String getMapName() {
+    return mapName;
+  }
 
-    public String getMapAssetPath() {
-	return mapAssetPath;
-    }
+  public void setMapName(String mapName) {
+    this.mapName = mapName;
+  }
 
-    public void setMapAssetPath(String mapAssetPath) {
-	this.mapAssetPath = mapAssetPath;
-    }
+  public String getMapAssetPath() {
+    return mapAssetPath;
+  }
 
-    public MapLoadMode getLoadMode() {
-	return loadMode;
-    }
+  public void setMapAssetPath(String mapAssetPath) {
+    this.mapAssetPath = mapAssetPath;
+  }
 
-    public void setLoadMode(MapLoadMode loadMode) {
-	this.loadMode = loadMode;
-    }
+  public MapLoadMode getLoadMode() {
+    return loadMode;
+  }
 
-    public AssetManager getMapAssets() {
-	return mapAssets;
-    }
+  public void setLoadMode(MapLoadMode loadMode) {
+    this.loadMode = loadMode;
+  }
 
-    public void setMapAssets(AssetManager mapAssets) {
-	this.mapAssets = mapAssets;
-    }
+  public AssetManager getMapAssets() {
+    return mapAssets;
+  }
 
-    public Tileset getTileset() {
-	return tileset;
-    }
+  public void setMapAssets(AssetManager mapAssets) {
+    this.mapAssets = mapAssets;
+  }
 
-    public void setTileset(Tileset tileset) {
-	this.tileset = tileset;
-    }
+  public Tileset getTileset() {
+    return tileset;
+  }
 
-    public MapData getMapData() {
-	return mapData;
-    }
+  public void setTileset(Tileset tileset) {
+    this.tileset = tileset;
+  }
 
-    public void setMapData(MapData mapData) {
-	this.mapData = mapData;
-    }
+  public MapData getMapData() {
+    return mapData;
+  }
 
-    public Integer getTilesetId() {
-	return tilesetId;
-    }
+  public void setMapData(MapData mapData) {
+    this.mapData = mapData;
+  }
 
-    public void setTilesetId(Integer tilesetId) {
-	this.tilesetId = tilesetId;
-    }
+  public Integer getTilesetId() {
+    return tilesetId;
+  }
 
-    @Override
-    public String toString() {
-	return "MapScope{" + "mapName=" + mapName + ", loadMode=" + loadMode + ", tilesetId=" + tilesetId + ", selection=" + selection + '}';
-    }
-    
+  public void setTilesetId(Integer tilesetId) {
+    this.tilesetId = tilesetId;
+  }
+
+  @Override
+  public String toString() {
+    return "MapScope{" + "mapName=" + mapName + ", loadMode=" + loadMode + ", tilesetId=" + tilesetId + ", selection=" + selection + '}';
+  }
+
+  public enum MapLoadMode {
+    From_VFS,
+    From_File
+  }
+
 }

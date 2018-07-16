@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -26,21 +26,20 @@ package thebob.ja2maptool.util.map.events;
 import thebob.ja2maptool.util.compositor.SnippetPlacement;
 
 /**
- *
  * @author the_bob
  */
 public class MapPlacementEventPayload implements MapEventPayload {
 
 
-    SnippetPlacement placement;
+  SnippetPlacement placement;
 
-    public MapPlacementEventPayload(SnippetPlacement placement) {
-        this.placement = placement;
-    }
+  public MapPlacementEventPayload(SnippetPlacement placement) {
+    this.placement = placement;
+  }
 
 
-    public SnippetPlacement getPlacement() {
-        return placement;
-    }
+  public SnippetPlacement getPlacement() {
+    return placement;
+  }
 
 }

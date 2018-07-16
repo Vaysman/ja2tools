@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -23,10 +23,11 @@
  */
 package thebob.ja2maptool.util.map.renderer;
 
+import thebob.ja2maptool.util.map.layers.base.ITileLayerGroup;
+import thebob.ja2maptool.util.map.renderer.renderlayer.OverlaySettings;
+
 import java.util.List;
 import java.util.Observer;
-import thebob.ja2maptool.util.map.renderer.renderlayer.OverlaySettings;
-import thebob.ja2maptool.util.map.layers.base.ITileLayerGroup;
 
 /**
  * Extended tile renderer interface including methods for managing its state
@@ -35,72 +36,78 @@ import thebob.ja2maptool.util.map.layers.base.ITileLayerGroup;
  */
 public interface ITileRendererManager extends ITileRendererControls, Observer {
 
-    /*
-     * Direct access to render layer group data. Note that changes done this way might not properly update all the renderer settings.
-     * Use the add/remove methods to for manipulating the layer groups.
-     */
-    List<ITileLayerGroup> getRenderLayers();
+  /*
+   * Direct access to render layer group data. Note that changes done this way might not properly update all the renderer settings.
+   * Use the add/remove methods to for manipulating the layer groups.
+   */
+  List<ITileLayerGroup> getRenderLayers();
 
-    /**
-     * Adds an overlay to the renderer - the passed layerGroup will get its own canvas placed over the current render window.
-     * @param layer
-     * @param settings 
-     */
-    void addRenderOverlay(ITileLayerGroup layer, OverlaySettings settings);
-    
-    /**
-     * Adds a layer to the renderer. This layer will be placed on top of existing layers and rendered on the base canvas.
-     * @param layer 
-     */
-    void addRenderLayer(ITileLayerGroup layer);    
+  /**
+   * Adds an overlay to the renderer - the passed layerGroup will get its own canvas placed over the current render window.
+   *
+   * @param layer
+   * @param settings
+   */
+  void addRenderOverlay(ITileLayerGroup layer, OverlaySettings settings);
 
-    void removeRenderLayer(ITileLayerGroup layer);
+  /**
+   * Adds a layer to the renderer. This layer will be placed on top of existing layers and rendered on the base canvas.
+   *
+   * @param layer
+   */
+  void addRenderLayer(ITileLayerGroup layer);
 
-    void removeRenderLayer(int index);
+  void removeRenderLayer(ITileLayerGroup layer);
 
-    public int getCanvasX();
+  void removeRenderLayer(int index);
 
-    public int getCanvasY();
-    
-    // -- view window manipulation methods
-    
-    /*
-     *
-     * moves the view window by specified offsets and redraws the screen. Call with 0,0 to force screen refresh. note that the parameters are offsets to move the window by, not coordinates to move the window to. *
-     */
-    void moveWindow(int x, int y);
-    
-    void centerWindow();
-    
-    /**
-     * Sets the renderer scale and updated the view
-     * @param scale 
-     */
-    void setScale(double scale);
-    /**
-     * Gets the current rendering scale
-     * @return 
-     */
-    double getScale();
+  int getCanvasX();
 
-    /*
-     *
-     * use this to move the window to specific coordinates, followed by moveWindow(0,0) *
-     */
-    public void setWindowOffsetX(int oldX);
+  int getCanvasY();
 
-    /*
-     *
-     * use this to move the window to specific coordinates, followed by moveWindow(0,0) *
-     */
-    void setWindowOffsetY(int oldY);
+  // -- view window manipulation methods
 
-    int getWindowOffsetY();
+  /*
+   *
+   * moves the view window by specified offsets and redraws the screen. Call with 0,0 to force screen refresh. note that the parameters are offsets to move the window by, not coordinates to move the window to. *
+   */
+  void moveWindow(int x, int y);
 
-    int getWindowOffsetX();    
+  void centerWindow();
 
-    public void addObserver(Observer aThis);
-    public void deleteObserver(Observer aThis);
+  /**
+   * Gets the current rendering scale
+   *
+   * @return
+   */
+  double getScale();
 
-    public void shutdown();
+  /**
+   * Sets the renderer scale and updated the view
+   *
+   * @param scale
+   */
+  void setScale(double scale);
+
+  int getWindowOffsetY();
+
+  /*
+   *
+   * use this to move the window to specific coordinates, followed by moveWindow(0,0) *
+   */
+  void setWindowOffsetY(int oldY);
+
+  int getWindowOffsetX();
+
+  /*
+   *
+   * use this to move the window to specific coordinates, followed by moveWindow(0,0) *
+   */
+  public void setWindowOffsetX(int oldX);
+
+  public void addObserver(Observer aThis);
+
+  public void deleteObserver(Observer aThis);
+
+  public void shutdown();
 }

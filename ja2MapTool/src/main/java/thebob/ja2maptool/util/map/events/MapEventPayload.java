@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -24,9 +24,8 @@
 package thebob.ja2maptool.util.map.events;
 
 /**
- *
  * @author the_bob
  */
 public interface MapEventPayload {
-    
+
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -28,43 +28,42 @@ import thebob.assetloader.tileset.Tileset;
 import thebob.ja2maptool.util.tilesearch.histogram.TileHistogramComparator;
 
 /**
- *
  * @author the_bob
  */
 public class TileSearch {
-    
-    Tileset tileset;
-    int files;
-    SearchMethod method;
-    TileComparator comparator;
 
-    public TileSearch(Tileset tileset, SearchMethod method) {
-	this.tileset = tileset;
-	this.files = tileset.getFileCount();
-	
-	switch(method){
-	    case Simple:
-		break;
-	    case HistogramSimple:
-		comparator = new TileHistogramComparator(tileset, TileHistogramComparator.ComparatorType.Simple, 32);
-		break;
-	    case HistogramEMD:
-		comparator = new TileHistogramComparator(tileset, TileHistogramComparator.ComparatorType.EMD, 8);
-		break;
-	    default:
-		throw new AssertionError(method.name());
-	
-	}
-    }
+  Tileset tileset;
+  int files;
+  SearchMethod method;
+  TileComparator comparator;
 
-    public TileSearchResult tileSearch(Tile source) {
-	return comparator.search(source);
+  public TileSearch(Tileset tileset, SearchMethod method) {
+    this.tileset = tileset;
+    this.files = tileset.getFileCount();
+
+    switch (method) {
+      case Simple:
+        break;
+      case HistogramSimple:
+        comparator = new TileHistogramComparator(tileset, TileHistogramComparator.ComparatorType.Simple, 32);
+        break;
+      case HistogramEMD:
+        comparator = new TileHistogramComparator(tileset, TileHistogramComparator.ComparatorType.EMD, 8);
+        break;
+      default:
+        throw new AssertionError(method.name());
+
     }
-    
-    public enum SearchMethod{
-	Simple,
-	HistogramSimple,
-	HistogramEMD,
-    }
+  }
+
+  public TileSearchResult tileSearch(Tile source) {
+    return comparator.search(source);
+  }
+
+  public enum SearchMethod {
+    Simple,
+    HistogramSimple,
+    HistogramEMD,
+  }
 
 }

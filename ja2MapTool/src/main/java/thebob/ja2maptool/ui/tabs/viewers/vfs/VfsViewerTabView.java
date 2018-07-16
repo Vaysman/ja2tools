@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -27,8 +27,6 @@ import de.saxsys.mvvmfx.FluentViewLoader;
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
 import de.saxsys.mvvmfx.ViewTuple;
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -47,6 +45,10 @@ import thebob.ja2maptool.ui.tabs.viewers.map.MapViewerTabView;
 import thebob.ja2maptool.ui.tabs.viewers.map.MapViewerTabViewModel;
 import thebob.ja2maptool.ui.tabs.viewers.sti.StiViewerTabView;
 import thebob.ja2maptool.ui.tabs.viewers.sti.StiViewerTabViewModel;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+
 import static thebob.ja2maptool.ui.tabs.viewers.vfs.VfsViewerTabViewModel.PREVIEW_OPTIONS_UPDATED;
 import static thebob.ja2maptool.ui.tabs.viewers.vfs.VfsViewerTabViewModel.PREVIEW_REQUESTED;
 
@@ -57,164 +59,156 @@ import static thebob.ja2maptool.ui.tabs.viewers.vfs.VfsViewerTabViewModel.PREVIE
  */
 public class VfsViewerTabView implements FxmlView<VfsViewerTabViewModel>, Initializable {
 
-    @FXML
-    private Label vfs_name;
+  ViewTuple<MapViewerTabView, MapViewerTabViewModel> mapViewer = null;
+  @FXML
+  private Label vfs_name;
+  @FXML
+  private TreeView<String> vfs_list;
+  @FXML
+  private ListView<VFSAccessor> vfs_variants;
+  @FXML
+  private AnchorPane vfs_preview;
+  @FXML
+  private Button btn_prev;
+  @FXML
+  private Button btn_open;
+  @FXML
+  private Button btn_extract;
+  // MVVMFX inject
+  @InjectViewModel
+  private VfsViewerTabViewModel viewModel;
 
-    @FXML
-    private TreeView<String> vfs_list;
+  @FXML
+  void extract(MouseEvent event) {
 
-    @FXML
-    private ListView<VFSAccessor> vfs_variants;
+  }
 
-    @FXML
-    private AnchorPane vfs_preview;
+  @FXML
+  void open(MouseEvent event) {
 
-    @FXML
-    private Button btn_prev;
+  }
 
-    @FXML
-    private Button btn_open;
+  @FXML
+  void preview(MouseEvent event) {
+    viewModel.preview(vfs_variants.getSelectionModel().getSelectedItem());
+  }
 
-    @FXML
-    private Button btn_extract;
+  @FXML
+  void select_file(MouseEvent event) {
+    select_file();
+  }
 
-    @FXML
-    void extract(MouseEvent event) {
+  void select_file() {
+    viewModel.populateVariants(vfs_list.getSelectionModel().getSelectedItem());
+    vfs_variants.refresh();
+    vfs_variants.getSelectionModel().selectLast();
+    viewModel.populatePreview(vfs_variants.getSelectionModel().getSelectedItem());
+  }
 
+  @FXML
+  void select_variant(MouseEvent event) {
+    viewModel.populatePreview(vfs_variants.getSelectionModel().getSelectedItem());
+  }
+
+  @Override
+  public void initialize(URL url, ResourceBundle rb) {
+    vfs_name.setText(viewModel.getConfigName());
+    vfs_list.setRoot(viewModel.getListRoot());
+    vfs_variants.setItems(viewModel.getVariantsList());
+    viewModel.populateTree();
+
+    vfs_list.getSelectionModel().selectedIndexProperty().addListener(event -> {
+      select_file();
+    });
+
+    viewModel.subscribe(PREVIEW_OPTIONS_UPDATED, (key, value) -> {
+      System.out.println("thebob.ja2maptool.ui.tabs.viewers.vfs.VfsViewerTabView.initialize() PREVIEW_OPTIONS_UPDATED");
+      boolean canPrev = (boolean) value[0];
+      boolean canLoad = (boolean) value[1];
+      boolean canExtr = (boolean) value[2];
+      System.out.println("thebob.ja2maptool.ui.tabs.viewers.vfs.VfsViewerTabView.initialize(): " + canPrev + "/" + canLoad + "/" + canExtr);
+      btn_prev.setDisable(!canPrev);
+      btn_open.setDisable(!canLoad);
+      btn_extract.setDisable(!canExtr);
+    });
+
+    viewModel.subscribe(PREVIEW_REQUESTED, (key, value) -> {
+      System.out.println("thebob.ja2maptool.ui.tabs.viewers.vfs.VfsViewerTabView.initialize() PREVIEW_REQUESTED");
+      VfsViewerTabViewModel.DetectedAssetType assetType = (VfsViewerTabViewModel.DetectedAssetType) value[0];
+      VFSAccessor assetAccessor = vfs_variants.getSelectionModel().getSelectedItem();
+      switch (assetType) {
+        case STI:
+          loadStiPreview(assetAccessor);
+          break;
+        case SLF:
+          break;
+        case Map:
+          loadMapPreview(assetAccessor);
+          break;
+        case Text:
+          break;
+        case Unknown:
+          break;
+        default:
+          throw new AssertionError(assetType.name());
+      }
+    });
+  }
+
+  private void loadMapViewer(MapScope scope) {
+    mapViewer = FluentViewLoader.fxmlView(MapViewerTabView.class)
+        .providedScopes(scope)
+        .load();
+  }
+
+  private void loadMapPreview(VFSAccessor source) {
+
+    AssetManager assets = viewModel.getAssets();
+    MapData data = assets.getMaps().loadMapData(source.getBytes());
+
+    MapScope scope = new MapScope();
+    scope.setMapData(data);
+    scope.setTilesetId(data.getSettings().iTilesetID);
+    scope.setTileset(assets.getTilesets().getTileset(data.getSettings().iTilesetID));
+    scope.setMapAssets(assets);
+    scope.setMapName(source.getPath());
+
+    if (mapViewer == null) {
+      loadMapViewer(scope);
+    } else {
+      mapViewer.getViewModel().setMapScope(scope);
     }
 
-    @FXML
-    void open(MouseEvent event) {
+    Parent content = mapViewer.getView();
 
-    }
+    vfs_preview.getChildren().clear();
+    vfs_preview.getChildren().add(content);
 
-    @FXML
-    void preview(MouseEvent event) {
-	viewModel.preview(vfs_variants.getSelectionModel().getSelectedItem());
-    }
+    vfs_preview.setTopAnchor(content, 0d);
+    vfs_preview.setLeftAnchor(content, 0d);
+    vfs_preview.setRightAnchor(content, 0d);
+    vfs_preview.setBottomAnchor(content, 0d);
 
-    @FXML
-    void select_file(MouseEvent event) {
-	select_file();
-    }
+    mapViewer.getViewModel().updateRenderer(true);
+  }
 
-    void select_file() {
-	viewModel.populateVariants(vfs_list.getSelectionModel().getSelectedItem());
-	vfs_variants.refresh();
-	vfs_variants.getSelectionModel().selectLast();
-	viewModel.populatePreview(vfs_variants.getSelectionModel().getSelectedItem());
-    }
+  private void loadStiPreview(VFSAccessor source) {
+    StiViewerScope scope = new StiViewerScope();
+    scope.setFileBytes(source.getBytes());
 
-    @FXML
-    void select_variant(MouseEvent event) {
-	viewModel.populatePreview(vfs_variants.getSelectionModel().getSelectedItem());
-    }
+    ViewTuple<StiViewerTabView, StiViewerTabViewModel> selectorTouple = FluentViewLoader.fxmlView(StiViewerTabView.class)
+        .providedScopes(scope)
+        .load();
 
-    // MVVMFX inject
-    @InjectViewModel
-    private VfsViewerTabViewModel viewModel;
+    Parent content = selectorTouple.getView();
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-	vfs_name.setText(viewModel.getConfigName());
-	vfs_list.setRoot(viewModel.getListRoot());
-	vfs_variants.setItems(viewModel.getVariantsList());
-	viewModel.populateTree();
+    vfs_preview.getChildren().clear();
+    vfs_preview.getChildren().add(content);
 
-	vfs_list.getSelectionModel().selectedIndexProperty().addListener(event -> {
-	    select_file();
-	});
-
-	viewModel.subscribe(PREVIEW_OPTIONS_UPDATED, (key, value) -> {
-	    System.out.println("thebob.ja2maptool.ui.tabs.viewers.vfs.VfsViewerTabView.initialize() PREVIEW_OPTIONS_UPDATED");
-	    boolean canPrev = (boolean) value[0];
-	    boolean canLoad = (boolean) value[1];
-	    boolean canExtr = (boolean) value[2];
-	    System.out.println("thebob.ja2maptool.ui.tabs.viewers.vfs.VfsViewerTabView.initialize(): " + canPrev + "/" + canLoad + "/" + canExtr);
-	    btn_prev.setDisable(!canPrev);
-	    btn_open.setDisable(!canLoad);
-	    btn_extract.setDisable(!canExtr);
-	});
-
-	viewModel.subscribe(PREVIEW_REQUESTED, (key, value) -> {
-	    System.out.println("thebob.ja2maptool.ui.tabs.viewers.vfs.VfsViewerTabView.initialize() PREVIEW_REQUESTED");
-	    VfsViewerTabViewModel.DetectedAssetType assetType = (VfsViewerTabViewModel.DetectedAssetType) value[0];
-	    VFSAccessor assetAccessor = vfs_variants.getSelectionModel().getSelectedItem();
-	    switch (assetType) {
-		case STI:
-		    loadStiPreview(assetAccessor);
-		    break;
-		case SLF:
-		    break;
-		case Map:
-		    loadMapPreview(assetAccessor);
-		    break;
-		case Text:
-		    break;
-		case Unknown:
-		    break;
-		default:
-		    throw new AssertionError(assetType.name());
-	    }
-	});
-    }
-
-    ViewTuple<MapViewerTabView, MapViewerTabViewModel> mapViewer = null;
-
-    private void loadMapViewer(MapScope scope) {
-	mapViewer = FluentViewLoader.fxmlView(MapViewerTabView.class)
-		.providedScopes(scope)
-		.load();
-    }
-
-    private void loadMapPreview(VFSAccessor source) {
-
-	AssetManager assets = viewModel.getAssets();
-	MapData data = assets.getMaps().loadMapData(source.getBytes());
-
-	MapScope scope = new MapScope();
-	scope.setMapData(data);
-	scope.setTilesetId(data.getSettings().iTilesetID);
-	scope.setTileset(assets.getTilesets().getTileset(data.getSettings().iTilesetID));
-	scope.setMapAssets(assets);
-	scope.setMapName(source.getPath());
-
-	if (mapViewer == null) {
-	    loadMapViewer(scope);
-	} else {
-	    mapViewer.getViewModel().setMapScope(scope);
-	}
-
-	Parent content = mapViewer.getView();
-
-	vfs_preview.getChildren().clear();
-	vfs_preview.getChildren().add(content);
-
-	vfs_preview.setTopAnchor(content, 0d);
-	vfs_preview.setLeftAnchor(content, 0d);
-	vfs_preview.setRightAnchor(content, 0d);
-	vfs_preview.setBottomAnchor(content, 0d);
-
-	mapViewer.getViewModel().updateRenderer(true);
-    }
-
-    private void loadStiPreview(VFSAccessor source) {
-	StiViewerScope scope = new StiViewerScope();
-	scope.setFileBytes(source.getBytes());
-
-	ViewTuple<StiViewerTabView, StiViewerTabViewModel> selectorTouple = FluentViewLoader.fxmlView(StiViewerTabView.class)
-		.providedScopes(scope)
-		.load();
-
-	Parent content = selectorTouple.getView();
-
-	vfs_preview.getChildren().clear();
-	vfs_preview.getChildren().add(content);
-
-	vfs_preview.setTopAnchor(content, 0d);
-	vfs_preview.setLeftAnchor(content, 0d);
-	vfs_preview.setRightAnchor(content, 0d);
-	vfs_preview.setBottomAnchor(content, 0d);
-    }
+    vfs_preview.setTopAnchor(content, 0d);
+    vfs_preview.setLeftAnchor(content, 0d);
+    vfs_preview.setRightAnchor(content, 0d);
+    vfs_preview.setBottomAnchor(content, 0d);
+  }
 
 }

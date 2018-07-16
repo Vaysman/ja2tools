@@ -23,53 +23,58 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -->
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.RowConstraints?>
-
-<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="550.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="thebob.ja2maptool.ui.dialogs.scopeselect.ScopeSelectionDialogView">
-   <children>
-      <BorderPane layoutX="200.0" layoutY="93.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <top>
-            <Label text="Select mapping" BorderPane.alignment="CENTER" />
-         </top>
-         <bottom>
-            <GridPane BorderPane.alignment="CENTER">
-              <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <AnchorPane GridPane.columnIndex="1" />
-                  <AnchorPane GridPane.columnIndex="2">
-                     <children>
-                        <Button mnemonicParsing="false" onMouseClicked="#load" text="Load" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="5.0" />
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane>
-                     <children>
-                        <Button mnemonicParsing="false" onMouseClicked="#canceled" text="Cancel" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="5.0" />
-                     </children>
-                  </AnchorPane>
-               </children>
-            </GridPane>
-         </bottom>
-         <center>
-            <AnchorPane BorderPane.alignment="CENTER">
-               <children>
-                  <TreeView fx:id="map_list" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-               </children>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TreeView?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" id="AnchorPane" prefHeight="600.0" prefWidth="550.0"
+            xmlns="http://javafx.com/javafx/8.0.111"
+            fx:controller="thebob.ja2maptool.ui.dialogs.scopeselect.ScopeSelectionDialogView">
+  <children>
+    <BorderPane layoutX="200.0" layoutY="93.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <top>
+        <Label text="Select mapping" BorderPane.alignment="CENTER"/>
+      </top>
+      <bottom>
+        <GridPane BorderPane.alignment="CENTER">
+          <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+          </columnConstraints>
+          <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+          </rowConstraints>
+          <children>
+            <AnchorPane GridPane.columnIndex="1"/>
+            <AnchorPane GridPane.columnIndex="2">
+              <children>
+                <Button mnemonicParsing="false" onMouseClicked="#load" text="Load" AnchorPane.bottomAnchor="5.0"
+                        AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="5.0"/>
+              </children>
             </AnchorPane>
-         </center>
-      </BorderPane>
-   </children>
+            <AnchorPane>
+              <children>
+                <Button mnemonicParsing="false" onMouseClicked="#canceled" text="Cancel" AnchorPane.bottomAnchor="5.0"
+                        AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="5.0"/>
+              </children>
+            </AnchorPane>
+          </children>
+        </GridPane>
+      </bottom>
+      <center>
+        <AnchorPane BorderPane.alignment="CENTER">
+          <children>
+            <TreeView fx:id="map_list" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0"
+                      AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+          </children>
+        </AnchorPane>
+      </center>
+    </BorderPane>
+  </children>
 </AnchorPane>

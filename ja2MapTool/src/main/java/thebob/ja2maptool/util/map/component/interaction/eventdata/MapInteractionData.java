@@ -34,75 +34,75 @@ import javafx.scene.input.MouseEvent;
  */
 public class MapInteractionData {
 
-    MapInteractionUserdata userdata = null;
-    MouseEvent event = null;
-    private final int mouseCellX;
-    private final int mouseCellY;
-    private final int mouseCell;
-    private final boolean shiftDown;
-    private final boolean controlDown;
-    private final boolean altDown;
-    private final MouseButton button;
+  private final int mouseCellX;
+  private final int mouseCellY;
+  private final int mouseCell;
+  private final boolean shiftDown;
+  private final boolean controlDown;
+  private final boolean altDown;
+  private final MouseButton button;
+  MapInteractionUserdata userdata = null;
+  MouseEvent event = null;
 
-    public MapInteractionData(int mouseCellX, int mouseCellY, int mouseCell, boolean shiftDown, boolean controlDown, boolean altDown, MouseButton button) {
-        this.mouseCellX = mouseCellX;
-        this.mouseCellY = mouseCellY;
-        this.mouseCell = mouseCell;
-        this.shiftDown = shiftDown;
-        this.controlDown = controlDown;
-        this.altDown = altDown;
-        this.button = button;
-    }
+  public MapInteractionData(int mouseCellX, int mouseCellY, int mouseCell, boolean shiftDown, boolean controlDown, boolean altDown, MouseButton button) {
+    this.mouseCellX = mouseCellX;
+    this.mouseCellY = mouseCellY;
+    this.mouseCell = mouseCell;
+    this.shiftDown = shiftDown;
+    this.controlDown = controlDown;
+    this.altDown = altDown;
+    this.button = button;
+  }
 
-    public MapInteractionData(int mouseCellX, int mouseCellY, int mouseCell, MouseEvent event) {
-        this.mouseCellX = mouseCellX;
-        this.mouseCellY = mouseCellY;
-        this.mouseCell = mouseCell;
-        this.shiftDown = event.isShiftDown();
-        this.controlDown = event.isControlDown();
-        this.altDown = event.isAltDown();
-        this.button = event.getButton();
-        this.event = event;
-    }
+  public MapInteractionData(int mouseCellX, int mouseCellY, int mouseCell, MouseEvent event) {
+    this.mouseCellX = mouseCellX;
+    this.mouseCellY = mouseCellY;
+    this.mouseCell = mouseCell;
+    this.shiftDown = event.isShiftDown();
+    this.controlDown = event.isControlDown();
+    this.altDown = event.isAltDown();
+    this.button = event.getButton();
+    this.event = event;
+  }
 
-    public MapInteractionUserdata getUserdata() {
-        return userdata;
-    }
+  public MapInteractionUserdata getUserdata() {
+    return userdata;
+  }
 
-    public void setUserdata(MapInteractionUserdata userdata) {
-        this.userdata = userdata;
-    }
+  public void setUserdata(MapInteractionUserdata userdata) {
+    this.userdata = userdata;
+  }
 
-    public int getMouseCellX() {
-        return mouseCellX;
-    }
+  public int getMouseCellX() {
+    return mouseCellX;
+  }
 
-    public int getMouseCellY() {
-        return mouseCellY;
-    }
+  public int getMouseCellY() {
+    return mouseCellY;
+  }
 
-    public int getMouseCell() {
-        return mouseCell;
-    }
+  public int getMouseCell() {
+    return mouseCell;
+  }
 
-    public boolean isShiftDown() {
-        return shiftDown;
-    }
+  public boolean isShiftDown() {
+    return shiftDown;
+  }
 
-    public boolean isControlDown() {
-        return controlDown;
-    }
+  public boolean isControlDown() {
+    return controlDown;
+  }
 
-    public boolean isAltDown() {
-        return altDown;
-    }
+  public boolean isAltDown() {
+    return altDown;
+  }
 
-    public MouseEvent getEvent() {
-        return event;
-    }
+  public MouseEvent getEvent() {
+    return event;
+  }
 
-    public MouseButton getButton() {
-        return button;
-    }
-        
+  public MouseButton getButton() {
+    return button;
+  }
+
 }

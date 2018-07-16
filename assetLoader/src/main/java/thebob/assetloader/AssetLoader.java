@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 the_bob.
@@ -23,103 +23,102 @@
  */
 package thebob.assetloader;
 
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import javafx.scene.control.TreeItem;
 import thebob.assetloader.slf.SlfLoader;
 import thebob.assetloader.sti.StiLoader;
 import thebob.assetloader.vfs.VFSConfig;
 import thebob.assetloader.vfs.VirtualFileSystem;
 import thebob.assetloader.vfs.accessors.VFSAccessor;
 
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.LinkedList;
+
 /**
- *
  * @author the_bob
  */
 public class AssetLoader {
 
-    public SlfLoader loadLibrary(String fileName) {
-	SlfLoader libLoader = new SlfLoader();
-	libLoader.loadFile(fileName);
-	return libLoader;
+  protected static boolean testAssets() {
+    SlfLoader libLoader = new SlfLoader();
+    libLoader.loadFile("Tilesets.slf");
+
+    StiLoader stiLoader = new StiLoader();
+
+    for (int i = 0; i < libLoader.getAssetCount(); i++) {
+      ByteBuffer buffer = libLoader.getAsset(i);
+      stiLoader.loadAsset(buffer);
     }
+    return true;
+  }
 
-    protected static boolean testAssets() {
-		SlfLoader libLoader = new SlfLoader();
-		libLoader.loadFile("Tilesets.slf");
+  protected static void printVFSFileVariants(VirtualFileSystem vfs, String filePath) {
+    for (String configName : vfs.getConfigNames()) {
+      VFSConfig config = vfs.getConfig(configName);
 
-		StiLoader stiLoader = new StiLoader();
-
-		for (int i = 0; i < libLoader.getAssetCount(); i++) {
-			ByteBuffer buffer = libLoader.getAsset(i);
-			stiLoader.loadAsset(buffer);
-		}
-		return true;
+      LinkedList<VFSAccessor> variants = config.getFileVariants(filePath);
+      System.out.println("\nthebob.assetloader.AssetLoader.testVFS() config " + configName);
+      if (variants == null) {
+        System.out.println("\t-> no file (" + filePath + ")");
+      } else {
+        for (VFSAccessor variant : variants) {
+          System.out.println("\t-> " + variant);
+        }
+      }
     }
+  }
 
-    protected static void printVFSFileVariants(VirtualFileSystem vfs, String filePath) {
-	for (String configName : vfs.getConfigNames()) {
-	    VFSConfig config = vfs.getConfig(configName);
-
-	    LinkedList<VFSAccessor> variants = config.getFileVariants(filePath);
-	    System.out.println("\nthebob.assetloader.AssetLoader.testVFS() config " + configName);
-	    if (variants == null) {
-		System.out.println("\t-> no file (" + filePath + ")");
-	    } else {
-		for (VFSAccessor variant : variants) {
-		    System.out.println("\t-> " + variant);
-		}
-	    }
-	}
+  protected static void dumpVFSMapList(VirtualFileSystem vfs) {
+    for (String configName : vfs.getConfigNames()) {
+      dumpVFSMapList(vfs, configName);
     }
+  }
 
-    protected static void dumpVFSMapList(VirtualFileSystem vfs) {
-	for (String configName : vfs.getConfigNames()) {
-	    dumpVFSMapList(vfs, configName);
-	}
-    }
+  protected static void dumpVFSMapList(VirtualFileSystem vfs, String configName) {
+    VFSConfig config = vfs.getConfig(configName);
+    System.out.println(configName);
 
-    protected static void dumpVFSMapList(VirtualFileSystem vfs, String configName) {
-	VFSConfig config = vfs.getConfig(configName);
-	System.out.println(configName);
+    for (String profile : config.getProfiles().keySet()) {
+      System.out.println("\t" + profile);
 
-	for (String profile : config.getProfiles().keySet()) {
-	    System.out.println("\t" + profile);
+      ArrayList<VFSAccessor> files = config.getProfiles().get(profile);
 
-	    ArrayList<VFSAccessor> files = config.getProfiles().get(profile);
-
-	    System.out.println("\t\t" + files.stream().filter(f -> f.getVFSPath().startsWith("\\MAPS\\")).count() + " maps");
+      System.out.println("\t\t" + files.stream().filter(f -> f.getVFSPath().startsWith("\\MAPS\\")).count() + " maps");
 
 	    /*
 	    files.stream().filter(f -> f.startsWith("\\MAPS\\")).sorted().forEach(mapName -> {
 		System.out.println("\t\t" + (mapName.replace("\\MAPS\\", "")));
 	    });
 	     */
-	}
     }
+  }
 
-    protected static boolean testVFS() {
-	try {
-	    VirtualFileSystem vfs = new VirtualFileSystem("../../JA113.data/gameData");
-	    //dumpVFSMapList(vfs, "vfs_config.JA2113AIMNAS.ini");
-	    dumpVFSMapList(vfs, "vfs_config.JA2113-Metavira.ini");
+  protected static boolean testVFS() {
+    try {
+      VirtualFileSystem vfs = new VirtualFileSystem("../../JA113.data/gameData");
+      //dumpVFSMapList(vfs, "vfs_config.JA2113AIMNAS.ini");
+      dumpVFSMapList(vfs, "vfs_config.JA2113-Metavira.ini");
 
 //            printVFSFileVariants(vfs, "\\MAPS\\A9.DAT");
 //            printVFSFileVariants(vfs, "\\TABLEDATA\\ITEMS\\ITEMS.XML");
 //	    printVFSFileVariants(vfs, "\\Ja2Set.dat.xml");
 //	    printVFSFileVariants(vfs, "\\Ja2_Options.INI");
 //	    printVFSFileVariants(vfs, "\\BinaryData\\JA2set.dat");
-//            printVFSFileVariants(vfs, "\\TILESETS\\0\\BUILD_01.STI");            
-	} catch (Exception e) {
-	    e.printStackTrace();
-	    return false;
-	}
-	return true;
+//            printVFSFileVariants(vfs, "\\TILESETS\\0\\BUILD_01.STI");
+    } catch (Exception e) {
+      e.printStackTrace();
+      return false;
     }
+    return true;
+  }
 
-    public static void main(String[] args) {
-	testVFS();
-    }
+  public static void main(String[] args) {
+    testVFS();
+  }
+
+  public SlfLoader loadLibrary(String fileName) {
+    SlfLoader libLoader = new SlfLoader();
+    libLoader.loadFile(fileName);
+    return libLoader;
+  }
 
 }

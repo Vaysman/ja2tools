@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -23,93 +23,91 @@
  */
 package thebob.ja2maptool.model;
 
-import java.util.HashMap;
-import java.util.Map;
 import thebob.assetloader.tileset.Tile;
 import thebob.ja2maptool.util.tilesearch.TileSearchResult;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- *
  * @author the_bob
  */
 public class TileMapping {
 
-    public enum MappingMode {
-	None,
-	SameFile,
-	MatchedFile,
-	AutoMatched,
-	Manual
-    }
+  int sourceType;
+  int sourceIndex;
+  int targetType;
+  int targetIndex;
+  MappingMode mappingMode = MappingMode.None;
+  Map<Double, Tile> autoMapSuggestions = new HashMap<Double, Tile>();
+  TileSearchResult autoMapResult = null;
 
-    int sourceType;
-    int sourceIndex;
-    int targetType;
-    int targetIndex;
-    MappingMode mappingMode = MappingMode.None;
+  public TileMapping(int sourceType, int sourceIndex, int targetType, int targetIndex) {
+    this.sourceType = sourceType;
+    this.sourceIndex = sourceIndex;
+    this.targetType = targetType;
+    this.targetIndex = targetIndex;
+  }
 
-    Map<Double, Tile> autoMapSuggestions = new HashMap<Double, Tile>();
+  public int getSourceType() {
+    return sourceType;
+  }
 
-    public TileMapping(int sourceType, int sourceIndex, int targetType, int targetIndex) {
-	this.sourceType = sourceType;
-	this.sourceIndex = sourceIndex;
-	this.targetType = targetType;
-	this.targetIndex = targetIndex;
-    }
+  public void setSourceType(int sourceType) {
+    this.sourceType = sourceType;
+  }
 
-    public int getSourceType() {
-	return sourceType;
-    }
+  public int getSourceIndex() {
+    return sourceIndex;
+  }
 
-    public int getSourceIndex() {
-	return sourceIndex;
-    }
+  public void setSourceIndex(int sourceIndex) {
+    this.sourceIndex = sourceIndex;
+  }
 
-    public int getTargetType() {
-	return targetType;
-    }
+  public int getTargetType() {
+    return targetType;
+  }
 
-    public int getTargetIndex() {
-	return targetIndex;
-    }
+  public void setTargetType(int targetType) {
+    this.targetType = targetType;
+  }
 
-    public void setSourceType(int sourceType) {
-	this.sourceType = sourceType;
-    }
+  public int getTargetIndex() {
+    return targetIndex;
+  }
 
-    public void setSourceIndex(int sourceIndex) {
-	this.sourceIndex = sourceIndex;
-    }
+  public void setTargetIndex(int targetIndex) {
+    this.targetIndex = targetIndex;
+  }
 
-    public void setTargetType(int targetType) {
-	this.targetType = targetType;
-    }
+  public MappingMode getMappingMode() {
+    return mappingMode;
+  }
 
-    public void setTargetIndex(int targetIndex) {
-	this.targetIndex = targetIndex;
-    }
+  public void setMappingMode(MappingMode mappingMode) {
+    this.mappingMode = mappingMode;
+  }
 
-    public MappingMode getMappingMode() {
-	return mappingMode;
-    }
+  @Override
+  public String toString() {
+    return "TileMapping{" + "sourceType=" + sourceType + ", sourceIndex=" + sourceIndex + ", targetType=" + targetType + ", targetIndex=" + targetIndex + '}';
+  }
 
-    public void setMappingMode(MappingMode mappingMode) {
-	this.mappingMode = mappingMode;
-    }
+  public TileSearchResult getAutoMapResult() {
+    return autoMapResult;
+  }
 
-    @Override
-    public String toString() {
-	return "TileMapping{" + "sourceType=" + sourceType + ", sourceIndex=" + sourceIndex + ", targetType=" + targetType + ", targetIndex=" + targetIndex + '}';
-    }
+  public void setAutoMapResult(TileSearchResult bestTile) {
+    autoMapResult = bestTile;
+  }
 
-    TileSearchResult autoMapResult = null;
-
-    public void setAutoMapResult(TileSearchResult bestTile) {
-	autoMapResult = bestTile;
-    }
-
-    public TileSearchResult getAutoMapResult() {
-	return autoMapResult;
-    }
+  public enum MappingMode {
+    None,
+    SameFile,
+    MatchedFile,
+    AutoMatched,
+    Manual
+  }
 
 }

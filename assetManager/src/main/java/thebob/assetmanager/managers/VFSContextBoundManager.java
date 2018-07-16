@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 the_bob.
@@ -26,17 +26,16 @@ package thebob.assetmanager.managers;
 import thebob.assetmanager.AssetManager;
 
 /**
- *
  * @author the_bob
  */
 public abstract class VFSContextBoundManager {
-    
-    protected final AssetManager context;
 
-    public VFSContextBoundManager(AssetManager context) {
-        this.context = context;
-    }
+  protected final AssetManager context;
 
-    public abstract boolean init();
-    
+  public VFSContextBoundManager(AssetManager context) {
+    this.context = context;
+  }
+
+  public abstract boolean init();
+
 }

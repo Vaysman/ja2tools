@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -23,37 +23,37 @@
  */
 package thebob.ja2maptool;
 
-import thebob.ja2maptool.ui.main.MainScreenViewModel;
-import thebob.ja2maptool.ui.main.MainScreenView;
 import de.saxsys.mvvmfx.FluentViewLoader;
 import de.saxsys.mvvmfx.ViewTuple;
 import de.saxsys.mvvmfx.guice.MvvmfxGuiceApplication;
-import static javafx.application.Application.launch;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import thebob.ja2maptool.ui.main.MainScreenView;
+import thebob.ja2maptool.ui.main.MainScreenViewModel;
+
+import static javafx.application.Application.launch;
 
 /**
- *
  * @author the_bob
  */
-public class Starter  extends MvvmfxGuiceApplication {
+public class Starter extends MvvmfxGuiceApplication {
 
-	public static void main(final String[] args) {
-	    launch(args);
-	}
+  public static void main(final String[] args) {
+    launch(args);
+  }
 
-	@Override
-	public void startMvvmfx(final Stage stage) throws Exception {
-	    final ViewTuple<MainScreenView, MainScreenViewModel> tuple
-			    = FluentViewLoader.fxmlView(MainScreenView.class).load();
+  @Override
+  public void startMvvmfx(final Stage stage) throws Exception {
+    final ViewTuple<MainScreenView, MainScreenViewModel> tuple
+        = FluentViewLoader.fxmlView(MainScreenView.class).load();
 
-	    // Locate View for loaded FXML file
-	    final Parent view = tuple.getView();
+    // Locate View for loaded FXML file
+    final Parent view = tuple.getView();
 
-	    final Scene scene = new Scene(view);
-	    stage.setScene(scene);
-	    stage.show();
-	}
+    final Scene scene = new Scene(view);
+    stage.setScene(scene);
+    stage.show();
+  }
 
 }

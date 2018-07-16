@@ -26,59 +26,57 @@ package thebob.ja2maptool.util.compositor;
 import thebob.assetloader.map.core.components.IndexedElement;
 
 /**
- *
  * @author starcatter
  */
 public class TileSnippet {
 
-	final int width;
-	final int height;
-	final int size;
-	final IndexedElement[] tiles;
+  final int width;
+  final int height;
+  final int size;
+  final IndexedElement[] tiles;
 
-	public TileSnippet(int width, int height) {
-		this.width = width;
-		this.height = height;
-		size = width * height;
-		this.tiles = new IndexedElement[size];
-	}
+  public TileSnippet(int width, int height) {
+    this.width = width;
+    this.height = height;
+    size = width * height;
+    this.tiles = new IndexedElement[size];
+  }
 
-	// ---------------------------------
-	// set/get contents
-	// ---------------------------------
-	public void setXY(int x, int y, IndexedElement tile) {
-		tiles[xyToGrid(x, y)] = tile;
-	}
+  // ---------------------------------
+  // set/get contents
+  // ---------------------------------
+  public void setXY(int x, int y, IndexedElement tile) {
+    tiles[xyToGrid(x, y)] = tile;
+  }
 
-	public IndexedElement getXY(int x, int y) {
-		return tiles[xyToGrid(x, y)];
-	}
+  public IndexedElement getXY(int x, int y) {
+    return tiles[xyToGrid(x, y)];
+  }
 
-	// ---------------------------------
-	// Tile coordinate transformations
-	// ---------------------------------
-	public int xyToGrid(int x, int y) {
-		return ((y) * width + (x));
-	}
+  // ---------------------------------
+  // Tile coordinate transformations
+  // ---------------------------------
+  public int xyToGrid(int x, int y) {
+    return ((y) * width + (x));
+  }
 
-	public int gridToX(int gridNo) {
-		return gridNo - ((gridNo / width) * width); // so... gridNo%width ?
-	}
+  public int gridToX(int gridNo) {
+    return gridNo - ((gridNo / width) * width); // so... gridNo%width ?
+  }
 
-	public int gridToY(int gridNo) {
-		return (gridNo / width);
-	}
-	
-	// ---------------------------------
+  public int gridToY(int gridNo) {
+    return (gridNo / width);
+  }
 
-	public int getWidth() {
-		return width;
-	}
+  // ---------------------------------
 
-	public int getHeight() {
-		return height;
-	}
+  public int getWidth() {
+    return width;
+  }
 
-	
+  public int getHeight() {
+    return height;
+  }
+
 
 }

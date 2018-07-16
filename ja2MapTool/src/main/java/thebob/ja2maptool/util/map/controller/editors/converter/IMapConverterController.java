@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -26,9 +26,8 @@ package thebob.ja2maptool.util.map.controller.editors.converter;
 import thebob.ja2maptool.util.map.controller.base.IMapController;
 
 /**
- *
  * @author the_bob
  */
-public interface IMapConverterController extends IMapController{
-    
+public interface IMapConverterController extends IMapController {
+
 }

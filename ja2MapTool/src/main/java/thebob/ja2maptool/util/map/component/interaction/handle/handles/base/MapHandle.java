@@ -23,158 +23,156 @@
  */
 package thebob.ja2maptool.util.map.component.interaction.handle.handles.base;
 
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
 import javafx.event.EventType;
 import javafx.scene.input.MouseEvent;
 import thebob.ja2maptool.util.compositor.TileSnippet;
 
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
+
 /**
- *
  * @author starcatter
  */
 public class MapHandle {
 
-	public enum HandleStateType {
-		None,
-		Enabled, // handle can be manipulated directly
-		Disabled, // handle can not be manipulated directly
-		Focused,	// handle is focused/selected 
-	};
+  // show/hide the handle. Will also disable active areas and events.
+  boolean visible = false;
 
-	public enum HandleStateMode {
-		None,
-		Normal, // normal display state
-		Hovered, // mouse over handle
-		Active		// mouse button down/dragging
-	};
+  ;
+  // event handlers
+  Map<EventType<? extends MouseEvent>, Function<MouseEvent, MouseEvent>> events = new HashMap<>();
 
-	// show/hide the handle. Will also disable active areas and events.
-	boolean visible = false;
+  ;
+  // handle tiles and state
+  HandleStateMode currentStateMode = HandleStateMode.None;
+  HandleStateType currentStateType = HandleStateType.None;
+  MapHandleState currentState = null;
+  TileSnippet currentStateTiles = null;
+  // handle dimensions
+  int width = 1;
+  int height = 1;
+  int size = 1;
+  // handle position
+  int cellX;
+  int cellY;
+  int cell;
+  // margins for active area
+  int marginX;
+  int marginY;
+  EnumMap<HandleStateType, MapHandleState> allowedStates = new EnumMap<HandleStateType, MapHandleState>(HandleStateType.class);
 
-	// event handlers
-	Map<EventType<? extends MouseEvent>, Function<MouseEvent, MouseEvent>> events = new HashMap<>();
+  // ----------------------------------
+  public MouseEvent fireEvent(MouseEvent e) {
+    if (events.containsKey(e.getEventType())) {
+      return events.get(e.getEventType()).apply(e);
+    }
 
-	// handle tiles and state
-	HandleStateMode currentStateMode = HandleStateMode.None;
-	HandleStateType currentStateType = HandleStateType.None;
-	MapHandleState currentState = null;
-	TileSnippet currentStateTiles = null;
+    return e;
+  }
 
-	// handle dimensions
-	int width = 1;
-	int height = 1;
-	int size = 1;
+  public void setEvent(EventType<? extends MouseEvent> e, Function<MouseEvent, MouseEvent> f) {
+    events.put(e, f);
+  }
 
-	// handle position
-	int cellX;
-	int cellY;
-	int cell;
+  public void clearEvent(EventType<MouseEvent> e) {
+    events.remove(e);
+  }
 
-	// margins for active area
-	int marginX;
-	int marginY;
+  // ----------------------------------
+  public HandleStateType getState() {
+    return currentStateType;
+  }
 
-	EnumMap<HandleStateType, MapHandleState> allowedStates = new EnumMap<HandleStateType, MapHandleState>(HandleStateType.class);
+  public void setState(HandleStateType currentStateType) {
+    this.currentStateType = currentStateType;
+    currentState = allowedStates.get(currentStateType);
 
-	// ----------------------------------
-	public MouseEvent fireEvent(MouseEvent e) {
-		if (events.containsKey(e.getEventType())) {
-			return events.get(e.getEventType()).apply(e);
-		}
+    if (currentState != null && currentStateMode != HandleStateMode.None) {
+      setMode(currentStateMode);
+    }
+  }
 
-		return e;
-	}
+  public void addState(HandleStateType currentStateType, MapHandleState state) {
+    allowedStates.put(currentStateType, state);
+  }
 
-	public void setEvent(EventType<? extends MouseEvent> e, Function<MouseEvent, MouseEvent> f) {
-		events.put(e, f);
-	}
+  // --------------------------------
+  public void setMode(HandleStateMode mode) {
+    if (currentStateType == HandleStateType.None) {
+      return;
+    }
 
-	public void clearEvent(EventType<MouseEvent> e) {
-		events.remove(e);
-	}
+    currentStateTiles = currentState.getState(currentStateMode);
+    if (currentStateTiles != null) {
+      width = currentStateTiles.getWidth();
+      height = currentStateTiles.getHeight();
+      size = height * width;
+    }
+  }
 
-	// ----------------------------------
-	public HandleStateType getState() {
-		return currentStateType;
-	}
+  // ----------------------------------
+  public int getCellX() {
+    return cellX;
+  }
 
-	public void addState(HandleStateType currentStateType, MapHandleState state) {
-		allowedStates.put(currentStateType, state);
-	}
+  public void setCellX(int cellX) {
+    this.cellX = cellX;
+  }
 
-	public void setState(HandleStateType currentStateType) {
-		this.currentStateType = currentStateType;
-		currentState = allowedStates.get(currentStateType);
+  public int getCellY() {
+    return cellY;
+  }
 
-		if (currentState != null && currentStateMode != HandleStateMode.None) {
-			setMode(currentStateMode);
-		}
-	}
+  public void setCellY(int cellY) {
+    this.cellY = cellY;
+  }
 
-	// --------------------------------
-	public void setMode(HandleStateMode mode) {
-		if (currentStateType == HandleStateType.None) {
-			return;
-		}
+  public int getCell() {
+    return cell;
+  }
 
-		currentStateTiles = currentState.getState(currentStateMode);
-		if (currentStateTiles != null) {
-			width = currentStateTiles.getWidth();
-			height = currentStateTiles.getHeight();
-			size = height * width;
-		}
-	}
+  public void setCell(int cell) {
+    this.cell = cell;
+  }
 
-	// ----------------------------------
-	public int getCellX() {
-		return cellX;
-	}
+  public int getMarginX() {
+    return marginX;
+  }
 
-	public void setCellX(int cellX) {
-		this.cellX = cellX;
-	}
+  public void setMarginX(int marginX) {
+    this.marginX = marginX;
+  }
 
-	public int getCellY() {
-		return cellY;
-	}
+  public int getMarginY() {
+    return marginY;
+  }
 
-	public void setCellY(int cellY) {
-		this.cellY = cellY;
-	}
+  public void setMarginY(int marginY) {
+    this.marginY = marginY;
+  }
 
-	public int getCell() {
-		return cell;
-	}
+  public boolean isVisible() {
+    return visible;
+  }
 
-	public void setCell(int cell) {
-		this.cell = cell;
-	}
+  public void setVisible(boolean visible) {
+    this.visible = visible;
+  }
 
-	public int getMarginX() {
-		return marginX;
-	}
+  public enum HandleStateType {
+    None,
+    Enabled, // handle can be manipulated directly
+    Disabled, // handle can not be manipulated directly
+    Focused,  // handle is focused/selected
+  }
 
-	public void setMarginX(int marginX) {
-		this.marginX = marginX;
-	}
-
-	public int getMarginY() {
-		return marginY;
-	}
-
-	public void setMarginY(int marginY) {
-		this.marginY = marginY;
-	}
-
-	public boolean isVisible() {
-		return visible;
-	}
-
-	public void setVisible(boolean visible) {
-		this.visible = visible;
-	}
+  public enum HandleStateMode {
+    None,
+    Normal, // normal display state
+    Hovered, // mouse over handle
+    Active    // mouse button down/dragging
+  }
 
 }

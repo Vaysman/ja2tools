@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 the_bob.
@@ -23,21 +23,18 @@
  */
 package thebob.assetloader.dat.tileset.data;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
- *
  * @author the_bob
  */
 public class TilesetData {
 
-    public int index;
-    public String name;
-    public int ambienceId;
-    
-    public Map<Integer,String> files = new HashMap<Integer,String>();
-    
+  public int index;
+  public String name;
+  public int ambienceId;
+
+  public Map<Integer, String> files = new HashMap<Integer, String>();
+
 }

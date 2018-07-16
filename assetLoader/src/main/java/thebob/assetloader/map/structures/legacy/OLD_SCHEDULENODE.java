@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 the_bob.
@@ -23,24 +23,22 @@
  */
 package thebob.assetloader.map.structures.legacy;
 
-import java.nio.ByteOrder;
 import thebob.assetloader.map.helpers.AutoLoadingMapStruct;
 import thebob.assetloader.map.structures.SCHEDULENODE;
 
 /**
- *
  * @author the_bob
  */
 public class OLD_SCHEDULENODE extends AutoLoadingMapStruct {
-    
-    public final Reference32<SCHEDULENODE> next = new Reference32<SCHEDULENODE>();
-    public final Unsigned16[] usTime = array(new Unsigned16[4]);
-    // Converted to minutes 12:30PM would be 12*60 + 30 = 750
-    public final Unsigned16[] usData1 = array(new Unsigned16[4]); // Typically the gridno, but depends on the action
-    public final Unsigned16[] usData2 = array(new Unsigned16[4]); // Secondary information, not used by most actions
-    public final Unsigned8[] ubAction = array(new Unsigned8[4]);
-    public final Unsigned8 ubScheduleID = new Unsigned8();
-    public final Unsigned8 ubSoldierID = new Unsigned8();
-    public final Unsigned16 usFlags = new Unsigned16();
-    
+
+  public final Reference32<SCHEDULENODE> next = new Reference32<SCHEDULENODE>();
+  public final Unsigned16[] usTime = array(new Unsigned16[4]);
+  // Converted to minutes 12:30PM would be 12*60 + 30 = 750
+  public final Unsigned16[] usData1 = array(new Unsigned16[4]); // Typically the gridno, but depends on the action
+  public final Unsigned16[] usData2 = array(new Unsigned16[4]); // Secondary information, not used by most actions
+  public final Unsigned8[] ubAction = array(new Unsigned8[4]);
+  public final Unsigned8 ubScheduleID = new Unsigned8();
+  public final Unsigned8 ubSoldierID = new Unsigned8();
+  public final Unsigned16 usFlags = new Unsigned16();
+
 }

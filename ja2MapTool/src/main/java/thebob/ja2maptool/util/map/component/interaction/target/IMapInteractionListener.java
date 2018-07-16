@@ -34,27 +34,28 @@ import thebob.ja2maptool.util.map.component.interaction.eventdata.MapInteraction
  */
 public interface IMapInteractionListener {
 
-    /**
-     * triggers a hover event over this cell
-     *
-     * @param cell cell number
-     * @param data optional userdata assigned to this cell
-     * @return true if the event was consumed
-     */
-    boolean hoverCell(int cell, MapInteractionData data);
-    
-    /**
-     * Informs the component the cursor left its registered cells
-     * @return 
-     */
-    void hoverOff();
+  /**
+   * triggers a hover event over this cell
+   *
+   * @param cell cell number
+   * @param data optional userdata assigned to this cell
+   * @return true if the event was consumed
+   */
+  boolean hoverCell(int cell, MapInteractionData data);
 
-    /**
-     * triggers an activation event (probably a click) over this cell
-     *
-     * @param cell cell number
-     * @param data optional userdata assigned to this cell
-     * @return true if the event was consumed
-     */
-    boolean activateCell(int cell, MapInteractionData data);
+  /**
+   * Informs the component the cursor left its registered cells
+   *
+   * @return
+   */
+  void hoverOff();
+
+  /**
+   * triggers an activation event (probably a click) over this cell
+   *
+   * @param cell cell number
+   * @param data optional userdata assigned to this cell
+   * @return true if the event was consumed
+   */
+  boolean activateCell(int cell, MapInteractionData data);
 }

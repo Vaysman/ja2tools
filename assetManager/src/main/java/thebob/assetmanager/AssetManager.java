@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 the_bob.
@@ -32,69 +32,66 @@ import thebob.assetmanager.managers.TilesetManager;
 import thebob.assetmanager.managers.VFSContextBoundManager;
 
 /**
- *
  * This is the part that manages all assets abstracted by VFS In particular, it should support: - maps - xml data - tilesets - graphics
- *
- *
  */
 public class AssetManager {
 
-    protected final VFSConfig vfs;
-    // 
-    protected MapManager maps = new MapManager(this);
-    protected TilesetManager tilesets = new TilesetManager(this);
-    protected ItemManager items = new ItemManager(this);
-    //
-    protected XmlLoader xml;
+  protected final VFSConfig vfs;
+  //
+  protected MapManager maps = new MapManager(this);
+  protected TilesetManager tilesets = new TilesetManager(this);
+  protected ItemManager items = new ItemManager(this);
+  //
+  protected XmlLoader xml;
 
-    //
-    public AssetManager(VFSConfig vfs) {
-        this.vfs = vfs;
-        xml = new XmlLoader(this.vfs);
+  //
+  public AssetManager(VFSConfig vfs) {
+    this.vfs = vfs;
+    xml = new XmlLoader(this.vfs);
 
-        for (VFSContextBoundManager manager : new VFSContextBoundManager[]{maps, tilesets, items}) {
-            // System.out.println("AssetManager loading: "+manager+'\n');
-	    if (!manager.init()) {
-            System.err.println("VFSContext failed to init manager: " + manager);
-                throw new RuntimeException("VFSContext failed to init manager: " + manager);
-            }
-	    // System.out.println("\nAssetManager done: "+manager);
-        }
+    for (VFSContextBoundManager manager : new VFSContextBoundManager[]{maps, tilesets, items}) {
+      // System.out.println("AssetManager loading: "+manager+'\n');
+      if (!manager.init()) {
+        System.err.println("VFSContext failed to init manager: " + manager);
+        throw new RuntimeException("VFSContext failed to init manager: " + manager);
+      }
+      // System.out.println("\nAssetManager done: "+manager);
     }
+  }
 
-    public final XmlLoader getXml() {
-        return xml;
-    }
+  public static void main(String[] args) {
+    VirtualFileSystem vfs = new VirtualFileSystem("../../JA113.data/gameData");
+    //for (String configName : vfs.getConfigNames()) {
+    //VFSConfig config = vfs.getConfig("vfs_config.JA2113-Metavira.ini");
+    VFSConfig config = vfs.getConfig("vfs_config.JA2Vanilla.ini");
+    //System.out.println("\n\n\nthebob.assetmanager.AssetManager.main() LOADING: " + configName + "\n");
+    AssetManager am = new AssetManager(config);
+    System.out.println(am.toString());
+    return;
+    //}
+  }
 
-    public VFSConfig getVfs() {
-        return vfs;
-    }
+  public final XmlLoader getXml() {
+    return xml;
+  }
 
-    public MapManager getMaps() {
-        return maps;
-    }
+  public VFSConfig getVfs() {
+    return vfs;
+  }
 
-    public TilesetManager getTilesets() {
-        return tilesets;
-    }
+  public MapManager getMaps() {
+    return maps;
+  }
 
-    public ItemManager getItems() {
-        return items;
-    }
+  public TilesetManager getTilesets() {
+    return tilesets;
+  }
 
-    public String getVfsConfigName(){
-	    return getVfs().getPath().getFileName().toString();
-    }
-    
-    public static void main(String[] args) {
-        VirtualFileSystem vfs = new VirtualFileSystem("../../JA113.data/gameData");
-        //for (String configName : vfs.getConfigNames()) {
-            //VFSConfig config = vfs.getConfig("vfs_config.JA2113-Metavira.ini");
-            VFSConfig config = vfs.getConfig("vfs_config.JA2Vanilla.ini");
-            //System.out.println("\n\n\nthebob.assetmanager.AssetManager.main() LOADING: " + configName + "\n");
-            AssetManager am = new AssetManager(config);
-            System.out.println( am.toString() );
-            return;
-        //}
-    }
+  public ItemManager getItems() {
+    return items;
+  }
+
+  public String getVfsConfigName() {
+    return getVfs().getPath().getFileName().toString();
+  }
 }

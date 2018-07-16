@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -27,18 +27,17 @@ import de.saxsys.mvvmfx.Scope;
 import thebob.assetloader.vfs.VFSConfig;
 
 /**
- *
  * @author the_bob
  */
 public class VfsBrowserScope implements Scope {
-    VFSConfig config;
+  VFSConfig config;
 
-    public VFSConfig getConfig() {
-	return config;
-    }
+  public VFSConfig getConfig() {
+    return config;
+  }
 
-    public void setConfig(VFSConfig config) {
-	this.config = config;
-    }
-        
+  public void setConfig(VFSConfig config) {
+    this.config = config;
+  }
+
 }

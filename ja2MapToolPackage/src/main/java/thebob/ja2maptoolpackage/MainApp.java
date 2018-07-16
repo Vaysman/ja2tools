@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 the_bob.
@@ -33,20 +33,20 @@ import thebob.ja2maptool.ui.main.MainScreenView;
 
 public class MainApp extends MvvmfxGuiceApplication {
 
-	public static void main(final String[] args) {
-	    launch(args);
-	}
+  public static void main(final String[] args) {
+    launch(args);
+  }
 
-	@Override
-	public void startMvvmfx(final Stage stage) throws Exception {
-	    final Parent view = FluentViewLoader.fxmlView(MainScreenView.class).load().getView();
-	    
+  @Override
+  public void startMvvmfx(final Stage stage) throws Exception {
+    final Parent view = FluentViewLoader.fxmlView(MainScreenView.class).load().getView();
 
-	    final Scene scene = new Scene(view);
-	    
-	    stage.setScene(scene);
-	    stage.setTitle("JA2 1.13 Map Tool (Alpha11)");
-	    stage.show();
-	}
+
+    final Scene scene = new Scene(view);
+
+    stage.setScene(scene);
+    stage.setTitle("JA2 1.13 Map Tool (Alpha11)");
+    stage.show();
+  }
 
 }

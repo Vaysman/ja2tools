@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 the_bob.
@@ -28,54 +28,53 @@ import thebob.assetloader.common.AutoLoadingStruct;
 import thebob.assetloader.map.structures.legacy.OLD_OBJECTTYPE_101;
 
 /**
- *
  * @author the_bob
  */
 public abstract class AutoLoadingMapStruct extends AutoLoadingStruct {
 
-    public AutoLoadingMapStruct() {
-        super();
+  public AutoLoadingMapStruct() {
+    super();
+  }
+
+  protected static String printInventoryArray(Struct[] array) {
+    StringBuilder output = new StringBuilder();
+    boolean atLeastOneItem = false;
+
+    if (array[0] instanceof OLD_OBJECTTYPE_101) {
+      output.append(array.length);
+      output.append(" slots:");
+      for (Struct m : array) {
+        OLD_OBJECTTYPE_101 character = (OLD_OBJECTTYPE_101) m;
+        if (character.usItem.get() != 0) {
+          atLeastOneItem = true;
+          output.append(character.toString());
+          output.append(";");
+        }
+      }
+      if (!atLeastOneItem) output.append(" (all contained empty items!) ");
     }
 
-    protected static String printInventoryArray(Struct[] array) {
-        StringBuilder output = new StringBuilder();
-        boolean atLeastOneItem = false;
+    return output.toString();
+  }
 
-        if (array[0] instanceof OLD_OBJECTTYPE_101) {
-            output.append(array.length);
-            output.append(" slots:");
-            for (Struct m : array) {
-                OLD_OBJECTTYPE_101 character = (OLD_OBJECTTYPE_101) m;
-                if (character.usItem.get() != 0) {
-                    atLeastOneItem = true;
-                    output.append(character.toString());
-                    output.append(";");
-                }
-            }
-            if( !atLeastOneItem ) output.append(" (all contained empty items!) ");
-        }
+  protected static String printArrayAsGrids(Member[] array) {
+    StringBuilder output = new StringBuilder(array.length);
 
-        return output.toString();
+    if (array[0] instanceof Signed32) {
+      for (Member m : array) {
+        Signed32 character = (Signed32) m;
+        output.append(character.get() == 0 ? "0" : new GridPos(character.get()));
+      }
     }
 
-    protected static String printArrayAsGrids(Member[] array) {
-        StringBuilder output = new StringBuilder(array.length);
-        
-        if (array[0] instanceof Signed32) {
-            for (Member m : array) {
-                Signed32 character = (Signed32) m;
-                output.append( character.get() == 0 ? "0" : new GridPos(character.get()) );
-            }
-        }
-
-        if (array[0] instanceof Signed16) {
-            for (Member m : array) {
-                Signed16 character = (Signed16) m;
-                output.append( character.get() == 0 ? "0" : new GridPos(character.get()) );
-            }
-        }
-        
-        return output.toString();
+    if (array[0] instanceof Signed16) {
+      for (Member m : array) {
+        Signed16 character = (Signed16) m;
+        output.append(character.get() == 0 ? "0" : new GridPos(character.get()));
+      }
     }
-    
+
+    return output.toString();
+  }
+
 }

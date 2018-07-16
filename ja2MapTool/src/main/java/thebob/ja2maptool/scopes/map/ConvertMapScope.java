@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -23,106 +23,105 @@
  */
 package thebob.ja2maptool.scopes.map;
 
-import thebob.ja2maptool.scopes.mapping.ItemMappingScope;
-import thebob.ja2maptool.scopes.mapping.TilesetMappingScope;
 import de.saxsys.mvvmfx.Scope;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import thebob.ja2maptool.scopes.mapping.ItemMappingScope;
+import thebob.ja2maptool.scopes.mapping.TilesetMappingScope;
 import thebob.ja2maptool.util.MapTransformer;
 import thebob.ja2maptool.util.compositor.SelectedTiles;
 
 /**
- *
  * @author the_bob
  */
 public class ConvertMapScope implements Scope {
 
-    public static final String SCOPE_SELECTED = "SCOPE_SELECTED";
-    public static final String MAP_UPDATED = "MAP_UPDATED";
-    public static final String SNIPPETS_UPDATED = "SNIPPETS_UPDATED";
+  public static final String SCOPE_SELECTED = "SCOPE_SELECTED";
+  public static final String MAP_UPDATED = "MAP_UPDATED";
+  public static final String SNIPPETS_UPDATED = "SNIPPETS_UPDATED";
 
-    // loaded map
-    MapScope map = new MapScope();
+  // loaded map
+  MapScope map = new MapScope();
 
-    // selected parts of the map
-    MapSnippetScope snippets = null;
+  // selected parts of the map
+  MapSnippetScope snippets = null;
 
-    // Tileset mapping data
-    TilesetMappingScope tilesetMapping = null;
+  // Tileset mapping data
+  TilesetMappingScope tilesetMapping = null;
 
-    // Item mapping data
-    ItemMappingScope itemMapping = null;
+  // Item mapping data
+  ItemMappingScope itemMapping = null;
 
-    // compositor checkboxes 2
-    BooleanProperty remap_in = new SimpleBooleanProperty(false);
-    BooleanProperty remap_out = new SimpleBooleanProperty(true);
-    BooleanProperty remap_sel = new SimpleBooleanProperty(true);
+  // compositor checkboxes 2
+  BooleanProperty remap_in = new SimpleBooleanProperty(false);
+  BooleanProperty remap_out = new SimpleBooleanProperty(true);
+  BooleanProperty remap_sel = new SimpleBooleanProperty(true);
 
-    public MapScope getMap() {
-	return map;
+  public MapScope getMap() {
+    return map;
+  }
+
+  public void setMap(MapScope map) {
+    this.map = map;
+  }
+
+  public TilesetMappingScope getTilesetMapping() {
+    return tilesetMapping;
+  }
+
+  public void setTilesetMapping(TilesetMappingScope tilesetMapping) {
+    this.tilesetMapping = tilesetMapping;
+  }
+
+  public ItemMappingScope getItemMapping() {
+    return itemMapping;
+  }
+
+  public void setItemMapping(ItemMappingScope itemMapping) {
+    this.itemMapping = itemMapping;
+  }
+
+  public MapSnippetScope getSnippets() {
+    return snippets;
+  }
+
+  public void setSnippets(MapSnippetScope snippets) {
+    this.snippets = snippets;
+  }
+
+  @Override
+  public String toString() {
+    return "ConvertMapScope{" + "map=" + map + ", snippets=" + snippets + ", tilesetMapping=" + tilesetMapping + ", itemMapping=" + itemMapping + '}';
+  }
+
+  public boolean hasSelection() {
+    return map.getSelection() != null;
+  }
+
+  public BooleanProperty getRemap_in() {
+    return remap_in;
+  }
+
+  public BooleanProperty getRemap_out() {
+    return remap_out;
+  }
+
+  public BooleanProperty getRemap_sel() {
+    return remap_sel;
+  }
+
+  public SelectedTiles getSelection() {
+    if (map.getSelection() != null) {
+      if (remap_sel.get() && tilesetMapping != null) {
+        SelectedTiles selection = new SelectedTiles(map.getSelection());
+        MapTransformer transformer = new MapTransformer(this);
+        transformer.remapSnippet(selection);
+        return selection;
+      } else {
+        return map.getSelection();
+      }
     }
-
-    public void setMap(MapScope map) {
-	this.map = map;
-    }
-
-    public TilesetMappingScope getTilesetMapping() {
-	return tilesetMapping;
-    }
-
-    public void setTilesetMapping(TilesetMappingScope tilesetMapping) {
-	this.tilesetMapping = tilesetMapping;
-    }
-
-    public ItemMappingScope getItemMapping() {
-	return itemMapping;
-    }
-
-    public void setItemMapping(ItemMappingScope itemMapping) {
-	this.itemMapping = itemMapping;
-    }
-
-    public MapSnippetScope getSnippets() {
-	return snippets;
-    }
-
-    public void setSnippets(MapSnippetScope snippets) {
-	this.snippets = snippets;
-    }
-
-    @Override
-    public String toString() {
-	return "ConvertMapScope{" + "map=" + map + ", snippets=" + snippets + ", tilesetMapping=" + tilesetMapping + ", itemMapping=" + itemMapping + '}';
-    }
-
-    public boolean hasSelection() {
-	return map.getSelection() != null;
-    }
-
-    public BooleanProperty getRemap_in() {
-	return remap_in;
-    }
-
-    public BooleanProperty getRemap_out() {
-	return remap_out;
-    }
-
-    public BooleanProperty getRemap_sel() {
-	return remap_sel;
-    }
-
-    public SelectedTiles getSelection() {
-	if (map.getSelection() != null) {
-	    if (remap_sel.get() && tilesetMapping != null) {
-		SelectedTiles selection = new SelectedTiles(map.getSelection());
-		MapTransformer transformer = new MapTransformer(this);
-		transformer.remapSnippet(selection);
-		return selection;
-	    } else {
-		return map.getSelection();
-	    }
-	}
-	return null;
-    }
+    return null;
+  }
 
 }

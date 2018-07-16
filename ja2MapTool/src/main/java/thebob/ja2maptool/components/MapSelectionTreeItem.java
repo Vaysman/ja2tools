@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -28,26 +28,25 @@ import thebob.assetloader.vfs.accessors.VFSAccessor;
 import thebob.assetmanager.AssetManager;
 
 /**
- *
  * @author the_bob
  */
-public class MapSelectionTreeItem extends TreeItem<String> {    
-    
-    VFSAccessor accessor;
-    AssetManager manager;
+public class MapSelectionTreeItem extends TreeItem<String> {
 
-    public MapSelectionTreeItem(String value, VFSAccessor accessor, AssetManager manager) {
-	super(value);
-	this.accessor = accessor;
-	this.manager = manager;
-    }
+  VFSAccessor accessor;
+  AssetManager manager;
 
-    public VFSAccessor getAccessor() {
-	return accessor;
-    }
+  public MapSelectionTreeItem(String value, VFSAccessor accessor, AssetManager manager) {
+    super(value);
+    this.accessor = accessor;
+    this.manager = manager;
+  }
 
-    public AssetManager getManager() {
-	return manager;
-    }
-    
+  public VFSAccessor getAccessor() {
+    return accessor;
+  }
+
+  public AssetManager getManager() {
+    return manager;
+  }
+
 }

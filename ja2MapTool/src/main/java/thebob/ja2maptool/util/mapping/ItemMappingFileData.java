@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -24,69 +24,67 @@
 package thebob.ja2maptool.util.mapping;
 
 import java.util.Map;
-import javafx.collections.ObservableList;
 
 /**
- *
  * @author the_bob
  */
 public class ItemMappingFileData {
 
-    Map<Integer, Integer> mapping;
-    String srcConfDir;
-    String srcConf;
-    String dstConfDir;
-    String dstConf;
+  Map<Integer, Integer> mapping;
+  String srcConfDir;
+  String srcConf;
+  String dstConfDir;
+  String dstConf;
 
-    public ItemMappingFileData() {
-    }
+  public ItemMappingFileData() {
+  }
 
-    public ItemMappingFileData(Map<Integer, Integer> mapping, String srcConfDir, String srcConf, String dstConfDir, String dstConf) {
-	this.mapping = mapping;
-	this.srcConfDir = srcConfDir;
-	this.srcConf = srcConf;
-	this.dstConfDir = dstConfDir;
-	this.dstConf = dstConf;
-    }
+  public ItemMappingFileData(Map<Integer, Integer> mapping, String srcConfDir, String srcConf, String dstConfDir, String dstConf) {
+    this.mapping = mapping;
+    this.srcConfDir = srcConfDir;
+    this.srcConf = srcConf;
+    this.dstConfDir = dstConfDir;
+    this.dstConf = dstConf;
+  }
 
-    public Map<Integer, Integer> getMapping() {
-	return mapping;
-    }
+  public Map<Integer, Integer> getMapping() {
+    return mapping;
+  }
 
-    public void setMapping(Map<Integer, Integer> mapping) {
-	this.mapping = mapping;
-    }
+  public void setMapping(Map<Integer, Integer> mapping) {
+    this.mapping = mapping;
+  }
 
-    public String getSrcConfDir() {
-	return srcConfDir;
-    }
+  public String getSrcConfDir() {
+    return srcConfDir;
+  }
 
-    public void setSrcConfDir(String srcConfDir) {
-	this.srcConfDir = srcConfDir;
-    }
+  public void setSrcConfDir(String srcConfDir) {
+    this.srcConfDir = srcConfDir;
+  }
 
-    public String getSrcConf() {
-	return srcConf;
-    }
+  public String getSrcConf() {
+    return srcConf;
+  }
 
-    public void setSrcConf(String srcConf) {
-	this.srcConf = srcConf;
-    }
+  public void setSrcConf(String srcConf) {
+    this.srcConf = srcConf;
+  }
 
-    public String getDstConfDir() {
-	return dstConfDir;
-    }
+  public String getDstConfDir() {
+    return dstConfDir;
+  }
 
-    public void setDstConfDir(String dstConfDir) {
-	this.dstConfDir = dstConfDir;
-    }
+  public void setDstConfDir(String dstConfDir) {
+    this.dstConfDir = dstConfDir;
+  }
 
-    public String getDstConf() {
-	return dstConf;
-    }
+  public String getDstConf() {
+    return dstConf;
+  }
 
-    public void setDstConf(String dstConf) {
-	this.dstConf = dstConf;
-    }
+  public void setDstConf(String dstConf) {
+    this.dstConf = dstConf;
+  }
 
 }

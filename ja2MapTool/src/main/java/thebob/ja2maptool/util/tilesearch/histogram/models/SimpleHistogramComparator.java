@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -24,23 +24,22 @@
 package thebob.ja2maptool.util.tilesearch.histogram.models;
 
 /**
- *
  * @author the_bob
  */
 public class SimpleHistogramComparator implements HistogramComparator {
-    
-    public static int trim = 1;
 
-    public double compareHistograms(double[][] h1, double[][] h2) {
-	double distance = 0;
-	int histogramSize = h1[0].length;
+  public static int trim = 1;
 
-	for (int i = trim; i < histogramSize - trim; i++) {
-	    distance += Math.abs(h1[0][i] - h2[0][i]);
-	    distance += Math.abs(h1[1][i] - h2[1][i]);
-	    distance += Math.abs(h1[2][i] - h2[2][i]);
-	}
-	return distance;
+  public double compareHistograms(double[][] h1, double[][] h2) {
+    double distance = 0;
+    int histogramSize = h1[0].length;
+
+    for (int i = trim; i < histogramSize - trim; i++) {
+      distance += Math.abs(h1[0][i] - h2[0][i]);
+      distance += Math.abs(h1[1][i] - h2[1][i]);
+      distance += Math.abs(h1[2][i] - h2[2][i]);
     }
+    return distance;
+  }
 
 }

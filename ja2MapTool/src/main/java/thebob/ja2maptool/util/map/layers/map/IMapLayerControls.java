@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -29,18 +29,19 @@ import thebob.assetloader.tileset.Tileset;
 
 /**
  * Basic map layer controls, supposed to be manipulated from outside of the DisplayManager
+ *
  * @author the_bob
  */
 public interface IMapLayerControls {
 
-    void loadMap(MapData map);
+  void loadMap(MapData map);
 
-    void setMapTileset(Tileset tileset);
-    
-    // connects viewer buttons to the map layers
-    public void setMapLayerButtons(BooleanProperty[] viewerButtons);
+  void setMapTileset(Tileset tileset);
 
-    void setMapDisplayButtons(BooleanProperty[] displayButtons);
+  // connects viewer buttons to the map layers
+  public void setMapLayerButtons(BooleanProperty[] viewerButtons);
+
+  void setMapDisplayButtons(BooleanProperty[] displayButtons);
 }
 
 

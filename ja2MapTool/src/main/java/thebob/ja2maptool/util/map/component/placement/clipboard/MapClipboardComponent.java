@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -35,136 +35,135 @@ import thebob.ja2maptool.util.map.layers.preview.PreviewLayer;
 import thebob.ja2maptool.util.map.renderer.ITileRendererManager;
 
 /**
- *
  * @author the_bob
  */
 public class MapClipboardComponent extends MapPlacementComponentBase implements IMapClipboardComponent {
 
-    private final ICursorLayerManager cursorLayer;
-    private final PreviewLayer previewLayer;
-    private final IMapSelectionComponent selection;
+  private final ICursorLayerManager cursorLayer;
+  private final PreviewLayer previewLayer;
+  private final IMapSelectionComponent selection;
 
-    public MapClipboardComponent(ITileRendererManager renderer, IMapLayerManager map, ICursorLayerManager cursorLayer, PreviewLayer previewLayer, IMapSelectionComponent selection) {
-        super(renderer, map);
-        this.cursorLayer = cursorLayer;
-        this.previewLayer = previewLayer;
-        this.selection = selection;
+  public MapClipboardComponent(ITileRendererManager renderer, IMapLayerManager map, ICursorLayerManager cursorLayer, PreviewLayer previewLayer, IMapSelectionComponent selection) {
+    super(renderer, map);
+    this.cursorLayer = cursorLayer;
+    this.previewLayer = previewLayer;
+    this.selection = selection;
+  }
+
+  // -------------------------
+  @Override
+  public void setPlacementLocation(MapCursor placement) {
+    super.setPlacementLocation(placement);
+    updatePreview();
+
+    notifyObservers(new MapEvent(MapEvent.ChangeType.CLIPBOARD_PLACED));
+  }
+
+  @Override
+  public void setPayload(SelectedTiles payload) {
+    super.setPayload(payload);
+    updatePreview();
+
+    notifyObservers(new MapEvent(MapEvent.ChangeType.CLIPBOARD_FILLED));
+  }
+
+  // -------------------------
+  protected void updatePreview() {
+    if (previewLayer == null) {
+      return;
     }
 
-    // -------------------------
-    @Override
-    public void setPlacementLocation(MapCursor placement) {
-        super.setPlacementLocation(placement);
-        updatePreview();
+    if (canPaste()) {
+      previewLayer.setPreview(payload);
+      previewLayer.placePreview(placementLocation);
+    } else {
+      previewLayer.setPreview(null);
+      previewLayer.placePreview(null);
+    }
+  }
 
-        notifyObservers(new MapEvent(MapEvent.ChangeType.CLIPBOARD_PLACED));
+  // -------------------------
+  @Override
+  public boolean hasContents() {
+    return getPayload() != null;
+  }
+
+  @Override
+  public SelectedTiles getContents() {
+    return getPayload();
+  }
+
+  @Override
+  public void setContents(SelectedTiles clipboardContents) {
+    setPayload(clipboardContents);
+  }
+
+  @Override
+  public void emptyContents() {
+    setPayload(null);
+    notifyObservers(new MapEvent(MapEvent.ChangeType.CLIPBOARD_EMPTIED));
+  }
+
+  @Override
+  public boolean canPaste() {
+    return getPayload() != null && getPlacementLocation() != null;
+  }
+
+  @Override
+  public boolean canCopy() {
+    return selection.hasSelection();
+  }
+
+  @Override
+  public boolean canCut() {
+    return selection.hasSelection();
+  }
+
+  @Override
+  public boolean copy() {
+    if (!canCopy()) {
+      return false;
     }
 
-    @Override
-    public void setPayload(SelectedTiles payload) {
-        super.setPayload(payload);
-        updatePreview();
+    SelectedTiles tiles = selection.getSelection();
+    if (getMap().getTilesForSelection(tiles) != null) {
+      setPayload(tiles);
+      return true;
+    } else {
+      return false;
+    }
+  }
 
-        notifyObservers(new MapEvent(MapEvent.ChangeType.CLIPBOARD_FILLED));
+  // TODO: cut
+  @Override
+  public boolean cut() {
+    if (!canCut()) {
+      return false;
     }
 
-    // -------------------------
-    protected void updatePreview() {
-        if (previewLayer == null) {
-            return;
-        }
+    SelectedTiles tiles = selection.getSelection();
+    if (getMap().getTilesForSelection(tiles) != null) {
+      setPayload(tiles);
+      return true;
+    } else {
+      return false;
+    }
+  }
 
-        if (canPaste()) {
-            previewLayer.setPreview(payload);
-            previewLayer.placePreview(placementLocation);
-        } else {
-            previewLayer.setPreview(null);
-            previewLayer.placePreview(null);
-        }
+  @Override
+  public boolean paste(SelectionPlacementOptions options) {
+    if (!canPaste()) {
+      return false;
     }
 
-    // -------------------------
-    @Override
-    public boolean hasContents() {
-        return getPayload() != null;
-    }
+    getMap().appendTiles(getPlacementLocation(), getPayload(), options);
 
-    @Override
-    public SelectedTiles getContents() {
-        return getPayload();
-    }
+    return true;
+  }
 
-    @Override
-    public void setContents(SelectedTiles clipboardContents) {
-        setPayload(clipboardContents);
-    }
-
-    @Override
-    public void emptyContents() {
-        setPayload(null);
-        notifyObservers(new MapEvent(MapEvent.ChangeType.CLIPBOARD_EMPTIED));
-    }
-
-    @Override
-    public boolean canPaste() {
-        return getPayload() != null && getPlacementLocation() != null;
-    }
-
-    @Override
-    public boolean canCopy() {
-        return selection.hasSelection();
-    }
-
-    @Override
-    public boolean canCut() {
-        return selection.hasSelection();
-    }
-
-    @Override
-    public boolean copy() {
-        if (!canCopy()) {
-            return false;
-        }
-
-        SelectedTiles tiles = selection.getSelection();
-        if (getMap().getTilesForSelection(tiles) != null) {
-            setPayload(tiles);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    // TODO: cut
-    @Override
-    public boolean cut() {
-        if (!canCut()) {
-            return false;
-        }
-
-        SelectedTiles tiles = selection.getSelection();
-        if (getMap().getTilesForSelection(tiles) != null) {
-            setPayload(tiles);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public boolean paste(SelectionPlacementOptions options) {
-        if (!canPaste()) {
-            return false;
-        }
-
-        getMap().appendTiles(getPlacementLocation(), getPayload(), options);
-
-        return true;
-    }
-
-    @Override
-    public Integer hoverPlacement(int placement) {
-        return null;
-    }
+  @Override
+  public Integer hoverPlacement(int placement) {
+    return null;
+  }
 
 }

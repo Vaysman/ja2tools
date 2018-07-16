@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -29,61 +29,60 @@ import thebob.ja2maptool.util.map.layers.map.IMapLayerManager;
 import thebob.ja2maptool.util.map.renderer.ITileRendererManager;
 
 /**
- *
  * @author the_bob
  */
 public abstract class MapViewerControllerBase extends MapControllerBase implements IMapViewerController {
 
-    protected MapViewerTabViewModel viewWindow;
+  protected MapViewerTabViewModel viewWindow;
 
-    public MapViewerControllerBase(ITileRendererManager renderer, IMapLayerManager map, MapViewerTabViewModel viewWindow) {
-	super(renderer, map);
-	this.viewWindow = viewWindow;
-    }
+  public MapViewerControllerBase(ITileRendererManager renderer, IMapLayerManager map, MapViewerTabViewModel viewWindow) {
+    super(renderer, map);
+    this.viewWindow = viewWindow;
+  }
 
-    protected void zoom(int amount) {
-	System.out.println("thebob.ja2maptool.util.map.controller.viewer.MapViewerControllerBase.zoom()");
-	zoom(amount / 100d);
-    }
+  protected void zoom(int amount) {
+    System.out.println("thebob.ja2maptool.util.map.controller.viewer.MapViewerControllerBase.zoom()");
+    zoom(amount / 100d);
+  }
 
-    protected void zoom(double amount) {
-	getRenderer().setScale(getRenderer().getScale() + amount);
-    }
+  protected void zoom(double amount) {
+    getRenderer().setScale(getRenderer().getScale() + amount);
+  }
 
-    // -- stuff passed through to the renderer
-    @Override
-    public void moveWindow(int x, int y) {
-	getRenderer().moveWindow(x, y);
-    }
+  // -- stuff passed through to the renderer
+  @Override
+  public void moveWindow(int x, int y) {
+    getRenderer().moveWindow(x, y);
+  }
 
-    @Override
-    public double getScale() {
-	return getRenderer().getScale();
-    }
+  @Override
+  public double getScale() {
+    return getRenderer().getScale();
+  }
 
-    @Override
-    public void setScale(double scale) {
-	getRenderer().setScale(scale);
-    }
+  @Override
+  public void setScale(double scale) {
+    getRenderer().setScale(scale);
+  }
 
-    @Override
-    public void setWindowOffsetX(int oldX) {
-	getRenderer().setWindowOffsetX(oldX);
-    }
+  @Override
+  public int getWindowOffsetY() {
+    return getRenderer().getWindowOffsetY();
+  }
 
-    @Override
-    public void setWindowOffsetY(int oldY) {
-	getRenderer().setWindowOffsetY(oldY);
-    }
+  @Override
+  public void setWindowOffsetY(int oldY) {
+    getRenderer().setWindowOffsetY(oldY);
+  }
 
-    @Override
-    public int getWindowOffsetY() {
-	return getRenderer().getWindowOffsetY();
-    }
+  @Override
+  public int getWindowOffsetX() {
+    return getRenderer().getWindowOffsetX();
+  }
 
-    @Override
-    public int getWindowOffsetX() {
-	return getRenderer().getWindowOffsetX();
-    }
+  @Override
+  public void setWindowOffsetX(int oldX) {
+    getRenderer().setWindowOffsetX(oldX);
+  }
 
 }

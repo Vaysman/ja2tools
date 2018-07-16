@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 the_bob.
@@ -23,16 +23,15 @@
  */
 package thebob.assetloader.xml;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.util.StreamReaderDelegate;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 /**
- *
  * @author the_bob
- * 
+ * <p>
  * So there's this jaxb2 weirdness about requiring namespace to be specified for pretty much everything, even if schema form is set to unqualified.
  * This class is a way of fooling the marshaller into thinking we're actually crazy enough to prefix every damn xml element and attribute.
  * It should work as long as namespaces are close enough to what package names can be.
@@ -40,26 +39,26 @@ import javax.xml.stream.util.StreamReaderDelegate;
  */
 class XmlNamespaceWrapper extends StreamReaderDelegate {
 
-    private String packageName;
+  private String packageName;
 
-    public XmlNamespaceWrapper(String xmlFile, Class baseClass) throws XMLStreamException, FileNotFoundException {
-        super(XMLInputFactory.newFactory().createXMLStreamReader(new FileInputStream(xmlFile)));
-        packageName = baseClass.getPackage().getName().replace('.', '/');
-    }
-    
-    public XmlNamespaceWrapper(FileInputStream xmlFile, Class baseClass) throws XMLStreamException, FileNotFoundException {
-        super(XMLInputFactory.newFactory().createXMLStreamReader(xmlFile));
-        packageName = baseClass.getPackage().getName().replace('.', '/');
-    }
+  public XmlNamespaceWrapper(String xmlFile, Class baseClass) throws XMLStreamException, FileNotFoundException {
+    super(XMLInputFactory.newFactory().createXMLStreamReader(new FileInputStream(xmlFile)));
+    packageName = baseClass.getPackage().getName().replace('.', '/');
+  }
 
-    @Override
-    public String getAttributeNamespace(int arg0) {
-        return packageName;
-    }
+  public XmlNamespaceWrapper(FileInputStream xmlFile, Class baseClass) throws XMLStreamException, FileNotFoundException {
+    super(XMLInputFactory.newFactory().createXMLStreamReader(xmlFile));
+    packageName = baseClass.getPackage().getName().replace('.', '/');
+  }
 
-    @Override
-    public String getNamespaceURI() {
-        return packageName;
-    }
-    
+  @Override
+  public String getAttributeNamespace(int arg0) {
+    return packageName;
+  }
+
+  @Override
+  public String getNamespaceURI() {
+    return packageName;
+  }
+
 }

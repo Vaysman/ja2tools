@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -23,32 +23,32 @@
  */
 package thebob.ja2maptool.util.tilesearch.histogram;
 
-import java.util.HashMap;
-import java.util.Map;
 import thebob.assetloader.tileset.Tile;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- *
  * @author the_bob
  */
 public class TileHistogramCache {
 
-    Map<Integer, double[][]> tileHistograms = new HashMap<Integer, double[][]>();
-    Map<Integer, Tile> tiles = new HashMap<Integer, Tile>();
+  Map<Integer, double[][]> tileHistograms = new HashMap<Integer, double[][]>();
+  Map<Integer, Tile> tiles = new HashMap<Integer, Tile>();
 
-    public TileHistogramCache(Tile[] tiles, int histogramSize) {
-	
-	for (Tile tile : tiles) {
-	    tileHistograms.put(tile.getIndex(), TileHistogramComparator.getHistogram(tile, histogramSize));
-	    this.tiles.put(tile.getIndex(),tile);
-	}
-    }
+  public TileHistogramCache(Tile[] tiles, int histogramSize) {
 
-    public Map<Integer, double[][]> getHistograms() {
-	return tileHistograms;
+    for (Tile tile : tiles) {
+      tileHistograms.put(tile.getIndex(), TileHistogramComparator.getHistogram(tile, histogramSize));
+      this.tiles.put(tile.getIndex(), tile);
     }
+  }
 
-    public Tile getTile(int index) {
-	return tiles.get(index);
-    }
+  public Map<Integer, double[][]> getHistograms() {
+    return tileHistograms;
+  }
+
+  public Tile getTile(int index) {
+    return tiles.get(index);
+  }
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -33,89 +33,87 @@ import javafx.scene.image.Image;
 import thebob.assetloader.common.ImageAdapter;
 import thebob.assetloader.sti.StiLoader;
 import thebob.ja2maptool.scopes.view.StiViewerScope;
-import thebob.ja2maptool.scopes.view.VfsBrowserScope;
 
 /**
- *
  * @author the_bob
  */
 public class StiViewerTabViewModel implements ViewModel {
 
-    @InjectScope
-    StiViewerScope scope;
+  @InjectScope
+  StiViewerScope scope;
 
-    StiLoader loader = new StiLoader();
+  StiLoader loader = new StiLoader();
 
-    StringProperty stiName = new SimpleStringProperty();
-    StringProperty stiStatus = new SimpleStringProperty();
+  StringProperty stiName = new SimpleStringProperty();
+  StringProperty stiStatus = new SimpleStringProperty();
 
-    int _currentIndex = 0;
-    IntegerProperty currentIndex = new SimpleIntegerProperty(0);
-    IntegerProperty maxIndex = new SimpleIntegerProperty(-1);
+  int _currentIndex = 0;
+  IntegerProperty currentIndex = new SimpleIntegerProperty(0);
+  IntegerProperty maxIndex = new SimpleIntegerProperty(-1);
 
-    byte[][] palette;
+  byte[][] palette;
 
-    public void initialize() {
-	if (scope.getFilePath() != null) {
-	    loader.loadFile(scope.getFilePath());
-	} else if (scope.getFileBytes() != null) {
-	    loader.loadAsset(scope.getFileBytes());
-	} else {
+  public void initialize() {
+    if (scope.getFilePath() != null) {
+      loader.loadFile(scope.getFilePath());
+    } else if (scope.getFileBytes() != null) {
+      loader.loadAsset(scope.getFileBytes());
+    } else {
 
-	}
-
-	maxIndex.set(loader.getImageCount() - 1);
-	palette = loader.getPalette();
-
-	currentIndex.addListener(event -> {
-	    stiStatus.set(currentIndex.get() + "/" + maxIndex.get() + ", " + loader.getImageWidth(_currentIndex) + "x" + loader.getImageHeight(_currentIndex));
-	});
     }
 
-    Image getImage() {
-	return getImage(_currentIndex);
-    }
+    maxIndex.set(loader.getImageCount() - 1);
+    palette = loader.getPalette();
 
-    Image getImage(int i) {
-	return ImageAdapter.convertStiImage(loader.getImageWidth(i), loader.getImageHeight(i), loader.getImage(i), palette);
-    }
+    currentIndex.addListener(event -> {
+      stiStatus.set(currentIndex.get() + "/" + maxIndex.get() + ", " + loader.getImageWidth(_currentIndex) + "x" + loader.getImageHeight(_currentIndex));
+    });
+  }
 
-    public boolean nextImage() {
-	if (_currentIndex < maxIndex.get()) {
-	    _currentIndex++;
-	    currentIndex.set(_currentIndex);
-	    return true;
-	}
-	return false;
-    }
+  Image getImage() {
+    return getImage(_currentIndex);
+  }
 
-    public boolean prevImage() {
-	if (_currentIndex > 0) {
-	    _currentIndex--;
-	    currentIndex.set(_currentIndex);
-	    return true;
-	}
-	return false;
-    }
+  Image getImage(int i) {
+    return ImageAdapter.convertStiImage(loader.getImageWidth(i), loader.getImageHeight(i), loader.getImage(i), palette);
+  }
 
-    public StringProperty getStiName() {
-	return stiName;
+  public boolean nextImage() {
+    if (_currentIndex < maxIndex.get()) {
+      _currentIndex++;
+      currentIndex.set(_currentIndex);
+      return true;
     }
+    return false;
+  }
 
-    public StringProperty getStiStatus() {
-	return stiStatus;
+  public boolean prevImage() {
+    if (_currentIndex > 0) {
+      _currentIndex--;
+      currentIndex.set(_currentIndex);
+      return true;
     }
+    return false;
+  }
 
-    public IntegerProperty getCurrentIndex() {
-	return currentIndex;
-    }
+  public StringProperty getStiName() {
+    return stiName;
+  }
 
-    public IntegerProperty getMaxIndex() {
-	return maxIndex;
-    }
+  public StringProperty getStiStatus() {
+    return stiStatus;
+  }
 
-    public byte[][] getPalette() {
-	return palette;
-    }
+  public IntegerProperty getCurrentIndex() {
+    return currentIndex;
+  }
+
+  public IntegerProperty getMaxIndex() {
+    return maxIndex;
+  }
+
+  public byte[][] getPalette() {
+    return palette;
+  }
 
 }

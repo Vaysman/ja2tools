@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -32,116 +32,115 @@ import thebob.ja2maptool.util.map.layers.map.IMapLayerManager;
 import thebob.ja2maptool.util.map.renderer.ITileRendererManager;
 
 /**
- *
  * @author the_bob
  */
 public abstract class CursorControllerBase implements ICursorController {
 
-    protected MapCursorComponent controller = null;
+  protected MapCursorComponent controller = null;
 
-    @Override
-    public void setController(MapCursorComponent controller) {
-        this.controller = controller;
-    }
+  @Override
+  public void setController(MapCursorComponent controller) {
+    this.controller = controller;
+  }
 
-    @Override
-    public void mouseEvent(MouseEvent e) {
-    }
+  @Override
+  public void mouseEvent(MouseEvent e) {
+  }
 
-    // ----------------------------------------
-    // Cursor update
-    // ----------------------------------------
-    public abstract void updateCursor();
+  // ----------------------------------------
+  // Cursor update
+  // ----------------------------------------
+  public abstract void updateCursor();
 
-    // ------------------------    
-    @Override
-    public MapCursor getCursor() {
-        return controller.getMapCursor();
-    }
+  // ------------------------
+  @Override
+  public MapCursor getCursor() {
+    return controller.getMapCursor();
+  }
 
-    @Override
-    public MapCursor getCursor(int x, int y, IndexedElement cursor) {
-        return controller.getMapCursor(x, y, cursor);
-    }
+  @Override
+  public MapCursor getCursor(int x, int y, IndexedElement cursor) {
+    return controller.getMapCursor(x, y, cursor);
+  }
 
-    @Override
-    public MapCursor getCursor(double x, double y, IndexedElement cursor) {
-        return controller.getMapCursor(x, y, cursor);
-    }
+  @Override
+  public MapCursor getCursor(double x, double y, IndexedElement cursor) {
+    return controller.getMapCursor(x, y, cursor);
+  }
 
-    @Override
-    public int getMouseCellX() {
-        return controller.getMouseCellX();
-    }
+  @Override
+  public int getMouseCellX() {
+    return controller.getMouseCellX();
+  }
 
-    @Override
-    public int getMouseCellY() {
-        return controller.getMouseCellY();
-    }
+  @Override
+  public int getMouseCellY() {
+    return controller.getMouseCellY();
+  }
 
-    @Override
-    public int getMouseCell() {
-        return controller.getMouseCell();
-    }
+  @Override
+  public int getMouseCell() {
+    return controller.getMouseCell();
+  }
 
-    @Override
-    public double getLastCursorX() {
-        return controller.getLastCursorX();
-    }
+  @Override
+  public double getLastCursorX() {
+    return controller.getLastCursorX();
+  }
 
-    @Override
-    public double getLastCursorY() {
-        return controller.getLastCursorY();
-    }
+  @Override
+  public double getLastCursorY() {
+    return controller.getLastCursorY();
+  }
 
-    @Override
-    public boolean isControlDown() {
-        return controller.isControlDown();
-    }
+  @Override
+  public boolean isControlDown() {
+    return controller.isControlDown();
+  }
 
-    @Override
-    public boolean isShiftDown() {
-        return controller.isShiftDown();
-    }
+  @Override
+  public boolean isShiftDown() {
+    return controller.isShiftDown();
+  }
 
-    @Override
-    public boolean isAltDown() {
-        return controller.isAltDown();
-    }
+  @Override
+  public boolean isAltDown() {
+    return controller.isAltDown();
+  }
 
-    @Override
-    public int getWindowScreenX() {
-        return controller.getWindowScreenX();
-    }
+  @Override
+  public int getWindowScreenX() {
+    return controller.getWindowScreenX();
+  }
 
-    @Override
-    public int getWindowScreenY() {
-        return controller.getWindowScreenY();
-    }
+  @Override
+  public int getWindowScreenY() {
+    return controller.getWindowScreenY();
+  }
 
-    @Override
-    public double getMouseScreenX() {
-        return controller.getMouseScreenX();
-    }
+  @Override
+  public double getMouseScreenX() {
+    return controller.getMouseScreenX();
+  }
 
-    @Override
-    public double getMouseScreenY() {
-        return controller.getMouseScreenY();
-    }
+  @Override
+  public double getMouseScreenY() {
+    return controller.getMouseScreenY();
+  }
 
-    @Override
-    public ICursorLayerManager getCursors() {
-        return controller.getCursors();
-    }
+  @Override
+  public ICursorLayerManager getCursors() {
+    return controller.getCursors();
+  }
 
-    @Override
-    public ITileRendererManager getRenderer() {
-        return controller.getRenderer();
-    }
+  @Override
+  public ITileRendererManager getRenderer() {
+    return controller.getRenderer();
+  }
 
-    @Override
-    public IMapLayerManager getMap() {
-        return controller.getMap();
-    }
+  @Override
+  public IMapLayerManager getMap() {
+    return controller.getMap();
+  }
 
 }

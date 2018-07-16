@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -23,14 +23,15 @@
  */
 package thebob.ja2maptool.util.map.controller.viewer;
 
-import java.util.Observable;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import thebob.ja2maptool.ui.tabs.viewers.map.MapViewerTabViewModel;
-import thebob.ja2maptool.util.map.events.MapEvent;
 import thebob.ja2maptool.util.map.controller.viewer.base.MapViewerControllerBase;
+import thebob.ja2maptool.util.map.events.MapEvent;
 import thebob.ja2maptool.util.map.layers.map.IMapLayerManager;
 import thebob.ja2maptool.util.map.renderer.ITileRendererManager;
+
+import java.util.Observable;
 
 /**
  * Simple viewer implementation that scrolls the map toward click location
@@ -40,44 +41,44 @@ import thebob.ja2maptool.util.map.renderer.ITileRendererManager;
  */
 public class MapBrowserViewerController extends MapViewerControllerBase {
 
-    public MapBrowserViewerController(ITileRendererManager renderer, IMapLayerManager map, MapViewerTabViewModel viewWindow) {
-        super(renderer, map, viewWindow);
+  public MapBrowserViewerController(ITileRendererManager renderer, IMapLayerManager map, MapViewerTabViewModel viewWindow) {
+    super(renderer, map, viewWindow);
+  }
+
+  public void update(Observable o, Object arg) {
+    if (arg == null || !(arg instanceof MapEvent)) {
+      System.out.println("thebob.ja2maptool.util.map.MapDisplayManager.update() got weird message from " + o);
+      return;
     }
+  }
 
-    public void update(Observable o, Object arg) {
-        if (arg == null || !(arg instanceof MapEvent)) {
-            System.out.println("thebob.ja2maptool.util.map.MapDisplayManager.update() got weird message from " + o);
-            return;
-        }
+  @Override
+  public void mouseEvent(MouseEvent e) {
+    if (e.getEventType() == MouseEvent.MOUSE_CLICKED) {
+      // move the window toward the click location
+      double dx = e.getX();
+      double dy = e.getY();
+
+      double wx = getRenderer().getCanvasX() / 2d;
+      double wy = getRenderer().getCanvasY() / 2d;
+
+      double deltaX = (dx - wx) / wx;
+      double deltaY = (dy - wy) / wx;
+
+      double transX = deltaX / 2 + deltaY / 2;
+      double transY = deltaY - deltaX / 2;
+
+      moveWindow((int) (transX * 10d), (int) (transY * 10d));
     }
+  }
 
-    @Override
-    public void mouseEvent(MouseEvent e) {
-        if (e.getEventType() == MouseEvent.MOUSE_CLICKED) {
-            // move the window toward the click location
-            double dx = e.getX();
-            double dy = e.getY();
+  @Override
+  public void keyEvent(KeyEvent e) {
+  }
 
-            double wx = getRenderer().getCanvasX() / 2d;
-            double wy = getRenderer().getCanvasY() / 2d;
-
-            double deltaX = (dx - wx) / wx;
-            double deltaY = (dy - wy) / wx;
-
-            double transX = deltaX / 2 + deltaY / 2;
-            double transY = deltaY - deltaX / 2;
-
-            moveWindow((int) (transX * 10d), (int) (transY * 10d));
-        }
-    }
-
-    @Override
-    public void keyEvent(KeyEvent e) {
-    }
-
-    @Override
-    public void disconnect() {
-        System.out.println("thebob.ja2maptool.util.map.controller.viewer.MapBrowserViewerController.disconnect()");
-    }
+  @Override
+  public void disconnect() {
+    System.out.println("thebob.ja2maptool.util.map.controller.viewer.MapBrowserViewerController.disconnect()");
+  }
 
 }

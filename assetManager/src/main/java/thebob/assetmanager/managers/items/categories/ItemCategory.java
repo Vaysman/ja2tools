@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 the_bob.
@@ -23,179 +23,177 @@
  */
 package thebob.assetmanager.managers.items.categories;
 
+import thebob.assetmanager.managers.items.Item;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
-import thebob.assetmanager.managers.items.Item;
 
 /**
- *
  * @author the_bob
  */
 public class ItemCategory {
 
-	public static class SubCategoryItemIterator implements Iterator<Item> {
+  private final String ucid;
+  String name;
+  ItemCategory parent;
+  List<ItemCategory> children = new ArrayList<ItemCategory>();
+  List<Item> items = new ArrayList<Item>();
+  private int depth = 0;
+  public ItemCategory(String name, ItemCategory parent) {
+    this.name = name;
+    this.parent = parent;
+    if (parent != null) {
+      depth = parent.depth + 1;
+      parent.addSubCategory(this);
+      ucid = parent.ucid + "->" + getName();
+    } else {
+      ucid = getName();
+    }
+  }
 
-		Iterator<ItemCategory> category;
-		Iterator<Item> item;
+  public String getName() {
+    return name;
+  }
 
-		SubCategoryItemIterator(Iterator<ItemCategory> categoryIter) {
-			category = categoryIter;
-			item = category.next().subCategoryItemIterator();
-		}
+  public int subCategoryCount() {
+    return children.size();
+  }
 
-		SubCategoryItemIterator(Iterator<ItemCategory> categoryIter, Iterator<Item> itemIter) {
-			category = categoryIter;
-			item = itemIter;
-		}
+  public boolean addSubCategory(ItemCategory e) {
+    return children.add(e);
+  }
 
-		@Override
-		public boolean hasNext() {
-			if (item.hasNext()) {
-				return true;
-			}
+  public ItemCategory getSubCategory(int index) {
+    return children.get(index);
+  }
 
-			while (category.hasNext()) {
-				item = category.next().subCategoryItemIterator();
+  public Iterator<ItemCategory> categoryIterator() {
+    return children.iterator();
+  }
 
-				if (item.hasNext()) {
-					return true;
-				}
-			}
+  public int itemCount() {
+    return items.size();
+  }
 
-			return false;
-		}
+  public int totalItemCount() {
+    if (subCategoryCount() == 0) {
+      return items.size();
+    } else {
+      return items.size() + children.stream().collect(Collectors.summingInt(subCat -> subCat.totalItemCount())).intValue();
+    }
+  }
 
-		@Override
-		public Item next() {
-			if (item.hasNext()) {
-				return item.next();
-			} else if ( hasNext() ) { // find the next element
-				return next();
-			} else {
-				return null;
-			}
-		}
-	}
+  public boolean addItem(Item e) {
+    e.setParentCategory(this);
+    return items.add(e);
+  }
 
-	private final String ucid;
+  public Item getItem(int index) {
+    return items.get(index);
+  }
 
-	String name;
-	ItemCategory parent;
-	List<ItemCategory> children = new ArrayList<ItemCategory>();
-	List<Item> items = new ArrayList<Item>();
-	private int depth = 0;
+  public Iterator<Item> itemIterator() {
+    return items.iterator();
+  }
 
-	public String getName() {
-		return name;
-	}
+  public Iterator<Item> subCategoryItemIterator() {
+    if (children.isEmpty()) {
+      return itemIterator();
+    } else if (items.isEmpty()) {
+      return new SubCategoryItemIterator(categoryIterator());
+    } else {
+      return new SubCategoryItemIterator(categoryIterator(), itemIterator());
+    }
+  }
 
-	public ItemCategory(String name, ItemCategory parent) {
-		this.name = name;
-		this.parent = parent;
-		if (parent != null) {
-			depth = parent.depth + 1;
-			parent.addSubCategory(this);
-			ucid = parent.ucid + "->" + getName();
-		} else {
-			ucid = getName();
-		}
-	}
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    if (subCategoryCount() + totalItemCount() > 0) {
+      sb.append('\n');
+      for (int i = 0; i < depth; i++) {
+        sb.append('\t');
+      }
+      sb.append('[');
+      sb.append(name);
+      sb.append(']');
+      if (totalItemCount() > 0) {
+        sb.append(",  ");
+        sb.append(totalItemCount());
+        sb.append(" items: ");
 
-	public int subCategoryCount() {
-		return children.size();
-	}
+        for (Iterator<Item> iterator = items.iterator(); iterator.hasNext(); ) {
+          sb.append('\n');
+          for (int i = 0; i < depth + 1; i++) {
+            sb.append('\t');
+          }
+          sb.append(iterator.next().getName());
+        }
+      }
+      if (subCategoryCount() > 0) {
+        sb.append(",  ");
+        sb.append(subCategoryCount());
+        sb.append(" sub categories: ");
+        for (Iterator<ItemCategory> iterator = children.iterator(); iterator.hasNext(); ) {
+          ItemCategory next = iterator.next();
+          sb.append(next);
+        }
+      }
+    }
+    return sb.toString();
+  }
 
-	public boolean addSubCategory(ItemCategory e) {
-		return children.add(e);
-	}
+  /**
+   * Gets Universal Category Id
+   *
+   * @return
+   */
+  public String getUcid() {
+    return ucid;
+  }
 
-	public ItemCategory getSubCategory(int index) {
-		return children.get(index);
-	}
+  public static class SubCategoryItemIterator implements Iterator<Item> {
 
-	public Iterator<ItemCategory> categoryIterator() {
-		return children.iterator();
-	}
+    Iterator<ItemCategory> category;
+    Iterator<Item> item;
 
-	public int itemCount() {
-		return items.size();
-	}
+    SubCategoryItemIterator(Iterator<ItemCategory> categoryIter) {
+      category = categoryIter;
+      item = category.next().subCategoryItemIterator();
+    }
 
-	public int totalItemCount() {
-		if (subCategoryCount() == 0) {
-			return items.size();
-		} else {
-			return items.size() + children.stream().collect(Collectors.summingInt(subCat -> subCat.totalItemCount())).intValue();
-		}
-	}
+    SubCategoryItemIterator(Iterator<ItemCategory> categoryIter, Iterator<Item> itemIter) {
+      category = categoryIter;
+      item = itemIter;
+    }
 
-	public boolean addItem(Item e) {
-		e.setParentCategory(this);
-		return items.add(e);
-	}
+    @Override
+    public boolean hasNext() {
+      if (item.hasNext()) {
+        return true;
+      }
 
-	public Item getItem(int index) {
-		return items.get(index);
-	}
+      while (category.hasNext()) {
+        item = category.next().subCategoryItemIterator();
 
-	public Iterator<Item> itemIterator() {
-		return items.iterator();
-	}
+        if (item.hasNext()) {
+          return true;
+        }
+      }
 
-	public Iterator<Item> subCategoryItemIterator() {
-		if (children.isEmpty()) {
-			return itemIterator();
-		} else if (items.isEmpty()) {
-			return new SubCategoryItemIterator(categoryIterator());
-		} else {
-			return new SubCategoryItemIterator(categoryIterator(),itemIterator());
-		}
-	}
+      return false;
+    }
 
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		if (subCategoryCount() + totalItemCount() > 0) {
-			sb.append('\n');
-			for (int i = 0; i < depth; i++) {
-				sb.append('\t');
-			}
-			sb.append('[');
-			sb.append(name);
-			sb.append(']');
-			if (totalItemCount() > 0) {
-				sb.append(",  ");
-				sb.append(totalItemCount());
-				sb.append(" items: ");
-
-				for (Iterator<Item> iterator = items.iterator(); iterator.hasNext();) {
-					sb.append('\n');
-					for (int i = 0; i < depth + 1; i++) {
-						sb.append('\t');
-					}
-					sb.append(iterator.next().getName());
-				}
-			}
-			if (subCategoryCount() > 0) {
-				sb.append(",  ");
-				sb.append(subCategoryCount());
-				sb.append(" sub categories: ");
-				for (Iterator<ItemCategory> iterator = children.iterator(); iterator.hasNext();) {
-					ItemCategory next = iterator.next();
-					sb.append(next);
-				}
-			}
-		}
-		return sb.toString();
-	}
-
-	/**
-	 * Gets Universal Category Id
-	 *
-	 * @return
-	 */
-	public String getUcid() {
-		return ucid;
-	}
+    @Override
+    public Item next() {
+      if (item.hasNext()) {
+        return item.next();
+      } else if (hasNext()) { // find the next element
+        return next();
+      } else {
+        return null;
+      }
+    }
+  }
 }

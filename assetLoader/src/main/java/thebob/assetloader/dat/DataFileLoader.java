@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 the_bob.
@@ -24,9 +24,8 @@
 package thebob.assetloader.dat;
 
 /**
- *
  * @author the_bob
  */
 public class DataFileLoader {
-    
+
 }

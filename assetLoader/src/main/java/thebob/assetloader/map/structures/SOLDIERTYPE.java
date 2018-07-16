@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 the_bob.
@@ -26,11 +26,10 @@ package thebob.assetloader.map.structures;
 import thebob.assetloader.map.helpers.AutoLoadingMapStruct;
 
 /**
- *
  * @author the_bob
  */
 public class SOLDIERTYPE extends AutoLoadingMapStruct {
-    SOLDIERTYPE(){
-        throw( new UnsupportedOperationException("SOLDIERTYPE not defined yet!") );
-    }
+  SOLDIERTYPE() {
+    throw (new UnsupportedOperationException("SOLDIERTYPE not defined yet!"));
+  }
 }

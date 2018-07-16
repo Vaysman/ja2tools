@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -28,20 +28,19 @@ import javafx.scene.image.ImageView;
 import thebob.assetmanager.managers.items.Item;
 
 /**
- *
  * @author the_bob
  */
 public class ItemMappingTreeItem extends TreeItem<String> {
-    
-    Item item;
 
-    public ItemMappingTreeItem(Item item) {
-	super(item.getName(), new ImageView(item.getImage()));
-	this.item = item;
-    }
+  Item item;
 
-    public Item getItem() {
-	return item;
-    }
-    
+  public ItemMappingTreeItem(Item item) {
+    super(item.getName(), new ImageView(item.getImage()));
+    this.item = item;
+  }
+
+  public Item getItem() {
+    return item;
+  }
+
 }

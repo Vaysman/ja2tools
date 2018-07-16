@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -30,22 +30,21 @@ import javafx.collections.ObservableList;
 import thebob.ja2maptool.util.compositor.SelectedTiles;
 
 /**
- *
  * @author the_bob
  */
-public class MapSnippetScope implements Scope{
-    public static final String SNIPPETS_UPDATED = "SNIPPETS_UPDATED";
-    
-    ObservableList<SelectedTiles> snippets = FXCollections.observableArrayList();
+public class MapSnippetScope implements Scope {
+  public static final String SNIPPETS_UPDATED = "SNIPPETS_UPDATED";
 
-    public MapSnippetScope(){
-	snippets.addListener((ListChangeListener.Change<? extends SelectedTiles> c) -> {
-	    publish(SNIPPETS_UPDATED);
-	});
-    }
-    
-    public ObservableList<SelectedTiles> getSnippets() {
-	return snippets;
-    }
-    
+  ObservableList<SelectedTiles> snippets = FXCollections.observableArrayList();
+
+  public MapSnippetScope() {
+    snippets.addListener((ListChangeListener.Change<? extends SelectedTiles> c) -> {
+      publish(SNIPPETS_UPDATED);
+    });
+  }
+
+  public ObservableList<SelectedTiles> getSnippets() {
+    return snippets;
+  }
+
 }

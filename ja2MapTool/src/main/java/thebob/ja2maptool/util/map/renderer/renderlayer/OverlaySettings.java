@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -26,37 +26,36 @@ package thebob.ja2maptool.util.map.renderer.renderlayer;
 import javafx.scene.effect.Effect;
 
 /**
- *
  * @author the_bob
  */
 public class OverlaySettings {
 
-    double opacity;
-    double offsetX;
-    double offsetY;
-    Effect effect;
+  double opacity;
+  double offsetX;
+  double offsetY;
+  Effect effect;
 
-    public OverlaySettings(double opacity, double offsetX, double offsetY, Effect effect) {
-	this.opacity = opacity;
-	this.offsetX = offsetX;
-	this.offsetY = offsetY;
-	this.effect = effect;
-    }
+  public OverlaySettings(double opacity, double offsetX, double offsetY, Effect effect) {
+    this.opacity = opacity;
+    this.offsetX = offsetX;
+    this.offsetY = offsetY;
+    this.effect = effect;
+  }
 
-    public double getOpacity() {
-	return opacity;
-    }
+  public double getOpacity() {
+    return opacity;
+  }
 
-    public double getOffsetX() {
-	return offsetX;
-    }
+  public double getOffsetX() {
+    return offsetX;
+  }
 
-    public double getOffsetY() {
-	return offsetY;
-    }
+  public double getOffsetY() {
+    return offsetY;
+  }
 
-    public Effect getEffect() {
-	return effect;
-    }
+  public Effect getEffect() {
+    return effect;
+  }
 
 }

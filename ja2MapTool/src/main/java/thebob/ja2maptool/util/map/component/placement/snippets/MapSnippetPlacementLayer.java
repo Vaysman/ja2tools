@@ -23,63 +23,63 @@
  */
 package thebob.ja2maptool.util.map.component.placement.snippets;
 
-import java.util.HashMap;
-import java.util.Map;
 import thebob.ja2maptool.util.compositor.SnippetPlacement;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- *
  * @author starcatter
  */
 public class MapSnippetPlacementLayer {
 
-    Map<Integer, SnippetPlacement> placements = new HashMap<Integer, SnippetPlacement>();
+  Map<Integer, SnippetPlacement> placements = new HashMap<Integer, SnippetPlacement>();
 
-    String name;
-    boolean visible = true;
+  String name;
+  boolean visible = true;
 
-    public MapSnippetPlacementLayer(MapSnippetPlacementLayer cpy) {
-        if(cpy == null){
-            throw new RuntimeException("MapSnippetPlacementLayer is null!");
-        }
-        this.name = cpy.name != null ? ( cpy.name + " (copy)" ) : "[unnamed] (copy)";
-        visible = cpy.visible;
-        cpy.placements.forEach((cell, placement) -> {
-            placements.put(cell, new SnippetPlacement(placement));
-        });
+  public MapSnippetPlacementLayer(MapSnippetPlacementLayer cpy) {
+    if (cpy == null) {
+      throw new RuntimeException("MapSnippetPlacementLayer is null!");
     }
+    this.name = cpy.name != null ? (cpy.name + " (copy)") : "[unnamed] (copy)";
+    visible = cpy.visible;
+    cpy.placements.forEach((cell, placement) -> {
+      placements.put(cell, new SnippetPlacement(placement));
+    });
+  }
 
-    public MapSnippetPlacementLayer(String name) {
-        this.name = name;
-    }
+  public MapSnippetPlacementLayer(String name) {
+    this.name = name;
+  }
 
-    public Map<Integer, SnippetPlacement> getPlacements() {
-        return placements;
-    }
+  public Map<Integer, SnippetPlacement> getPlacements() {
+    return placements;
+  }
 
-    public void setPlacements(Map<Integer, SnippetPlacement> placements) {
-        this.placements = placements;
-    }
+  public void setPlacements(Map<Integer, SnippetPlacement> placements) {
+    this.placements = placements;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public boolean isVisible() {
-        return visible;
-    }
+  public boolean isVisible() {
+    return visible;
+  }
 
-    public void setVisible(boolean visible) {
-        this.visible = visible;
-    }
+  public void setVisible(boolean visible) {
+    this.visible = visible;
+  }
 
-    @Override
-    public String toString() {
-        return name;
-    }
+  @Override
+  public String toString() {
+    return name;
+  }
 
 }

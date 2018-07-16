@@ -27,19 +27,18 @@ import thebob.ja2maptool.util.compositor.SnippetPlacement;
 import thebob.ja2maptool.util.map.component.interaction.eventdata.MapInteractionUserdata;
 
 /**
- *
  * @author starcatter
  */
 public class PlacementInteractionData extends MapInteractionUserdata {
 
-    private final SnippetPlacement placement;
+  private final SnippetPlacement placement;
 
-    public PlacementInteractionData(SnippetPlacement placement) {
-        this.placement = placement;
-    }
+  public PlacementInteractionData(SnippetPlacement placement) {
+    this.placement = placement;
+  }
 
-    public SnippetPlacement getPlacement() {
-        return placement;
-    }
+  public SnippetPlacement getPlacement() {
+    return placement;
+  }
 
 }

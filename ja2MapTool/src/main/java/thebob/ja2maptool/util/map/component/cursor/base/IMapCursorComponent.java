@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -29,32 +29,31 @@ import thebob.ja2maptool.util.map.component.cursor.cursors.base.ICursorControlle
 import thebob.ja2maptool.util.map.layers.cursor.MapCursor;
 
 /**
- *
  * @author the_bob
  */
 public interface IMapCursorComponent extends IMapInteractiveComponent {
 
-    void setCursor(ICursorController cursor);
+  void setCursor(ICursorController cursor);
 
-    int getMouseCellX();
+  int getMouseCellX();
 
-    int getMouseCellY();
+  int getMouseCellY();
 
-    int getMouseCell();
+  int getMouseCell();
 
-    double getLastCursorX();
+  double getLastCursorX();
 
-    double getLastCursorY();
+  double getLastCursorY();
 
-    boolean isControlDown();
+  boolean isControlDown();
 
-    boolean isShiftDown();
+  boolean isShiftDown();
 
-    boolean isAltDown();
+  boolean isAltDown();
 
-    MapCursor getMapCursor();
+  MapCursor getMapCursor();
 
-    MapCursor getMapCursor(int x, int y, IndexedElement cursor);
+  MapCursor getMapCursor(int x, int y, IndexedElement cursor);
 
-    MapCursor getMapCursor(double x, double y, IndexedElement cursor);
+  MapCursor getMapCursor(double x, double y, IndexedElement cursor);
 }

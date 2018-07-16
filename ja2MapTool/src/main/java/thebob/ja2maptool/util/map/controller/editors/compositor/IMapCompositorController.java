@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -23,85 +23,85 @@
  */
 package thebob.ja2maptool.util.map.controller.editors.compositor;
 
-import java.util.List;
-import java.util.Map;
 import thebob.ja2maptool.util.compositor.SelectedTiles;
 import thebob.ja2maptool.util.compositor.SelectionPlacementOptions;
 import thebob.ja2maptool.util.compositor.SnippetPlacement;
 import thebob.ja2maptool.util.map.component.placement.snippets.MapSnippetPlacementLayer;
 import thebob.ja2maptool.util.map.controller.base.IMapController;
 
+import java.util.List;
+import java.util.Map;
+
 /**
- *
  * @author the_bob
  */
 public interface IMapCompositorController extends IMapController {
 
-    /**
-     * Places all placements on the map
-     */
-    public void commitChangesToMap();
+  /**
+   * Places all placements on the map
+   */
+  public void commitChangesToMap();
 
-    /**
-     * returns currently selected tiles
-     *
-     * @return selected tiles
-     */
-    SelectedTiles getSelection();
+  /**
+   * returns currently selected tiles
+   *
+   * @return selected tiles
+   */
+  SelectedTiles getSelection();
 
-    /**
-     * places the passed tiles at placement position
-     *
-     * @param selection
-     * @param options
-     */
-    void placeSelection(SelectedTiles selection, SelectionPlacementOptions options);
+  /**
+   * places the passed tiles at placement position
+   *
+   * @param selection
+   * @param options
+   */
+  void placeSelection(SelectedTiles selection, SelectionPlacementOptions options);
 
-    /**
-     * sets placement preview tiles
-     *
-     * @param selection
-     */
-    public void setPlacementPreview(SelectedTiles selection);
+  /**
+   * sets placement preview tiles
+   *
+   * @param selection
+   */
+  public void setPlacementPreview(SelectedTiles selection);
 
-    /**
-     * Sets which layers will be pasted in added placements. Previously added
-     * placements will not be affected. Layer visibility for content pasted from
-     * clipboard is taken from current checkbox status.
-     *
-     * @param snippetPlacementOptions
-     */
-    public void setPlacementVisibility(SelectionPlacementOptions snippetPlacementOptions);
+  /**
+   * Sets which layers will be pasted in added placements. Previously added
+   * placements will not be affected. Layer visibility for content pasted from
+   * clipboard is taken from current checkbox status.
+   *
+   * @param snippetPlacementOptions
+   */
+  public void setPlacementVisibility(SelectionPlacementOptions snippetPlacementOptions);
 
-    // ----------------------------
-    // placements
-    // ----------------------------
-    public void selectPlacement(SnippetPlacement selectedItem);
+  // ----------------------------
+  // placements
+  // ----------------------------
+  public void selectPlacement(SnippetPlacement selectedItem);
 
-    // ----------------------------
-    // placement layers
-    // ----------------------------
-    List<MapSnippetPlacementLayer> getLayers();
+  // ----------------------------
+  // placement layers
+  // ----------------------------
+  List<MapSnippetPlacementLayer> getLayers();
 
-    void setActiveLayer(MapSnippetPlacementLayer layer);
+  public void setLayers(List<MapSnippetPlacementLayer> layers);
 
-    public MapSnippetPlacementLayer getActiveLayer();
+  public MapSnippetPlacementLayer getActiveLayer();
 
-    public void updateVisibleLayers();
+  void setActiveLayer(MapSnippetPlacementLayer layer);
 
-    // ----------------------------
-    // placement layer manipulation
-    // ----------------------------
-    MapSnippetPlacementLayer addPlacementLayer(String name);
+  public void updateVisibleLayers();
 
-    void deletePlacementLayer(MapSnippetPlacementLayer layer);
+  // ----------------------------
+  // placement layer manipulation
+  // ----------------------------
+  MapSnippetPlacementLayer addPlacementLayer(String name);
 
-    public void movePlacementLayer(MapSnippetPlacementLayer selectedItem, int i);
+  void deletePlacementLayer(MapSnippetPlacementLayer layer);
 
-    public void copyPlacementLayer(MapSnippetPlacementLayer selectedItem);
+  public void movePlacementLayer(MapSnippetPlacementLayer selectedItem, int i);
 
-    public void appendPlacementsToCurrentLayer(Map<Integer, SnippetPlacement> placements);
+  public void copyPlacementLayer(MapSnippetPlacementLayer selectedItem);
 
-    public void setLayers(List<MapSnippetPlacementLayer> layers);
+  public void appendPlacementsToCurrentLayer(Map<Integer, SnippetPlacement> placements);
 
 }

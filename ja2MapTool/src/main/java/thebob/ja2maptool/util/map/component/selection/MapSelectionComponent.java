@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -23,10 +23,6 @@
  */
 package thebob.ja2maptool.util.map.component.selection;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Observable;
 import javafx.application.Platform;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
@@ -38,354 +34,351 @@ import thebob.ja2maptool.util.map.component.base.MapComponentBase;
 import thebob.ja2maptool.util.map.component.interaction.IMapInteractionComponent;
 import thebob.ja2maptool.util.map.component.interaction.eventdata.MapInteractionData;
 import thebob.ja2maptool.util.map.component.interaction.layer.MapInteractionLayer;
+import thebob.ja2maptool.util.map.component.interaction.target.IMapInteractionListener;
 import thebob.ja2maptool.util.map.component.placement.snippets.IMapSnippetPlacementComponent;
 import thebob.ja2maptool.util.map.events.MapEvent;
 import thebob.ja2maptool.util.map.layers.cursor.CursorLayer;
-import static thebob.ja2maptool.util.map.layers.cursor.CursorLayer.LAYER_ACTION;
 import thebob.ja2maptool.util.map.layers.cursor.ICursorLayerManager;
 import thebob.ja2maptool.util.map.layers.map.IMapLayerManager;
 import thebob.ja2maptool.util.map.renderer.ITileRendererManager;
-import thebob.ja2maptool.util.map.component.interaction.target.IMapInteractionListener;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Observable;
+
+import static thebob.ja2maptool.util.map.layers.cursor.CursorLayer.LAYER_ACTION;
 
 /**
- *
  * @author the_bob
  */
 public class MapSelectionComponent extends MapComponentBase implements IMapSelectionComponent, IMapInteractionListener {
 
-    protected static final IndexedElement SELECTED_TILES_CURSOR = new IndexedElement(131, 10);
-    protected static final IndexedElement SELECTED_TILES_HOVER_CURSOR = new IndexedElement(131, 8);
+  protected static final IndexedElement SELECTED_TILES_CURSOR = new IndexedElement(131, 10);
+  protected static final IndexedElement SELECTED_TILES_HOVER_CURSOR = new IndexedElement(131, 8);
+  private final IMapInteractionComponent cells;
+  private final IMapSnippetPlacementComponent placements;
+  protected ICursorLayerManager cursorLayer;
+  // selction start marker
+  protected Integer selectionStartX = null;
+  protected Integer selectionStartY = null;
+  protected Integer selectionStartCell = null;
 
-    protected ICursorLayerManager cursorLayer;
-    private final IMapInteractionComponent cells;
-    private final IMapSnippetPlacementComponent placements;
+  // selction end marker
+  protected Integer selectionEndX = null;
+  protected Integer selectionEndY = null;
+  protected Integer selectionEndCell = null;
 
-    // selction start marker
-    protected Integer selectionStartX = null;
-    protected Integer selectionStartY = null;
-    protected Integer selectionStartCell = null;
+  // TODO: fix selectiom mode change
+  SelectionMode selMode = SelectionMode.CellRect;
+  // --------------------------------
+  // Methods for updating state
+  // --------------------------------
+  List<SnippetPlacement> selectedPlacements = new ArrayList<SnippetPlacement>();
+  // remember last selected cells. Looks like something is redrawing the selection every pixel moved instrad of every cell.
+  Integer lastSelectionStartCell = null;
+  Integer lastSelectionEndCell = null;
+  // --------------------------------
+  // mouse interaction support (drag selection)
+  // --------------------------------
+  int x = 0, y = 0;
+  int deltaXSum = 0;
+  int deltaYSum = 0;
+  boolean hovered = false;
+  boolean dragging = false;
+  // selection rect (tramsformed start/end coordinates, x1/y1 is upper left corner)
+  private Integer rectStartX;
+  private Integer rectEndX;
+  private Integer rectStartY;
+  private Integer rectEndY;
 
-    // selction end marker
-    protected Integer selectionEndX = null;
-    protected Integer selectionEndY = null;
-    protected Integer selectionEndCell = null;
+  public MapSelectionComponent(ITileRendererManager renderer, IMapLayerManager map, ICursorLayerManager cursorLayer, IMapInteractionComponent cells) {
+    super(renderer, map);
+    this.cursorLayer = cursorLayer;
+    this.cells = cells;
+    placements = null;
+  }
 
-    // TODO: fix selectiom mode change
-    SelectionMode selMode = SelectionMode.CellRect;
+  public MapSelectionComponent(ITileRendererManager renderer, IMapLayerManager map, ICursorLayerManager cursorLayer, IMapInteractionComponent cells, IMapSnippetPlacementComponent placements) {
+    super(renderer, map);
+    this.cursorLayer = cursorLayer;
+    this.cells = cells;
+    this.placements = placements;
+  }
 
-    // selection rect (tramsformed start/end coordinates, x1/y1 is upper left corner)
-    private Integer rectStartX;
-    private Integer rectEndX;
-    private Integer rectStartY;
-    private Integer rectEndY;
+  // --------------------------------
+  // Component communication methods
+  // --------------------------------
+  @Override
+  public Integer getSelectionStart() {
+    return selectionStartCell;
+  }
 
-    public MapSelectionComponent(ITileRendererManager renderer, IMapLayerManager map, ICursorLayerManager cursorLayer, IMapInteractionComponent cells) {
-        super(renderer, map);
-        this.cursorLayer = cursorLayer;
-        this.cells = cells;
-        placements = null;
+  @Override
+  public Integer getSelectionEnd() {
+    return selectionEndCell;
+  }
+
+  @Override
+  public boolean hasSelection() {
+    return selectionStartCell != null && selectionEndCell != null;
+  }
+
+  @Override
+  public SelectedTiles getSelection() {
+    SelectedTiles selectedTiles = new SelectedTiles(getMap().getTileset().getIndex(), rectStartX, rectEndX, selectionStartCell, rectStartY, rectEndY, selectionEndCell);
+
+    switch (selMode) {
+      case CellRect:
+        selectedTiles.setSelectedCells(cursorLayer.getCellNumbersForRect(rectStartX, rectStartY, rectEndX, rectEndY, CursorLayer.CursorFillMode.Full));
+        break;
+
+      case CellRectRadius:
+        selectedTiles.setSelectedCells(cursorLayer.getCellNumbersForRadius(rectStartX, rectStartY, Math.abs(rectEndX - rectStartX) * 2, Math.abs(rectEndY - rectStartY) * 2, CursorLayer.CursorFillMode.Full));
+        break;
     }
 
-    public MapSelectionComponent(ITileRendererManager renderer, IMapLayerManager map, ICursorLayerManager cursorLayer, IMapInteractionComponent cells, IMapSnippetPlacementComponent placements) {
-        super(renderer, map);
-        this.cursorLayer = cursorLayer;
-        this.cells = cells;
-        this.placements = placements;
+    return selectedTiles;
+  }
+
+  // --------------------------------
+  // Place/remove selection
+  // --------------------------------
+  @Override
+  public void placeMarker(int mouseCellX, int mouseCellY) {
+    if (selectionStartCell == null) {
+      selectionStartX = mouseCellX;
+      selectionStartY = mouseCellY;
+      selectionStartCell = cursorLayer.rowColToPos(selectionStartY, selectionStartX);
+
+      notifyObservers(new MapEvent(MapEvent.ChangeType.SELECTION_STARTED));
+    } else if (selectionEndCell == null || (mouseCellX != selectionEndX || mouseCellY != selectionEndY)) {
+      selectionEndX = mouseCellX;
+      selectionEndY = mouseCellY;
+      selectionEndCell = cursorLayer.rowColToPos(selectionEndY, selectionEndX);
+      updateSelectionGrids(selMode);
+
+      notifyObservers(new MapEvent(MapEvent.ChangeType.SELECTION_CHANGED));
+    } else if (mouseCellX == selectionEndX && mouseCellY == selectionEndY) {
+      //selMode = selMode.getNext();
+      //updateSelectionGrids(selMode);
     }
+  }
 
-    // --------------------------------
-    // Component communication methods
-    // --------------------------------
-    @Override
-    public Integer getSelectionStart() {
-        return selectionStartCell;
-    }
+  @Override
+  public void clearSelection() {
+    selectionStartX = null;
+    selectionStartY = null;
+    selectionStartCell = null;
 
-    @Override
-    public Integer getSelectionEnd() {
-        return selectionEndCell;
-    }
+    selectionEndX = null;
+    selectionEndY = null;
+    selectionEndCell = null;
 
-    @Override
-    public boolean hasSelection() {
-        return selectionStartCell != null && selectionEndCell != null;
-    }
+    rectStartX = null;
+    rectEndX = null;
+    rectStartY = null;
+    rectEndY = null;
 
-    @Override
-    public SelectedTiles getSelection() {
-        SelectedTiles selectedTiles = new SelectedTiles(getMap().getTileset().getIndex(), rectStartX, rectEndX, selectionStartCell, rectStartY, rectEndY, selectionEndCell);
+    cursorLayer.clearLayer(LAYER_ACTION);
+    cells.getLayer(this).clear();
+    cells.refreshLayers();
 
-        switch (selMode) {
-            case CellRect:
-                selectedTiles.setSelectedCells(cursorLayer.getCellNumbersForRect(rectStartX, rectStartY, rectEndX, rectEndY, CursorLayer.CursorFillMode.Full));
-                break;
+    notifyObservers(new MapEvent(MapEvent.ChangeType.SELECTION_CLEARED));
+  }
 
-            case CellRectRadius:
-                selectedTiles.setSelectedCells(cursorLayer.getCellNumbersForRadius(rectStartX, rectStartY, Math.abs(rectEndX - rectStartX) * 2, Math.abs(rectEndY - rectStartY) * 2, CursorLayer.CursorFillMode.Full));
-                break;
-        }
+  private void updateSelectionGrids(SelectionMode mode) {
+    if ((selectionStartCell != null)
+        && (selectionEndCell != null)
+        && ((!Objects.equals(lastSelectionStartCell, selectionStartCell))
+        || (!Objects.equals(lastSelectionEndCell, selectionEndCell))
+        || dragging)
+        ) {
 
-        return selectedTiles;
-    }
+      lastSelectionStartCell = selectionStartCell;
+      lastSelectionEndCell = selectionEndCell;
 
-    // --------------------------------
-    // Place/remove selection
-    // --------------------------------
-    @Override
-    public void placeMarker(int mouseCellX, int mouseCellY) {
-        if (selectionStartCell == null) {
-            selectionStartX = mouseCellX;
-            selectionStartY = mouseCellY;
-            selectionStartCell = cursorLayer.rowColToPos(selectionStartY, selectionStartX);
+      rectStartX = selectionStartX < selectionEndX ? selectionStartX : selectionEndX;
+      rectEndX = selectionStartX > selectionEndX ? selectionStartX : selectionEndX;
+      rectStartY = selectionStartY < selectionEndY ? selectionStartY : selectionEndY;
+      rectEndY = selectionStartY > selectionEndY ? selectionStartY : selectionEndY;
 
-            notifyObservers(new MapEvent(MapEvent.ChangeType.SELECTION_STARTED));
-        } else if (selectionEndCell == null || (mouseCellX != selectionEndX || mouseCellY != selectionEndY)) {
-            selectionEndX = mouseCellX;
-            selectionEndY = mouseCellY;
-            selectionEndCell = cursorLayer.rowColToPos(selectionEndY, selectionEndX);
-            updateSelectionGrids(selMode);
+      refreshSelectionGridDisplay(mode);
+      refreshInteractionGrid(mode);
 
-            notifyObservers(new MapEvent(MapEvent.ChangeType.SELECTION_CHANGED));
-        } else if (mouseCellX == selectionEndX && mouseCellY == selectionEndY) {
-            //selMode = selMode.getNext();
-            //updateSelectionGrids(selMode);
-        }
-    }
-
-    @Override
-    public void clearSelection() {
-        selectionStartX = null;
-        selectionStartY = null;
-        selectionStartCell = null;
-
-        selectionEndX = null;
-        selectionEndY = null;
-        selectionEndCell = null;
-
-        rectStartX = null;
-        rectEndX = null;
-        rectStartY = null;
-        rectEndY = null;
-
-        cursorLayer.clearLayer(LAYER_ACTION);
-        cells.getLayer(this).clear();
-        cells.refreshLayers();
-
-        notifyObservers(new MapEvent(MapEvent.ChangeType.SELECTION_CLEARED));
-    }
-
-    // --------------------------------
-    // Methods for updating state
-    // --------------------------------
-    List<SnippetPlacement> selectedPlacements = new ArrayList<SnippetPlacement>();
-
-    // remember last selected cells. Looks like something is redrawing the selection every pixel moved instrad of every cell.
-    Integer lastSelectionStartCell = null;
-    Integer lastSelectionEndCell = null;
-
-    private void updateSelectionGrids(SelectionMode mode) {
-        if (    (selectionStartCell != null)
-             && (selectionEndCell != null)
-             && (       (!Objects.equals(lastSelectionStartCell, selectionStartCell))
-                     || (!Objects.equals(lastSelectionEndCell, selectionEndCell))
-                     || dragging)
-                ) {
-
-            lastSelectionStartCell = selectionStartCell;
-            lastSelectionEndCell = selectionEndCell;
-
-            rectStartX = selectionStartX < selectionEndX ? selectionStartX : selectionEndX;
-            rectEndX = selectionStartX > selectionEndX ? selectionStartX : selectionEndX;
-            rectStartY = selectionStartY < selectionEndY ? selectionStartY : selectionEndY;
-            rectEndY = selectionStartY > selectionEndY ? selectionStartY : selectionEndY;
-
-            refreshSelectionGridDisplay(mode);
-            refreshInteractionGrid(mode);
-
-            // placement selection
-            if (placements != null) {
-                if (!dragging) {
-                    selectedPlacements.clear();
-                    int[] cells = cursorLayer.getCellNumbersForRect(rectStartX, rectStartY, rectEndX, rectEndY, CursorLayer.CursorFillMode.Full);
-                    for (int cell : cells) {
-                        SnippetPlacement placement = placements.getPlacements().get(cell);
-                        if (placement != null) {
-                            selectedPlacements.add(placement);
-                        }
-                    }
-                }
+      // placement selection
+      if (placements != null) {
+        if (!dragging) {
+          selectedPlacements.clear();
+          int[] cells = cursorLayer.getCellNumbersForRect(rectStartX, rectStartY, rectEndX, rectEndY, CursorLayer.CursorFillMode.Full);
+          for (int cell : cells) {
+            SnippetPlacement placement = placements.getPlacements().get(cell);
+            if (placement != null) {
+              selectedPlacements.add(placement);
             }
+          }
         }
+      }
+    }
+  }
+
+  private void refreshInteractionGrid(SelectionMode mode) {
+    MapInteractionLayer activeLayer = cells.getLayer(this);
+    activeLayer.clear();
+
+    switch (mode) {
+      case CellRect:
+        activeLayer.registerCells(cursorLayer.getCellNumbersForRect(rectStartX - 1, rectStartY - 1, rectEndX + 1, rectEndY + 1, CursorLayer.CursorFillMode.Full), null);
+        break;
+
+      case CellRectRadius:
+        activeLayer.registerCells(cursorLayer.getCellNumbersForRadius(selectionStartX, selectionStartY, (rectEndX - rectStartX) * 2, (rectEndY - rectStartY) * 2, CursorLayer.CursorFillMode.Full), null);
+        break;
+    }
+    cells.refreshLayers();
+  }
+
+  private void refreshSelectionGridDisplay(SelectionMode mode) {
+    cursorLayer.clearLayer(LAYER_ACTION);
+
+    CursorLayer.CursorFillMode fillMode = dragging ? CursorLayer.CursorFillMode.Border : CursorLayer.CursorFillMode.Full;
+
+    switch (mode) {
+      case CellRect:
+        cursorLayer.placeCursorRect(LAYER_ACTION, selectionStartX, selectionStartY, selectionEndX, selectionEndY, SELECTED_TILES_CURSOR, fillMode);
+        break;
+
+      case CellRectRadius:
+        cursorLayer.placeCursorCenterRect(LAYER_ACTION, selectionStartX, selectionStartY, Math.abs(selectionEndX - selectionStartX) * 2, Math.abs(selectionEndY - selectionStartY) * 2, SELECTED_TILES_CURSOR, fillMode);
+        break;
+    }
+  }
+
+  @Override
+  public boolean hoverCell(int cell, MapInteractionData data) {
+    if (rectStartX == null || rectEndX == null || rectStartY == null || rectEndY == null) {
+      return false;
     }
 
-    private void refreshInteractionGrid(SelectionMode mode) {
-        MapInteractionLayer activeLayer = cells.getLayer(this);
-        activeLayer.clear();
+    hovered = true;
 
-        switch (mode) {
-            case CellRect:
-                activeLayer.registerCells(cursorLayer.getCellNumbersForRect(rectStartX - 1, rectStartY - 1, rectEndX + 1, rectEndY + 1, CursorLayer.CursorFillMode.Full), null);
-                break;
+    int deltaX = 0;
+    int deltaY = 0;
 
-            case CellRectRadius:
-                activeLayer.registerCells(cursorLayer.getCellNumbersForRadius(selectionStartX, selectionStartY, (rectEndX - rectStartX) * 2, (rectEndY - rectStartY) * 2, CursorLayer.CursorFillMode.Full), null);
-                break;
-        }
-        cells.refreshLayers();
+    if (x > rectStartX - 1 && x < rectEndX + 1 && y > rectStartY - 1 && y < rectEndY + 1) {
+      deltaX = data.getMouseCellX() - x;
+      deltaY = data.getMouseCellY() - y;
     }
 
-    private void refreshSelectionGridDisplay(SelectionMode mode) {
-        cursorLayer.clearLayer(LAYER_ACTION);
+    x = data.getMouseCellX();
+    y = data.getMouseCellY();
 
-        CursorLayer.CursorFillMode fillMode = dragging ? CursorLayer.CursorFillMode.Border : CursorLayer.CursorFillMode.Full;
-
-        switch (mode) {
-            case CellRect:
-                cursorLayer.placeCursorRect(LAYER_ACTION, selectionStartX, selectionStartY, selectionEndX, selectionEndY, SELECTED_TILES_CURSOR, fillMode);
-                break;
-
-            case CellRectRadius:
-                cursorLayer.placeCursorCenterRect(LAYER_ACTION, selectionStartX, selectionStartY, Math.abs(selectionEndX - selectionStartX) * 2, Math.abs(selectionEndY - selectionStartY) * 2, SELECTED_TILES_CURSOR, fillMode);
-                break;
-        }
-    }
-
-    // --------------------------------
-    // mouse interaction support (drag selection)
-    // --------------------------------
-    int x = 0, y = 0;
-
-    int deltaXSum = 0;
-    int deltaYSum = 0;
-
-    boolean hovered = false;
-    boolean dragging = false;
-
-    @Override
-    public boolean hoverCell(int cell, MapInteractionData data) {
-        if (rectStartX == null || rectEndX == null || rectStartY == null || rectEndY == null) {
-            return false;
-        }
-
-        hovered = true;
-
-        int deltaX = 0;
-        int deltaY = 0;
-
-        if (x > rectStartX - 1 && x < rectEndX + 1 && y > rectStartY - 1 && y < rectEndY + 1) {
-            deltaX = data.getMouseCellX() - x;
-            deltaY = data.getMouseCellY() - y;
-        }
-
-        x = data.getMouseCellX();
-        y = data.getMouseCellY();
-
-        if (data.getButton() == MouseButton.PRIMARY) {
-            if (deltaX != 0 || deltaY != 0) {
-                if (!dragging) {
-                    dragStart();
-                }
-
-                selectionStartX += deltaX;
-                selectionStartY += deltaY;
-
-                selectionEndX += deltaX;
-                selectionEndY += deltaY;
-
-                selectionStartCell = cursorLayer.rowColToPos(selectionStartY, selectionStartX);
-                selectionEndCell = cursorLayer.rowColToPos(selectionEndY, selectionEndX);
-
-                deltaXSum += deltaX;
-                deltaYSum += deltaY;
-
-                notifyObservers(new MapEvent(MapEvent.ChangeType.SELECTION_CHANGED));
-            }
+    if (data.getButton() == MouseButton.PRIMARY) {
+      if (deltaX != 0 || deltaY != 0) {
+        if (!dragging) {
+          dragStart();
         }
 
-        final int deltaXf = deltaX;
-        final int deltaYf = deltaY;
+        selectionStartX += deltaX;
+        selectionStartY += deltaY;
 
-        Platform.runLater(() -> {
-            if (deltaXf != 0 || deltaYf != 0) {
-                updateSelectionGrids(selMode);
-            }
-            if (x > rectStartX - 1 && x < rectEndX + 1 && y > rectStartY - 1 && y < rectEndY + 1) {
-                cursorLayer.placeCursorRect(LAYER_ACTION, rectStartX - 1, rectStartY - 1, rectEndX + 1, rectEndY + 1, SELECTED_TILES_HOVER_CURSOR, CursorLayer.CursorFillMode.Corners);
-            }
-        });
+        selectionEndX += deltaX;
+        selectionEndY += deltaY;
 
-        return true;
+        selectionStartCell = cursorLayer.rowColToPos(selectionStartY, selectionStartX);
+        selectionEndCell = cursorLayer.rowColToPos(selectionEndY, selectionEndX);
+
+        deltaXSum += deltaX;
+        deltaYSum += deltaY;
+
+        notifyObservers(new MapEvent(MapEvent.ChangeType.SELECTION_CHANGED));
+      }
     }
 
-    void dragStart() {
-        dragging = true;
-        deltaXSum = 0;
-        deltaYSum = 0;
-    }
+    final int deltaXf = deltaX;
+    final int deltaYf = deltaY;
 
-    void dragEnd() {
-        dragging = false;
-        if (placements != null && selectedPlacements.isEmpty() == false) {
-            placements.movePlacementList(selectedPlacements, deltaXSum, deltaYSum);
-        }
-    }
+    Platform.runLater(() -> {
+      if (deltaXf != 0 || deltaYf != 0) {
+        updateSelectionGrids(selMode);
+      }
+      if (x > rectStartX - 1 && x < rectEndX + 1 && y > rectStartY - 1 && y < rectEndY + 1) {
+        cursorLayer.placeCursorRect(LAYER_ACTION, rectStartX - 1, rectStartY - 1, rectEndX + 1, rectEndY + 1, SELECTED_TILES_HOVER_CURSOR, CursorLayer.CursorFillMode.Corners);
+      }
+    });
 
-    @Override
-    public void hoverOff() {
-        if (hovered) {
-            updateSelectionGrids(selMode);
-            hovered = false;
-        }
-    }
+    return true;
+  }
 
-    @Override
-    public boolean activateCell(int cell, MapInteractionData data) {
-        x = data.getMouseCellX();
-        y = data.getMouseCellY();
-        if (dragging) {
-            dragEnd();
-        }
-        return true;
-    }
+  void dragStart() {
+    dragging = true;
+    deltaXSum = 0;
+    deltaYSum = 0;
+  }
 
-    // --------------------------------
-    // map controller methods, to be deleted?
-    // --------------------------------
-    @Override
-    public void mouseEvent(MouseEvent e) {
-        // nothing to do?
+  void dragEnd() {
+    dragging = false;
+    if (placements != null && selectedPlacements.isEmpty() == false) {
+      placements.movePlacementList(selectedPlacements, deltaXSum, deltaYSum);
     }
+  }
 
-    @Override
-    public void keyEvent(KeyEvent e) {
-        // nothing to do?
+  @Override
+  public void hoverOff() {
+    if (hovered) {
+      updateSelectionGrids(selMode);
+      hovered = false;
     }
+  }
 
-    @Override
-    public void disconnect() {
-        // nothing to do?
+  @Override
+  public boolean activateCell(int cell, MapInteractionData data) {
+    x = data.getMouseCellX();
+    y = data.getMouseCellY();
+    if (dragging) {
+      dragEnd();
     }
+    return true;
+  }
 
-    @Override
-    public void update(Observable o, Object arg) {
-        // nothing to do?
+  // --------------------------------
+  // map controller methods, to be deleted?
+  // --------------------------------
+  @Override
+  public void mouseEvent(MouseEvent e) {
+    // nothing to do?
+  }
+
+  @Override
+  public void keyEvent(KeyEvent e) {
+    // nothing to do?
+  }
+
+  @Override
+  public void disconnect() {
+    // nothing to do?
+  }
+
+  @Override
+  public void update(Observable o, Object arg) {
+    // nothing to do?
+  }
+
+  @Override
+  public String toString() {
+    return "MapSelectionComponent{" + "rectStartX=" + rectStartX + ", rectEndX=" + rectEndX + ", rectStartY=" + rectStartY + ", rectEndY=" + rectEndY + ", hovered=" + hovered + '}';
+  }
+
+  // ---------------------------
+  public enum SelectionMode {
+    CellRect,
+    // ScreenRect, TODO
+    CellRectRadius;
+
+    // http://siliconsparrow.com/how-to-cycle-through-the-values-of-an-enum-in-java/
+    public SelectionMode getNext() {
+      return values()[(ordinal() + 1) % values().length];
     }
-
-    // ---------------------------
-    public enum SelectionMode {
-        CellRect,
-        // ScreenRect, TODO
-        CellRectRadius;
-
-        // http://siliconsparrow.com/how-to-cycle-through-the-values-of-an-enum-in-java/
-        public SelectionMode getNext() {
-            return values()[(ordinal() + 1) % values().length];
-        }
-    }
-
-    @Override
-    public String toString() {
-        return "MapSelectionComponent{" + "rectStartX=" + rectStartX + ", rectEndX=" + rectEndX + ", rectStartY=" + rectStartY + ", rectEndY=" + rectEndY + ", hovered=" + hovered + '}';
-    }
+  }
 
 }

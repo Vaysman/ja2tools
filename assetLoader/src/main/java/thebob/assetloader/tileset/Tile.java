@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 the_bob.
@@ -23,85 +23,79 @@
  */
 package thebob.assetloader.tileset;
 
-import java.nio.ByteBuffer;
 import javafx.scene.image.Image;
-import javafx.scene.image.PixelFormat;
-import javafx.scene.image.PixelWriter;
-import javafx.scene.image.WritableImage;
 import thebob.assetloader.common.ImageAdapter;
 import thebob.assetloader.sti.StiLoader;
 
 /**
- *
  * @author the_bob
  */
 public class Tile {
-    
-    Image image = null;
-    StiLoader loader = null;
-    int type = -1;
-    int index = -1;
-    int width = 0;
-    int height = 0;
-    int offsetX = 0;
-    int offsetY = 0;
 
-    public Tile(StiLoader loader, int index, int type) {
-        this.loader = loader;
-        this.index = index;
-        this.type = type;
-    }
+  Image image = null;
+  StiLoader loader = null;
+  int type = -1;
+  int index = -1;
+  int width = 0;
+  int height = 0;
+  int offsetX = 0;
+  int offsetY = 0;
 
-    public Image getImage() {
-        if (image == null) {
-            loadImage();
-        }
-        return image;
-    }
+  public Tile(StiLoader loader, int index, int type) {
+    this.loader = loader;
+    this.index = index;
+    this.type = type;
+  }
 
-    private void loadImage() {
-        width = loader.getImageWidth(index);
-        height = loader.getImageHeight(index);
-        offsetX = loader.getImageOffsetX(index);
-        offsetY = loader.getImageOffsetY(index);
-        
-	// TODO: do this once per file, in stiloader or tileloader        
-        image = ImageAdapter.convertStiImage(width, height, loader.getImage(index), loader.getPalette());
+  public Image getImage() {
+    if (image == null) {
+      loadImage();
     }
+    return image;
+  }
 
-    public int getWidth() {
-        return width;
-    }
+  private void loadImage() {
+    width = loader.getImageWidth(index);
+    height = loader.getImageHeight(index);
+    offsetX = loader.getImageOffsetX(index);
+    offsetY = loader.getImageOffsetY(index);
 
-    public int getHeight() {
-        return height;
-    }
+    // TODO: do this once per file, in stiloader or tileloader
+    image = ImageAdapter.convertStiImage(width, height, loader.getImage(index), loader.getPalette());
+  }
 
-    public int getOffsetX() {
-        return offsetX;
-    }
+  public int getWidth() {
+    return width;
+  }
 
-    public int getOffsetY() {
-        return offsetY;
-    }
+  public int getHeight() {
+    return height;
+  }
 
-    public int getType() {
-	return type;
-    }
+  public int getOffsetX() {
+    return offsetX;
+  }
 
-    public int getIndex() {
-	return index;
-    }
+  public int getOffsetY() {
+    return offsetY;
+  }
 
-    public StiLoader getLoader() {
-	return loader;
-    }
+  public int getType() {
+    return type;
+  }
 
-    @Override
-    public String toString() {
-	return "Tile{" + "type=" + type + ", index=" + index + '}';
-    }
-    
-    
-        
+  public int getIndex() {
+    return index;
+  }
+
+  public StiLoader getLoader() {
+    return loader;
+  }
+
+  @Override
+  public String toString() {
+    return "Tile{" + "type=" + type + ", index=" + index + '}';
+  }
+
+
 }

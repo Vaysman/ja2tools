@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 the_bob.
@@ -24,22 +24,21 @@
 package thebob.assetloader.map.core.components;
 
 /**
- *
  * @author the_bob
  */
 public class IndexedElement {
 
-    public int type;
-    public int index;
+  public int type;
+  public int index;
 
-    public IndexedElement(int ubType, int ubSubIndex) {
-	type = ubType;
-	index = ubSubIndex;
-    }
+  public IndexedElement(int ubType, int ubSubIndex) {
+    type = ubType;
+    index = ubSubIndex;
+  }
 
-    @Override
-    public String toString() {
-	return "{" + type + ",\t" + index + '}';
-    }
-    
+  @Override
+  public String toString() {
+    return "{" + type + ",\t" + index + '}';
+  }
+
 }

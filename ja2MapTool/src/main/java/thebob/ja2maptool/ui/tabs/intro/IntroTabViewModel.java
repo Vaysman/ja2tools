@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -26,37 +26,37 @@ package thebob.ja2maptool.ui.tabs.intro;
 import de.saxsys.mvvmfx.InjectScope;
 import de.saxsys.mvvmfx.ViewModel;
 import thebob.ja2maptool.scopes.MainScope;
+import thebob.ja2maptool.scopes.VfsAssetScope;
+
 import static thebob.ja2maptool.scopes.MainScope.TabTypes.TAB_CONVERT;
 import static thebob.ja2maptool.scopes.MainScope.TabTypes.TAB_MAPPING_SETUP;
 import static thebob.ja2maptool.scopes.MainScope.TabTypes.TAB_VFS_SETUP;
-import thebob.ja2maptool.scopes.VfsAssetScope;
 
 public class IntroTabViewModel implements ViewModel {
-    @InjectScope
-    MainScope mainScreen;
-    @InjectScope
-    VfsAssetScope vfsAssets;
-    
-    public void goToConfigSetupTab() {
-	mainScreen.publish(mainScreen.GOTO_TAB, TAB_VFS_SETUP);
-    }
+  @InjectScope
+  MainScope mainScreen;
+  @InjectScope
+  VfsAssetScope vfsAssets;
 
-    public void goToConvertSetupTab() {
-	mainScreen.publish(mainScreen.GOTO_TAB, TAB_CONVERT);
-    }
+  public void goToConfigSetupTab() {
+    mainScreen.publish(mainScreen.GOTO_TAB, TAB_VFS_SETUP);
+  }
 
-    public void goToMapSetupTab() {
-	mainScreen.publish(mainScreen.GOTO_TAB, TAB_MAPPING_SETUP);
-    }
+  public void goToConvertSetupTab() {
+    mainScreen.publish(mainScreen.GOTO_TAB, TAB_CONVERT);
+  }
 
-    public MainScope getMainScreen() {
-        return mainScreen;
-    }
+  public void goToMapSetupTab() {
+    mainScreen.publish(mainScreen.GOTO_TAB, TAB_MAPPING_SETUP);
+  }
 
-    public VfsAssetScope getVfsAssets() {
-        return vfsAssets;
-    }
+  public MainScope getMainScreen() {
+    return mainScreen;
+  }
 
-    
-    
+  public VfsAssetScope getVfsAssets() {
+    return vfsAssets;
+  }
+
+
 }

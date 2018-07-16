@@ -28,14 +28,13 @@ import thebob.ja2maptool.util.map.component.interaction.handle.handles.base.MapH
 
 
 /**
- *
  * @author starcatter
  */
 public abstract class MapHandleState {
 
-	public TileSnippet getState(HandleStateMode mode) {
-		return get(mode);
-	}
+  public TileSnippet getState(HandleStateMode mode) {
+    return get(mode);
+  }
 
-	protected abstract TileSnippet get(HandleStateMode mode);
+  protected abstract TileSnippet get(HandleStateMode mode);
 }

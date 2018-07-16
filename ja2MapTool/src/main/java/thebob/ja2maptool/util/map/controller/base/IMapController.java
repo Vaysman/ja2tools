@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -23,14 +23,15 @@
  */
 package thebob.ja2maptool.util.map.controller.base;
 
-import java.util.Observer;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+
+import java.util.Observer;
 
 /**
  * Map Controllers provide an interface to the map renderer and abstract various
  * tasks performed on map data.
- *
+ * <p>
  * Before their introduction everything was handled by the MapDisplayManager,
  * which made that class cluttered and hard to work on.
  *
@@ -38,28 +39,28 @@ import javafx.scene.input.MouseEvent;
  */
 public interface IMapController {
 
-    void mouseEvent(MouseEvent e);
+  void mouseEvent(MouseEvent e);
 
-    void keyEvent(KeyEvent e);
+  void keyEvent(KeyEvent e);
 
-    void disconnect();
+  void disconnect();
 
-    /**
-     * Adds an observer to the set of observers for this object, provided that
-     * it is not the same as some observer already in the set. The order in
-     * which notifications will be delivered to multiple observers is not
-     * specified. See the class comment.
-     *
-     * @param o an observer to be added.
-     * @throws NullPointerException if the parameter o is null.
-     */
-    void addObserver(Observer o);
+  /**
+   * Adds an observer to the set of observers for this object, provided that
+   * it is not the same as some observer already in the set. The order in
+   * which notifications will be delivered to multiple observers is not
+   * specified. See the class comment.
+   *
+   * @param o an observer to be added.
+   * @throws NullPointerException if the parameter o is null.
+   */
+  void addObserver(Observer o);
 
-    /**
-     * Deletes an observer from the set of observers of this object. Passing
-     * <CODE>null</CODE> to this method will have no effect.
-     *
-     * @param o the observer to be deleted.
-     */
-    void deleteObserver(Observer o);
+  /**
+   * Deletes an observer from the set of observers of this object. Passing
+   * <CODE>null</CODE> to this method will have no effect.
+   *
+   * @param o the observer to be deleted.
+   */
+  void deleteObserver(Observer o);
 }

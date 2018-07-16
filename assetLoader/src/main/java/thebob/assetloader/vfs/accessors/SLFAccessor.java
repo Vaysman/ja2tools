@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 the_bob.
@@ -23,46 +23,46 @@
  */
 package thebob.assetloader.vfs.accessors;
 
-import java.nio.ByteBuffer;
 import thebob.assetloader.slf.SlfLoader;
 
+import java.nio.ByteBuffer;
+
 /**
- *
  * @author the_bob
  */
 public class SLFAccessor extends VFSAccessor {
-    
-    SlfLoader loader;
-    String filePath;	// file name in slf library
-    String vfsPath;	// file name in VFS tree
 
-    public SLFAccessor(SlfLoader loader, String filePath, String vfsPath) {
-        this.loader = loader;
-        this.filePath = filePath;
-        this.vfsPath = vfsPath;
-    }
+  SlfLoader loader;
+  String filePath;  // file name in slf library
+  String vfsPath;  // file name in VFS tree
 
-    public ByteBuffer getBytes() {
-        return loader.getFile(filePath);
-    }
+  public SLFAccessor(SlfLoader loader, String filePath, String vfsPath) {
+    this.loader = loader;
+    this.filePath = filePath;
+    this.vfsPath = vfsPath;
+  }
 
-    @Override
-    public String toString() {
-        return "[ SLFAccessor: " + loader.toString() + "::" + filePath + " ]";
-    }
+  public ByteBuffer getBytes() {
+    return loader.getFile(filePath);
+  }
 
-    @Override
-    public String getPath() {
-        return filePath;
-    }
+  @Override
+  public String toString() {
+    return "[ SLFAccessor: " + loader.toString() + "::" + filePath + " ]";
+  }
 
-    public SlfLoader getLoader() {
-	return loader;
-    }
+  @Override
+  public String getPath() {
+    return filePath;
+  }
 
-    @Override
-    public String getVFSPath() {
-	return vfsPath;
-    }
-    
+  public SlfLoader getLoader() {
+    return loader;
+  }
+
+  @Override
+  public String getVFSPath() {
+    return vfsPath;
+  }
+
 }

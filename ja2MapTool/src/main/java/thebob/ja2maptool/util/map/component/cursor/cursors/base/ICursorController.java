@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -32,52 +32,51 @@ import thebob.ja2maptool.util.map.layers.map.IMapLayerManager;
 import thebob.ja2maptool.util.map.renderer.ITileRendererManager;
 
 /**
- *
  * @author the_bob
  */
 public interface ICursorController {
 
-    public void updateCursor();
+  public void updateCursor();
 
-    // ------------------------
-    MapCursor getCursor();
+  // ------------------------
+  MapCursor getCursor();
 
-    MapCursor getCursor(int x, int y, IndexedElement cursor);
+  MapCursor getCursor(int x, int y, IndexedElement cursor);
 
-    MapCursor getCursor(double x, double y, IndexedElement cursor);
+  MapCursor getCursor(double x, double y, IndexedElement cursor);
 
-    ICursorLayerManager getCursors();
+  ICursorLayerManager getCursors();
 
-    double getLastCursorX();
+  double getLastCursorX();
 
-    double getLastCursorY();
+  double getLastCursorY();
 
-    IMapLayerManager getMap();
+  IMapLayerManager getMap();
 
-    int getMouseCell();
+  int getMouseCell();
 
-    int getMouseCellX();
+  int getMouseCellX();
 
-    int getMouseCellY();
+  int getMouseCellY();
 
-    double getMouseScreenX();
+  double getMouseScreenX();
 
-    double getMouseScreenY();
+  double getMouseScreenY();
 
-    ITileRendererManager getRenderer();
+  ITileRendererManager getRenderer();
 
-    int getWindowScreenX();
+  int getWindowScreenX();
 
-    int getWindowScreenY();
+  int getWindowScreenY();
 
-    boolean isAltDown();
+  boolean isAltDown();
 
-    boolean isControlDown();
+  boolean isControlDown();
 
-    boolean isShiftDown();
+  boolean isShiftDown();
 
-    void mouseEvent(MouseEvent e);
+  void mouseEvent(MouseEvent e);
 
-    void setController(MapCursorComponent controller);
+  void setController(MapCursorComponent controller);
 
 }

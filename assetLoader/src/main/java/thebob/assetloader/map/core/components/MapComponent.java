@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 the_bob.
@@ -23,37 +23,37 @@
  */
 package thebob.assetloader.map.core.components;
 
-import java.nio.ByteBuffer;
 import thebob.assetloader.map.core.MapData;
 
+import java.nio.ByteBuffer;
+
 /**
- *
  * @author the_bob
  */
 public abstract class MapComponent {
 
-    MapData map;
-    ByteBuffer byteBuffer;
+  MapData map;
+  ByteBuffer byteBuffer;
 
-    public MapComponent(MapData source) {
-        this.map = source;
-        byteBuffer = source.getByteBuffer();
-    }
+  public MapComponent(MapData source) {
+    this.map = source;
+    byteBuffer = source.getByteBuffer();
+  }
 
-    protected MapSettings settings() {
-        return map.getSettings();
-    }
+  protected MapSettings settings() {
+    return map.getSettings();
+  }
 
-    protected MapContentInfo info() {
-        return map.getInfo();
-    }
+  protected MapContentInfo info() {
+    return map.getInfo();
+  }
 
-    protected MapActors actors() {
-        return map.getActors();
-    }
+  protected MapActors actors() {
+    return map.getActors();
+  }
 
-    protected MapLayers layers() {
-        return map.getLayers();
-    }
-    
+  protected MapLayers layers() {
+    return map.getLayers();
+  }
+
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -23,34 +23,34 @@
  */
 package thebob.ja2maptool.util.tilesearch;
 
-import java.util.ArrayList;
-import java.util.List;
 import thebob.assetloader.tileset.Tile;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- *
  * @author the_bob
  */
 public class TileSearchResult {
 
-    Double bestResult;
-    List<Double> resultValues = new ArrayList<Double>();
-    List<Tile> results = new ArrayList<Tile>();
+  Double bestResult;
+  List<Double> resultValues = new ArrayList<Double>();
+  List<Tile> results = new ArrayList<Tile>();
 
-    public Double getBestResult() {
-	return bestResult;
-    }
+  public Double getBestResult() {
+    return bestResult;
+  }
 
-    public void setBestResult(Double bestResult) {
-	this.bestResult = bestResult;
-    }
+  public void setBestResult(Double bestResult) {
+    this.bestResult = bestResult;
+  }
 
-    public List<Double> getResultValues() {
-	return resultValues;
-    }
+  public List<Double> getResultValues() {
+    return resultValues;
+  }
 
-    public List<Tile> getResults() {
-	return results;
-    }
+  public List<Tile> getResults() {
+    return results;
+  }
 
 }

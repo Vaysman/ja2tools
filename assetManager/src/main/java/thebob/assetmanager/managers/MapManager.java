@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 the_bob.
@@ -23,65 +23,65 @@
  */
 package thebob.assetmanager.managers;
 
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.List;
 import thebob.assetloader.map.MapLoader;
 import thebob.assetloader.map.core.MapData;
 import thebob.assetloader.vfs.VFSConfig;
 import thebob.assetmanager.AssetManager;
 
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- *
  * @author the_bob
  */
 public class MapManager extends VFSContextBoundManager {
 
-    List<String> mapFiles = new ArrayList<String>();
+  List<String> mapFiles = new ArrayList<String>();
 
-    VFSConfig vfs;
-    MapLoader loader;
+  VFSConfig vfs;
+  MapLoader loader;
 
-    public MapManager(AssetManager context) {
-	super(context);
+  public MapManager(AssetManager context) {
+    super(context);
+  }
+
+  @Override
+  public boolean init() {
+    context.getVfs().getFileList().stream().filter(f -> f.startsWith("\\MAPS\\")).sorted().forEach(str -> {
+      mapFiles.add(str);
+    });
+
+    vfs = context.getVfs();
+    loader = new MapLoader(context.getXml());
+
+    return true;
+  }
+
+  public List<String> getMapFiles() {
+    return mapFiles;
+  }
+
+  public MapData loadMap(String mapName) {
+    ByteBuffer map = vfs.getFile(mapName);
+    if (map != null) {
+      return loader.loadMap(map);
+    } else {
+      throw new RuntimeException("Cannot find map asset: " + mapName);
     }
+  }
 
-    @Override
-    public boolean init() {
-	context.getVfs().getFileList().stream().filter(f -> f.startsWith("\\MAPS\\")).sorted().forEach(str -> {
-	    mapFiles.add(str);
-	});
+  public MapData loadMapFile(String mapName) {
+    return loader.loadMapFile(mapName);
+  }
 
-	vfs = context.getVfs();
-	loader = new MapLoader(context.getXml());
+  public MapData loadMapData(ByteBuffer map) {
+    return loader.loadMap(map);
+  }
 
-	return true;
-    }
-
-    public List<String> getMapFiles() {
-	return mapFiles;
-    }
-
-    public MapData loadMap(String mapName) {
-	ByteBuffer map = vfs.getFile(mapName);
-	if (map != null) {
-	    return loader.loadMap(map);
-	} else {
-	    throw new RuntimeException("Cannot find map asset: " + mapName);
-	}
-    }
-
-    public MapData loadMapFile(String mapName) {
-	return loader.loadMapFile(mapName);
-    }
-
-    public MapData loadMapData(ByteBuffer map) {
-	return loader.loadMap(map);
-    }
-
-    @Override
-    public String toString() {
-	return "MapManager{" + "mapFiles=" + mapFiles.size() + "}";
-    }
+  @Override
+  public String toString() {
+    return "MapManager{" + "mapFiles=" + mapFiles.size() + "}";
+  }
 
 }

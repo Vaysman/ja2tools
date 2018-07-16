@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -28,59 +28,59 @@ import javafx.scene.input.MouseEvent;
 import thebob.assetloader.map.core.components.IndexedElement;
 import thebob.ja2maptool.util.map.component.cursor.cursors.base.CursorControllerBase;
 import thebob.ja2maptool.util.map.component.selection.IMapSelectionComponent;
+
 import static thebob.ja2maptool.util.map.layers.cursor.CursorLayer.LAYER_CURSOR;
 
 /**
- *
  * @author the_bob
  */
 public class SelectionCursorController extends CursorControllerBase {
 
-    private static final IndexedElement SELECTION_CURSOR = new IndexedElement(131, 15);
-    private static final IndexedElement SELECTION_START_CURSOR = new IndexedElement(131, 20);
-    private static final IndexedElement SELECTION_END_CURSOR = new IndexedElement(131, 19);
+  private static final IndexedElement SELECTION_CURSOR = new IndexedElement(131, 15);
+  private static final IndexedElement SELECTION_START_CURSOR = new IndexedElement(131, 20);
+  private static final IndexedElement SELECTION_END_CURSOR = new IndexedElement(131, 19);
 
-    IMapSelectionComponent selection;
+  IMapSelectionComponent selection;
 
-    public SelectionCursorController(IMapSelectionComponent selection) {
-        this.selection = selection;
+  public SelectionCursorController(IMapSelectionComponent selection) {
+    this.selection = selection;
+  }
+
+  @Override
+  public void mouseEvent(MouseEvent e) {
+    super.mouseEvent(e);
+    if (e.getEventType() == MouseEvent.MOUSE_CLICKED || e.getEventType() == MouseEvent.MOUSE_DRAGGED) {
+      if (e.getButton() == MouseButton.PRIMARY) {
+        getCursors().setBatchMode(true);
+        selection.placeMarker(getMouseCellX(), getMouseCellY());
+        updateCursor();
+        getCursors().setBatchMode(false);
+      } else if (e.getButton() == MouseButton.SECONDARY) {
+        getCursors().setBatchMode(true);
+        selection.clearSelection();
+        updateCursor();
+        getCursors().setBatchMode(false);
+      } else if (e.getButton() == MouseButton.MIDDLE) {
+        // TODO: change selection mode
+      }
+
     }
+  }
 
-    @Override
-    public void mouseEvent(MouseEvent e) {
-        super.mouseEvent(e);
-        if (e.getEventType() == MouseEvent.MOUSE_CLICKED || e.getEventType() == MouseEvent.MOUSE_DRAGGED) {
-            if (e.getButton() == MouseButton.PRIMARY) {
-                getCursors().setBatchMode(true);
-                selection.placeMarker(getMouseCellX(), getMouseCellY());
-                updateCursor();
-                getCursors().setBatchMode(false);
-            } else if (e.getButton() == MouseButton.SECONDARY) {
-                getCursors().setBatchMode(true);
-                selection.clearSelection();
-                updateCursor();
-                getCursors().setBatchMode(false);
-            } else if (e.getButton() == MouseButton.MIDDLE) {
-                // TODO: change selection mode
-            }
-            
-        }
-    }
+  @Override
+  public void updateCursor() {
+    getCursors().clearLayer(LAYER_CURSOR);
+    getCursors().placeCursor(LAYER_CURSOR, getMouseCell(), SELECTION_CURSOR);
+    placeSelectionCursors();
+  }
 
-    @Override
-    public void updateCursor() {
-        getCursors().clearLayer(LAYER_CURSOR);
-        getCursors().placeCursor(LAYER_CURSOR, getMouseCell(), SELECTION_CURSOR);
-        placeSelectionCursors();
+  private void placeSelectionCursors() {
+    if (selection.getSelectionStart() != null) {
+      getCursors().placeCursor(LAYER_CURSOR, selection.getSelectionStart(), SELECTION_START_CURSOR);
     }
-
-    private void placeSelectionCursors() {
-        if (selection.getSelectionStart() != null) {
-            getCursors().placeCursor(LAYER_CURSOR, selection.getSelectionStart(), SELECTION_START_CURSOR);
-        }
-        if (selection.getSelectionEnd() != null) {
-            getCursors().placeCursor(LAYER_CURSOR, selection.getSelectionEnd(), SELECTION_END_CURSOR);
-        }
+    if (selection.getSelectionEnd() != null) {
+      getCursors().placeCursor(LAYER_CURSOR, selection.getSelectionEnd(), SELECTION_END_CURSOR);
     }
+  }
 
 }
