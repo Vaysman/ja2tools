@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -24,13 +24,12 @@
 package thebob.ja2maptool.util.tilesearch;
 
 import thebob.assetloader.tileset.Tile;
-import thebob.ja2maptool.util.tilesearch.TileSearchResult;
 
 /**
- *
  * @author the_bob
  */
 public interface TileComparator {
-    double compareTiles(Tile t1, Tile t2);
-    TileSearchResult search(Tile t);    
+  double compareTiles(Tile t1, Tile t2);
+
+  TileSearchResult search(Tile t);
 }

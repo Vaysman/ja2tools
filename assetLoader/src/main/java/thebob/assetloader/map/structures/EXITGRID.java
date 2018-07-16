@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 the_bob.
@@ -24,34 +24,31 @@
 package thebob.assetloader.map.structures;
 
 import thebob.assetloader.map.helpers.AutoLoadingMapStruct;
-import java.nio.ByteOrder;
-import thebob.assetloader.map.structures.legacy.OLD_DOOR;
 import thebob.assetloader.map.structures.legacy.OLD_EXITGRID;
 
 /**
- *
  * @author the_bob
  */
 public class EXITGRID extends AutoLoadingMapStruct {
-    
-    public final Signed32 iMapIndex = new Signed32(); //dnl ch86 170214
-    public final Signed32 usGridNo = new Signed32(); // Sweet spot for placing mercs in new sector.
-    public final Unsigned8 ubGotoSectorX = new Unsigned8();
-    public final Unsigned8 ubGotoSectorY = new Unsigned8();
-    public final Unsigned8 ubGotoSectorZ = new Unsigned8();
 
-    public void loadOld(OLD_EXITGRID old){
-        iMapIndex.set( old.iMapIndex.get() );
-        usGridNo.set( old.usGridNo.get() );
-        ubGotoSectorX.set( old.ubGotoSectorX.get() );
-        ubGotoSectorY.set( old.ubGotoSectorY.get() );
-        ubGotoSectorZ.set( old.ubGotoSectorZ.get() );
-    }
+  public final Signed32 iMapIndex = new Signed32(); //dnl ch86 170214
+  public final Signed32 usGridNo = new Signed32(); // Sweet spot for placing mercs in new sector.
+  public final Unsigned8 ubGotoSectorX = new Unsigned8();
+  public final Unsigned8 ubGotoSectorY = new Unsigned8();
+  public final Unsigned8 ubGotoSectorZ = new Unsigned8();
 
-    @Override
-    public String toString() {
-        return super.toString(); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    
+  public void loadOld(OLD_EXITGRID old) {
+    iMapIndex.set(old.iMapIndex.get());
+    usGridNo.set(old.usGridNo.get());
+    ubGotoSectorX.set(old.ubGotoSectorX.get());
+    ubGotoSectorY.set(old.ubGotoSectorY.get());
+    ubGotoSectorZ.set(old.ubGotoSectorZ.get());
+  }
+
+  @Override
+  public String toString() {
+    return super.toString(); //To change body of generated methods, choose Tools | Templates.
+  }
+
+
 }

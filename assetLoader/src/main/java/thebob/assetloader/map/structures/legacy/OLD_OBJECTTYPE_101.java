@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 the_bob.
@@ -23,12 +23,9 @@
  */
 package thebob.assetloader.map.structures.legacy;
 
-import java.nio.ByteOrder;
-import javolution.io.Struct;
 import thebob.assetloader.map.helpers.AutoLoadingMapStruct;
 
 /**
- *
  * @author the_bob
  */
 
@@ -52,28 +49,28 @@ import thebob.assetloader.map.helpers.AutoLoadingMapStruct;
 
 public class OLD_OBJECTTYPE_101 extends AutoLoadingMapStruct {
 
-    public final Unsigned16 usItem = new Unsigned16();
-    public final Unsigned8 ubNumberOfObjects = new Unsigned8();
-    
-    public final OLD_OBJECTTYPE_101_UNION data = inner( new OLD_OBJECTTYPE_101_UNION() );
+  public final Unsigned16 usItem = new Unsigned16();
+  public final Unsigned8 ubNumberOfObjects = new Unsigned8();
 
-    //public final Signed8[] unionPlaceholder = array(new Signed8[12]);
+  public final OLD_OBJECTTYPE_101_UNION data = inner(new OLD_OBJECTTYPE_101_UNION());
 
-    public final Unsigned16[] usAttachItem = array(new Unsigned16[4]);
-    public final Signed8[] bAttachStatus = array(new Signed8[4]);
+  //public final Signed8[] unionPlaceholder = array(new Signed8[12]);
 
-    public final Signed8 fFlags = new Signed8();
-    public final Unsigned8 ubMission = new Unsigned8();
+  public final Unsigned16[] usAttachItem = array(new Unsigned16[4]);
+  public final Signed8[] bAttachStatus = array(new Signed8[4]);
 
-    public final Signed8 bTrap = new Signed8();
-    public final Unsigned8 ubImprintID = new Unsigned8();
-    public final Unsigned8 ubWeight = new Unsigned8();
-    public final Unsigned8 fUsed = new Unsigned8(16);
+  public final Signed8 fFlags = new Signed8();
+  public final Unsigned8 ubMission = new Unsigned8();
 
-    @Override
-    public String toString() {
-        return "[item #"+usItem+" * "+ubNumberOfObjects+"]";
-    }
-    
-    
+  public final Signed8 bTrap = new Signed8();
+  public final Unsigned8 ubImprintID = new Unsigned8();
+  public final Unsigned8 ubWeight = new Unsigned8();
+  public final Unsigned8 fUsed = new Unsigned8(16);
+
+  @Override
+  public String toString() {
+    return "[item #" + usItem + " * " + ubNumberOfObjects + "]";
+  }
+
+
 }

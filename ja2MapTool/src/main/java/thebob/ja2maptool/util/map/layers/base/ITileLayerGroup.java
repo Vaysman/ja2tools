@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -23,96 +23,94 @@
  */
 package thebob.ja2maptool.util.map.layers.base;
 
-import java.util.Observer;
 import thebob.assetloader.tileset.Tileset;
 import thebob.ja2maptool.util.map.events.MapEvent;
 
+import java.util.Observer;
+
 /**
- *
  * @author the_bob
  */
 public interface ITileLayerGroup extends Iterable<TileLayer> {
 
-    /**
-     *
-     * @param mapRows
-     * @param mapCols
-     * @param tileset
-     */
-    void init(int mapRows, int mapCols, Tileset tileset);
+  /**
+   * @param mapRows
+   * @param mapCols
+   * @param tileset
+   */
+  void init(int mapRows, int mapCols, Tileset tileset);
 
-    // -----------------------
-    // cell coordinate transformations
-    // -----------------------
-    /**
-     * Calculates cell id for given cell Y/X coordinates. Note the unusual
-     * coordinate order <b>Y</b> (row) coordinate goes first, <b>X</b> (col)
-     * coordinate second.
-     *
-     * @param y cell row
-     * @param x cell column
-     * @return cell id for the map of this size
-     */
-    int rowColToPos(int y, int x);
+  // -----------------------
+  // cell coordinate transformations
+  // -----------------------
 
-    /**
-     *
-     * @param sGridNo
-     * @return X (column) coordinate of this grid for a map of this size
-     */
-    public int gridNoToCellX(int sGridNo);
+  /**
+   * Calculates cell id for given cell Y/X coordinates. Note the unusual
+   * coordinate order <b>Y</b> (row) coordinate goes first, <b>X</b> (col)
+   * coordinate second.
+   *
+   * @param y cell row
+   * @param x cell column
+   * @return cell id for the map of this size
+   */
+  int rowColToPos(int y, int x);
 
-    /**
-     *
-     * @param sGridNo
-     * @return Y (row) coordinate of this grid for a map of this size
-     */
-    public int gridNoToCellY(int sGridNo);
+  /**
+   * @param sGridNo
+   * @return X (column) coordinate of this grid for a map of this size
+   */
+  public int gridNoToCellX(int sGridNo);
 
-    // -----------------------
-    // layer info and setup
-    // -----------------------
-    /**
-     *
-     * @return map width in cells
-     */
-    int getMapCols();
+  /**
+   * @param sGridNo
+   * @return Y (row) coordinate of this grid for a map of this size
+   */
+  public int gridNoToCellY(int sGridNo);
 
-    /**
-     *
-     * @return map height in cells
-     */
-    int getMapRows();
+  // -----------------------
+  // layer info and setup
+  // -----------------------
 
-    /**
-     *
-     * @return total number of cells on this layer.
-     */
-    int getMapSize();
+  /**
+   * @return map width in cells
+   */
+  int getMapCols();
 
-    /**
-     * True means nothing can be drawn beyond the layer area defined by rows x cols
-     * @return
-     */
-    boolean limitDrawArea();
+  /**
+   * @return map height in cells
+   */
+  int getMapRows();
 
-    /**
-     * True means the triangular edges are to be trimmed, so the layer is rendered as a rectangle rather than a diamond
-     * @return
-     */
-    boolean trimEdges();
+  /**
+   * @return total number of cells on this layer.
+   */
+  int getMapSize();
 
-    Tileset getTileset();
+  /**
+   * True means nothing can be drawn beyond the layer area defined by rows x cols
+   *
+   * @return
+   */
+  boolean limitDrawArea();
 
-    void setTileset(Tileset tileset);
+  /**
+   * True means the triangular edges are to be trimmed, so the layer is rendered as a rectangle rather than a diamond
+   *
+   * @return
+   */
+  boolean trimEdges();
 
-    public void setBatchMode(boolean batchMode);
-    
-    // observable implementation TODO: to be deleted and replaced by default
-    <T extends MapEvent> void notifySubscribers(T message);
+  Tileset getTileset();
 
-    void subscribe(Observer observer);
+  void setTileset(Tileset tileset);
 
-    void unsubscribe(Observer observer);
+  public void setBatchMode(boolean batchMode);
+
+  // observable implementation TODO: to be deleted and replaced by default
+  <T extends MapEvent> void notifySubscribers(T message);
+
+  void subscribe(Observer observer);
+
+  void unsubscribe(Observer observer);
 
 }

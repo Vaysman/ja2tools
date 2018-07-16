@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 the_bob.
@@ -24,18 +24,15 @@
 package thebob.assetloader.map.structures;
 
 import thebob.assetloader.map.helpers.AutoLoadingMapStruct;
-import java.nio.ByteOrder;
-import javolution.io.Struct;
 
 /**
- *
  * @author the_bob
  */
 public class SGPPaletteEntry extends AutoLoadingMapStruct {
-    
-    Unsigned8 peRed = new Unsigned8();
-    Unsigned8 peGreen = new Unsigned8();
-    Unsigned8 peBlue = new Unsigned8();
-    Unsigned8 peFlags = new Unsigned8();
-    
+
+  Unsigned8 peRed = new Unsigned8();
+  Unsigned8 peGreen = new Unsigned8();
+  Unsigned8 peBlue = new Unsigned8();
+  Unsigned8 peFlags = new Unsigned8();
+
 }

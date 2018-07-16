@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -33,41 +33,40 @@ import thebob.ja2maptool.util.map.layers.cursor.MapCursor;
  * is the thing that's supposed to be placed on the map, and the placement,
  * which is the location on the map we're looking to put the thing.
  *
+ * @author the_bob
  * @see PlacementCursorController
  * <br>Is an example of where this is useful, it can identify the size of the
  * thing and communicate to the component when a placement has been chosen
- *
- * @author the_bob
  */
 public interface IMapPlacementComponent extends IMapController {
 
-    SelectedTiles getPayload();
+  SelectedTiles getPayload();
 
-    void setPayload(SelectedTiles payload);
+  void setPayload(SelectedTiles payload);
 
-    /**
-     * Gets the placement currently setup in the placement component, assuming
-     * the placement component is the kind for which a "current" placement makes
-     * sense.
-     *
-     * @return the current placement location if set
-     */
-    MapCursor getPlacementLocation();
+  /**
+   * Gets the placement currently setup in the placement component, assuming
+   * the placement component is the kind for which a "current" placement makes
+   * sense.
+   *
+   * @return the current placement location if set
+   */
+  MapCursor getPlacementLocation();
 
-    /**
-     * Tells the placement component the user wants to place the thing at this
-     * location
-     *
-     * @param placement
-     */
-    void setPlacementLocation(MapCursor placement);
+  /**
+   * Tells the placement component the user wants to place the thing at this
+   * location
+   *
+   * @param placement
+   */
+  void setPlacementLocation(MapCursor placement);
 
-    /**
-     * Asks the placement component if there's a thing placed over this cell.
-     *
-     * @param cell
-     * @return the controller should return the placement "center" if found,
-     * null if there's no placement covering the cell.
-     */
-    Integer hoverPlacement(int cell);
+  /**
+   * Asks the placement component if there's a thing placed over this cell.
+   *
+   * @param cell
+   * @return the controller should return the placement "center" if found,
+   * null if there's no placement covering the cell.
+   */
+  Integer hoverPlacement(int cell);
 }

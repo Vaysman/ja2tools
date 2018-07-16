@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -23,70 +23,66 @@
  */
 package thebob.ja2maptool.model;
 
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import static thebob.ja2maptool.model.TileCategoryMapping.RemapStatus.None;
 import thebob.ja2maptool.scopes.mapping.TilesetMappingScope;
 
+import static thebob.ja2maptool.model.TileCategoryMapping.RemapStatus.None;
+
 /**
- *
  * @author the_bob
  */
 public class TileCategoryMapping {
 
-    public enum RemapStatus {
-	None, // no remapping done
-	Same, // automap found same file mapped to category
-	Matched, // automap matched a file for this category in the target tileset
-	Found, // automap found some similar tiles for this category
-	Manual	    // manual remapping needed
-    }
+  int categoryId;
+  String categoryName;
+  RemapStatus status;
+  ObservableList<TileMapping> mappings = FXCollections.observableArrayList();
+  public TileCategoryMapping(int categoryId, ObservableList<TileMapping> mappings) {
+    this.categoryId = categoryId;
+    this.categoryName = TilesetMappingScope.getTileCategortyName(categoryId);
+    this.status = None;
+    this.mappings = mappings;
+  }
 
-    int categoryId;
-    String categoryName;
-    RemapStatus status;
-    ObservableList<TileMapping> mappings = FXCollections.observableArrayList();
+  public TileCategoryMapping(int categoryId, String categoryName, RemapStatus status, ObservableList<TileMapping> mappings) {
+    this.categoryId = categoryId;
+    this.categoryName = categoryName;
+    this.status = status;
+    this.mappings = mappings;
+  }
 
-    public TileCategoryMapping(int categoryId, ObservableList<TileMapping> mappings) {
-	this.categoryId = categoryId;
-	this.categoryName = TilesetMappingScope.getTileCategortyName(categoryId);
-	this.status = None;
-	this.mappings = mappings;
-    }
+  public String getCategoryName() {
+    return categoryName;
+  }
 
-    public TileCategoryMapping(int categoryId, String categoryName, RemapStatus status, ObservableList<TileMapping> mappings) {
-	this.categoryId = categoryId;
-	this.categoryName = categoryName;
-	this.status = status;
-	this.mappings = mappings;
-    }
+  public void setCategoryName(String categoryName) {
+    this.categoryName = categoryName;
+  }
 
-    
-    
-    public String getCategoryName() {
-	return categoryName;
-    }
+  public RemapStatus getStatus() {
+    return status;
+  }
 
-    public void setCategoryName(String categoryName) {
-	this.categoryName = categoryName;
-    }
+  public void setStatus(RemapStatus status) {
+    this.status = status;
+  }
 
-    public RemapStatus getStatus() {
-	return status;
-    }
+  public ObservableList<TileMapping> getMappings() {
+    return mappings;
+  }
 
-    public void setStatus(RemapStatus status) {
-	this.status = status;
-    }
+  public int getCategoryId() {
+    return categoryId;
+  }
 
-    public ObservableList<TileMapping> getMappings() {
-	return mappings;
-    }    
+  public enum RemapStatus {
+    None, // no remapping done
+    Same, // automap found same file mapped to category
+    Matched, // automap matched a file for this category in the target tileset
+    Found, // automap found some similar tiles for this category
+    Manual      // manual remapping needed
+  }
 
-    public int getCategoryId() {
-	return categoryId;
-    }
-    
-    
+
 }

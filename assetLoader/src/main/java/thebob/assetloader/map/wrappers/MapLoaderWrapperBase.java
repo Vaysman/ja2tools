@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 the_bob.
@@ -23,19 +23,20 @@
  */
 package thebob.assetloader.map.wrappers;
 
-import java.nio.ByteBuffer;
 import thebob.assetloader.map.core.MapData;
-import java.nio.MappedByteBuffer;
+
+import java.nio.ByteBuffer;
 
 /**
- *
  * @author the_bob
  */
 public abstract class MapLoaderWrapperBase {
-    MapData map;
-    public void loadAsset( MapData map ){
-        this.map = map;
-        load(map.getByteBuffer());
-    }
-    protected abstract void load( ByteBuffer source );
+  MapData map;
+
+  public void loadAsset(MapData map) {
+    this.map = map;
+    load(map.getByteBuffer());
+  }
+
+  protected abstract void load(ByteBuffer source);
 }

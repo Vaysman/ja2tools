@@ -27,13 +27,12 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
 /**
- *
  * @author starcatter
  */
 public interface IMapInteractiveComponent extends IMapComponent {
 
-	void mouseEvent(MouseEvent e);
+  void mouseEvent(MouseEvent e);
 
-	void keyEvent(KeyEvent e);
+  void keyEvent(KeyEvent e);
 
 }

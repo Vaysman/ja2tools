@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -28,21 +28,26 @@ import thebob.ja2maptool.util.compositor.SelectionPlacementOptions;
 import thebob.ja2maptool.util.map.controller.base.IMapController;
 
 /**
- *
  * @author the_bob
  */
 public interface IMapClipboardComponent extends IMapController {
-    boolean hasContents();
-    
-    SelectedTiles getContents();
-    void setContents(SelectedTiles clipboardContents);
-    void emptyContents();
-    
-    boolean canPaste();
-    boolean canCopy();
-    boolean canCut();
-    
-    boolean copy();
-    boolean cut();
-    boolean paste(SelectionPlacementOptions options);
+  boolean hasContents();
+
+  SelectedTiles getContents();
+
+  void setContents(SelectedTiles clipboardContents);
+
+  void emptyContents();
+
+  boolean canPaste();
+
+  boolean canCopy();
+
+  boolean canCut();
+
+  boolean copy();
+
+  boolean cut();
+
+  boolean paste(SelectionPlacementOptions options);
 }

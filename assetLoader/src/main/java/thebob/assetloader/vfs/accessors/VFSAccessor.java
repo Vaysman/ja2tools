@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 the_bob.
@@ -27,26 +27,25 @@ import java.io.FileInputStream;
 import java.nio.ByteBuffer;
 
 /**
- *
  * @author the_bob
  */
 public abstract class VFSAccessor implements Comparable<VFSAccessor> {
 
-    public abstract String getPath();
+  public abstract String getPath();
 
-    public abstract String getVFSPath();
+  public abstract String getVFSPath();
 
-    public abstract ByteBuffer getBytes();
+  public abstract ByteBuffer getBytes();
 
-    public FileInputStream getStream() {
-	throw new RuntimeException("getStream not supported for this asset");
-    }
+  public FileInputStream getStream() {
+    throw new RuntimeException("getStream not supported for this asset");
+  }
 
-    ;
+  ;
 
-    @Override
-    public int compareTo(VFSAccessor o) {
-	return getVFSPath().compareTo(o.getVFSPath());
-    }
+  @Override
+  public int compareTo(VFSAccessor o) {
+    return getVFSPath().compareTo(o.getVFSPath());
+  }
 
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -24,76 +24,77 @@
 package thebob.ja2maptool.components;
 
 import de.saxsys.mvvmfx.Scope;
-import java.util.List;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import static javafx.scene.input.MouseEvent.MOUSE_CLICKED;
 import thebob.ja2maptool.ui.main.MainScreenView;
 
+import java.util.List;
+
+import static javafx.scene.input.MouseEvent.MOUSE_CLICKED;
+
 /**
- *
  * @author the_bob
  */
 public class ScopeActionMenu<T extends Scope> extends Menu {
-    
-    String name;
-    Class tabClass;
-    T scope;
-    List<T> scopeList;
-    MenuItem openOption;
-    MenuItem closeOption;
-    Tab scopeTab;
-    MainScreenView scopeTabParent;
 
-    @Override
-    public void show() {
-	super.show();
-	openOption.setText(((scopeTab == null) || (scopeTabParent.getTabPane().getTabs().indexOf(scopeTab) == -1)) ? "Open tab" : "Goto tab");
-	
-	if (scopeTab != null) {
-	    openOption.setOnAction((ActionEvent event) -> {
-		if (scopeTabParent.getTabPane().getTabs().indexOf(scopeTab) == -1) {
-		    scopeTabParent.getTabPane().getTabs().add(scopeTab);
-		}
-		scopeTabParent.getTabPane().getSelectionModel().select(scopeTab);
-	    });
-	} else {
-	    // tab was not created (loaded scope via map converter?)
-	    openOption.setOnAction((ActionEvent event) -> {
-		scopeTabParent.addTab(tabClass, name, scope);
-	    });
-	}
+  String name;
+  Class tabClass;
+  T scope;
+  List<T> scopeList;
+  MenuItem openOption;
+  MenuItem closeOption;
+  Tab scopeTab;
+  MainScreenView scopeTabParent;
+
+  public ScopeActionMenu(String name, String description, T scope, List<T> scopeList, Tab scopeTab, MainScreenView scopeTabParent, Class tabClass) {
+    super(name + " " + description);
+    this.name = name;
+    this.tabClass = tabClass;
+    this.scope = scope;
+    this.scopeTab = scopeTab;
+    this.scopeList = scopeList;
+    this.scopeTabParent = scopeTabParent;
+
+    openOption = new MenuItem(scopeTab == null ? "Open tab" : "Goto tab");
+
+    getItems().add(openOption);
+    closeOption = new MenuItem("Discard");
+    closeOption.setOnAction((ActionEvent event) -> {
+      scopeList.remove(scope);
+      if (scopeTabParent.getTabPane().getTabs().indexOf(scopeTab) != -1) {
+        //TabPane tp = scopeTabParent.getTabPane();
+        //Skin<? extends Skinnable> tps = tp.getSkin();
+        //TabPaneSkin tpss = (TabPaneSkin)tps;
+        //tpss.getBehavior().closeTab(scopeTab);
+
+        scopeTab.getOnClosed().handle(new MouseEvent(MOUSE_CLICKED, 0, 0, 0, 0, MouseButton.PRIMARY, 0, true, true, true, true, true, true, true, true, true, true, null));
+      }
+    });
+    getItems().add(closeOption);
+  }
+
+  @Override
+  public void show() {
+    super.show();
+    openOption.setText(((scopeTab == null) || (scopeTabParent.getTabPane().getTabs().indexOf(scopeTab) == -1)) ? "Open tab" : "Goto tab");
+
+    if (scopeTab != null) {
+      openOption.setOnAction((ActionEvent event) -> {
+        if (scopeTabParent.getTabPane().getTabs().indexOf(scopeTab) == -1) {
+          scopeTabParent.getTabPane().getTabs().add(scopeTab);
+        }
+        scopeTabParent.getTabPane().getSelectionModel().select(scopeTab);
+      });
+    } else {
+      // tab was not created (loaded scope via map converter?)
+      openOption.setOnAction((ActionEvent event) -> {
+        scopeTabParent.addTab(tabClass, name, scope);
+      });
     }
+  }
 
-    public ScopeActionMenu(String name, String description, T scope, List<T> scopeList, Tab scopeTab, MainScreenView scopeTabParent, Class tabClass) {
-	super(name + " " + description);
-	this.name = name;
-	this.tabClass = tabClass;
-	this.scope = scope;
-	this.scopeTab = scopeTab;
-	this.scopeList = scopeList;
-	this.scopeTabParent = scopeTabParent;
-	
-	openOption = new MenuItem(scopeTab == null ? "Open tab" : "Goto tab");
-
-	getItems().add(openOption);
-	closeOption = new MenuItem("Discard");
-	closeOption.setOnAction((ActionEvent event) -> {
-	    scopeList.remove(scope);
-	    if (scopeTabParent.getTabPane().getTabs().indexOf(scopeTab) != -1) {			
-			//TabPane tp = scopeTabParent.getTabPane();
-			//Skin<? extends Skinnable> tps = tp.getSkin();
-			//TabPaneSkin tpss = (TabPaneSkin)tps;
-			//tpss.getBehavior().closeTab(scopeTab);
-			
-			scopeTab.getOnClosed().handle(new MouseEvent(MOUSE_CLICKED, 0, 0, 0, 0, MouseButton.PRIMARY, 0, true, true, true, true, true, true, true, true, true, true, null));											
-	    }
-	});
-	getItems().add(closeOption);
-    }
-    
 }

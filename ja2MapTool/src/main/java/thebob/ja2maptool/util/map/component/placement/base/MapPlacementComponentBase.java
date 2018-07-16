@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -23,7 +23,6 @@
  */
 package thebob.ja2maptool.util.map.component.placement.base;
 
-import java.util.Observable;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import thebob.ja2maptool.util.compositor.SelectedTiles;
@@ -32,54 +31,57 @@ import thebob.ja2maptool.util.map.layers.cursor.MapCursor;
 import thebob.ja2maptool.util.map.layers.map.IMapLayerManager;
 import thebob.ja2maptool.util.map.renderer.ITileRendererManager;
 
+import java.util.Observable;
+
 /**
  * Base class for controllers putting stuff on the map.
+ *
  * @author the_bob
  */
 public abstract class MapPlacementComponentBase extends MapComponentBase implements IMapPlacementComponent {
 
-    protected SelectedTiles payload = null;
-    protected MapCursor placementLocation = null;
-    
-    // -------------------------------------------
-    
-    public MapPlacementComponentBase(ITileRendererManager renderer, IMapLayerManager map) {
-        super(renderer, map);
-    }
+  protected SelectedTiles payload = null;
+  protected MapCursor placementLocation = null;
 
-    // -------------------------------------------
+  // -------------------------------------------
 
-    public SelectedTiles getPayload() {
-        return payload;
-    }
+  public MapPlacementComponentBase(ITileRendererManager renderer, IMapLayerManager map) {
+    super(renderer, map);
+  }
 
-    public void setPayload(SelectedTiles payload) {
-        this.payload = payload;
-    }
+  // -------------------------------------------
 
-    public MapCursor getPlacementLocation() {
-        return placementLocation;
-    }
+  public SelectedTiles getPayload() {
+    return payload;
+  }
 
-    public void setPlacementLocation(MapCursor placementLocation) {
-        this.placementLocation = placementLocation;
-    }      
-    
-    // -------------------------------------------
-    
-    @Override
-    public void mouseEvent(MouseEvent e) {
-        
-    }
+  public void setPayload(SelectedTiles payload) {
+    this.payload = payload;
+  }
 
-    @Override
-    public void keyEvent(KeyEvent e) {
-        
-    }
+  public MapCursor getPlacementLocation() {
+    return placementLocation;
+  }
 
-    @Override
-    public void update(Observable o, Object arg) {
-        
-    }
+  public void setPlacementLocation(MapCursor placementLocation) {
+    this.placementLocation = placementLocation;
+  }
+
+  // -------------------------------------------
+
+  @Override
+  public void mouseEvent(MouseEvent e) {
+
+  }
+
+  @Override
+  public void keyEvent(KeyEvent e) {
+
+  }
+
+  @Override
+  public void update(Observable o, Object arg) {
+
+  }
 
 }

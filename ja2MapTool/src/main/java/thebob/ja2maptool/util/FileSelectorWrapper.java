@@ -23,41 +23,41 @@
  */
 package thebob.ja2maptool.util;
 
-import java.io.File;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 
+import java.io.File;
+
 /**
- *
  * @author starcatter
  */
 public class FileSelectorWrapper {
 
-    public static String saveDialog(String name, String fileTypeName, String fileTypeMask, Window parentWindow) {
-        FileChooser chooser = new FileChooser();
-        chooser.setTitle(name);
-        chooser.setInitialDirectory(new File("."));
-        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(fileTypeName, fileTypeMask));
-        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("all files", "*.*"));
-        File selectedDirectory = chooser.showSaveDialog(parentWindow);
-        if (selectedDirectory != null) {
-            return selectedDirectory.getPath();
-        } else {
-            return null;
-        }
+  public static String saveDialog(String name, String fileTypeName, String fileTypeMask, Window parentWindow) {
+    FileChooser chooser = new FileChooser();
+    chooser.setTitle(name);
+    chooser.setInitialDirectory(new File("."));
+    chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(fileTypeName, fileTypeMask));
+    chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("all files", "*.*"));
+    File selectedDirectory = chooser.showSaveDialog(parentWindow);
+    if (selectedDirectory != null) {
+      return selectedDirectory.getPath();
+    } else {
+      return null;
     }
+  }
 
-    public static String openDialog(String name, String fileTypeName, String fileTypeMask, Window parentWindow) {
-        FileChooser chooser = new FileChooser();
-        chooser.setTitle(name);
-        chooser.setInitialDirectory(new File("."));
-        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(fileTypeName, fileTypeMask));
-        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("all files", "*.*"));
-        File selectedDirectory = chooser.showOpenDialog(parentWindow);
-        if (selectedDirectory != null) {
-            return selectedDirectory.getPath();
-        } else {
-            return null;
-        }
+  public static String openDialog(String name, String fileTypeName, String fileTypeMask, Window parentWindow) {
+    FileChooser chooser = new FileChooser();
+    chooser.setTitle(name);
+    chooser.setInitialDirectory(new File("."));
+    chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(fileTypeName, fileTypeMask));
+    chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("all files", "*.*"));
+    File selectedDirectory = chooser.showOpenDialog(parentWindow);
+    if (selectedDirectory != null) {
+      return selectedDirectory.getPath();
+    } else {
+      return null;
     }
+  }
 }

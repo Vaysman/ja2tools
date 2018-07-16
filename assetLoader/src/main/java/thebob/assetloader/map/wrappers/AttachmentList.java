@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 the_bob.
@@ -23,52 +23,57 @@
  */
 package thebob.assetloader.map.wrappers;
 
-import java.nio.ByteBuffer;
-import java.nio.MappedByteBuffer;
-import java.util.ArrayList;
-import java.util.List;
 import thebob.assetloader.map.MapLoader;
 
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- *
  * @author the_bob
  */
-public class AttachmentList extends MapLoaderWrapperBase{
+public class AttachmentList extends MapLoaderWrapperBase {
 
-    public static final int MAX_REASONABLE_ATTACHMENTS = 255;
-    
-    int size = 0;
-    List<ObjectStack> objects = new ArrayList<ObjectStack>();
+  public static final int MAX_REASONABLE_ATTACHMENTS = 255;
 
-    protected void load(ByteBuffer source) {
-        if (MapLoader.logEverything) System.out.println("loader.wrappers.AttachmentList.load(): size @"+ source.position());
-        size = source.getInt();
-        if (MapLoader.logEverything) System.out.println("loader.wrappers.AttachmentList.load(): will load " + size + " attachments...");
-        
-        if( size > MAX_REASONABLE_ATTACHMENTS ){
-            throw new RuntimeException("too many attachments!");
-        }
-        
-        if (size > 0) {
-            for (int i = 0; i < size; i++) {
-                if(MapLoader.logEverything) System.out.println("loader.wrappers.AttachmentList.load(): loading attachment " + (i + 1) + " / " + size + "...");
-                ObjectStack stack = new ObjectStack();
-                stack.loadAsset(map);
-                objects.add(stack);
-            }
-        } else {
-            if(MapLoader.logEverything) System.out.println("loader.wrappers.AttachmentList.load(): no attachments.");
-        }
+  int size = 0;
+  List<ObjectStack> objects = new ArrayList<ObjectStack>();
+
+  protected void load(ByteBuffer source) {
+    if (MapLoader.logEverything)
+      System.out.println("loader.wrappers.AttachmentList.load(): size @" + source.position());
+    size = source.getInt();
+    if (MapLoader.logEverything)
+      System.out.println("loader.wrappers.AttachmentList.load(): will load " + size + " attachments...");
+
+    if (size > MAX_REASONABLE_ATTACHMENTS) {
+      throw new RuntimeException("too many attachments!");
     }
 
-    void saveTo(ByteBuffer outputBuffer) {
-        if (MapLoader.logEverything) System.out.println("loader.wrappers.AttachmentList.saveTo(): size ("+size+") @"+ outputBuffer.position());
-        outputBuffer.putInt(size);
-        for( ObjectStack object : objects ){
-            if (MapLoader.logEverything) System.out.println("loader.wrappers.AttachmentList.saveTo(): ObjectStack @"+ outputBuffer.position());
-            object.saveTo(outputBuffer);            
-        }
-        if (MapLoader.logEverything) System.out.println("loader.wrappers.AttachmentList.saveTo(): end @"+ outputBuffer.position());
+    if (size > 0) {
+      for (int i = 0; i < size; i++) {
+        if (MapLoader.logEverything)
+          System.out.println("loader.wrappers.AttachmentList.load(): loading attachment " + (i + 1) + " / " + size + "...");
+        ObjectStack stack = new ObjectStack();
+        stack.loadAsset(map);
+        objects.add(stack);
+      }
+    } else {
+      if (MapLoader.logEverything) System.out.println("loader.wrappers.AttachmentList.load(): no attachments.");
     }
+  }
+
+  void saveTo(ByteBuffer outputBuffer) {
+    if (MapLoader.logEverything)
+      System.out.println("loader.wrappers.AttachmentList.saveTo(): size (" + size + ") @" + outputBuffer.position());
+    outputBuffer.putInt(size);
+    for (ObjectStack object : objects) {
+      if (MapLoader.logEverything)
+        System.out.println("loader.wrappers.AttachmentList.saveTo(): ObjectStack @" + outputBuffer.position());
+      object.saveTo(outputBuffer);
+    }
+    if (MapLoader.logEverything)
+      System.out.println("loader.wrappers.AttachmentList.saveTo(): end @" + outputBuffer.position());
+  }
 
 }

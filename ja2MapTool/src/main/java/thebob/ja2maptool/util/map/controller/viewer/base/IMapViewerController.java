@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -26,40 +26,42 @@ package thebob.ja2maptool.util.map.controller.viewer.base;
 import thebob.ja2maptool.util.map.controller.base.IMapController;
 
 /**
- *
  * @author the_bob
  */
-public interface IMapViewerController extends IMapController{
-    /*
-     *
-     * moves the view window by specified offsets and redraws the screen. Call with 0,0 to force screen refresh. note that the parameters are offsets to move the window by, not coordinates to move the window to. *
-     */
-    void moveWindow(int x, int y);
-    
-    /**
-     * Sets the renderer scale and updated the view
-     * @param scale 
-     */
-    void setScale(double scale);
-    /**
-     * Gets the current rendering scale
-     * @return 
-     */
-    double getScale();
+public interface IMapViewerController extends IMapController {
+  /*
+   *
+   * moves the view window by specified offsets and redraws the screen. Call with 0,0 to force screen refresh. note that the parameters are offsets to move the window by, not coordinates to move the window to. *
+   */
+  void moveWindow(int x, int y);
 
-    /*
-     *
-     * use this to move the window to specific coordinates, followed by moveWindow(0,0) *
-     */
-    public void setWindowOffsetX(int oldX);
+  /**
+   * Gets the current rendering scale
+   *
+   * @return
+   */
+  double getScale();
 
-    /*
-     *
-     * use this to move the window to specific coordinates, followed by moveWindow(0,0) *
-     */
-    void setWindowOffsetY(int oldY);
+  /**
+   * Sets the renderer scale and updated the view
+   *
+   * @param scale
+   */
+  void setScale(double scale);
 
-    int getWindowOffsetY();
+  int getWindowOffsetY();
 
-    int getWindowOffsetX();
+  /*
+   *
+   * use this to move the window to specific coordinates, followed by moveWindow(0,0) *
+   */
+  void setWindowOffsetY(int oldY);
+
+  int getWindowOffsetX();
+
+  /*
+   *
+   * use this to move the window to specific coordinates, followed by moveWindow(0,0) *
+   */
+  public void setWindowOffsetX(int oldX);
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -24,31 +24,30 @@
 package thebob.ja2maptool.util.tilesearch;
 
 /**
- *
  * @author the_bob
  */
 public class TileSearchUtils {
 
-    public static int[] remapPalette(byte[][] palette, byte[][] palette0) {
-	int[] remap = new int[256];
-	for (int i = 0; i < 256; i++) {
-	    int bestDistance = Integer.MAX_VALUE;
-	    int bestMap = i;
+  public static int[] remapPalette(byte[][] palette, byte[][] palette0) {
+    int[] remap = new int[256];
+    for (int i = 0; i < 256; i++) {
+      int bestDistance = Integer.MAX_VALUE;
+      int bestMap = i;
 
-	    for (int j = 0; j < 256; j++) {
-		int distance = Math.abs(palette[0][i] - palette0[0][j]) + Math.abs(palette[1][i] - palette0[1][j]) + Math.abs(palette[2][i] - palette0[2][j]);
-		if (distance < bestDistance) {
-		    bestDistance = distance;
-		    bestMap = j;
+      for (int j = 0; j < 256; j++) {
+        int distance = Math.abs(palette[0][i] - palette0[0][j]) + Math.abs(palette[1][i] - palette0[1][j]) + Math.abs(palette[2][i] - palette0[2][j]);
+        if (distance < bestDistance) {
+          bestDistance = distance;
+          bestMap = j;
 
-		    if (bestDistance == 0) {
-			break;
-		    }
-		}
-	    }
+          if (bestDistance == 0) {
+            break;
+          }
+        }
+      }
 
-	    remap[i] = bestMap;
-	}
-	return remap;
+      remap[i] = bestMap;
     }
+    return remap;
+  }
 }

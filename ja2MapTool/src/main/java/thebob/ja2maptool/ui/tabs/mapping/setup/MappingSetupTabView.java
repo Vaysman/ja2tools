@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -23,48 +23,40 @@
  */
 package thebob.ja2maptool.ui.tabs.mapping.setup;
 
-import de.saxsys.mvvmfx.FluentViewLoader;
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
-import de.saxsys.mvvmfx.ViewTuple;
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.MouseEvent;
-import thebob.ja2maptool.ui.main.MainScreenViewModel;
-import thebob.ja2maptool.ui.tabs.mapping.tileset.TilesetMappingTabView;
-import thebob.ja2maptool.ui.tabs.mapping.tileset.TilesetMappingTabViewModel;
-import thebob.ja2maptool.ui.tabs.vfs.VfsSetupTabViewModel;
+
+import java.net.URL;
+import java.util.ResourceBundle;
 
 public class MappingSetupTabView implements FxmlView<MappingSetupTabViewModel>, Initializable {
 
-    @FXML
-    private TreeView<String> map_left;
+  @FXML
+  private TreeView<String> map_left;
 
-    @FXML
-    private TreeView<String> map_right;
+  @FXML
+  private TreeView<String> map_right;
 
-    @FXML
-    private Button map_create;
+  @FXML
+  private Button map_create;
+  // MVVMFX inject
+  @InjectViewModel
+  private MappingSetupTabViewModel viewModel;
 
-    @FXML
-    void map_create_click(MouseEvent event) {	
-	viewModel.createMappingTab(map_left.getSelectionModel().getSelectedItem(), map_right.getSelectionModel().getSelectedItem());
-    }
-    
-    // MVVMFX inject
-    @InjectViewModel
-    private MappingSetupTabViewModel viewModel;
-    
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-	map_left.setRoot(viewModel.getMapLeftRoot());
-	map_right.setRoot(viewModel.getMapRightRoot());	
-    }
+  @FXML
+  void map_create_click(MouseEvent event) {
+    viewModel.createMappingTab(map_left.getSelectionModel().getSelectedItem(), map_right.getSelectionModel().getSelectedItem());
+  }
+
+  @Override
+  public void initialize(URL location, ResourceBundle resources) {
+    map_left.setRoot(viewModel.getMapLeftRoot());
+    map_right.setRoot(viewModel.getMapRightRoot());
+  }
 
 }

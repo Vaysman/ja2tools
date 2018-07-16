@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -26,11 +26,11 @@ package thebob.ja2maptool.util.map;
 import thebob.ja2maptool.scopes.map.ConvertMapScope;
 import thebob.ja2maptool.scopes.map.MapCompositorScope;
 import thebob.ja2maptool.ui.tabs.viewers.map.MapViewerTabViewModel;
-import thebob.ja2maptool.util.map.renderer.ITileRendererControls;
-import thebob.ja2maptool.util.map.layers.map.IMapLayerControls;
 import thebob.ja2maptool.util.map.controller.editors.compositor.IMapCompositorController;
 import thebob.ja2maptool.util.map.controller.editors.converter.IMapConverterController;
 import thebob.ja2maptool.util.map.controller.viewer.base.IMapViewerController;
+import thebob.ja2maptool.util.map.layers.map.IMapLayerControls;
+import thebob.ja2maptool.util.map.renderer.ITileRendererControls;
 
 /**
  * The interface that combines all of the map display functionality.
@@ -39,30 +39,34 @@ import thebob.ja2maptool.util.map.controller.viewer.base.IMapViewerController;
  */
 public interface IMapDisplayManager extends ITileRendererControls, IMapLayerControls {
 
-    /**
-     * Returns the viewer controller, which provides functionality for scrolling and scaling the map window
-     * @return 
-     */
-    IMapViewerController connectBasicViewer(MapViewerTabViewModel viewWindow);
-    IMapViewerController connectEditorViewer(MapViewerTabViewModel viewWindow);
-    
-    /**
-     * Returns the compositor controller, which is meant to give the compositor UI component access to necessary functionality
-     * @param compositor the scope will be used for passing events between the controller and the view model
-     * @return 
-     */
-    IMapCompositorController connectCompositor(MapCompositorScope compositor);
-    
-    /**
-     * Returns the converter controller, which is meant to give the converter UI component access to necessary functionality
-     * @param converter the scope will be used for passing events between the controller and the view model
-     * @return 
-     */
-    IMapConverterController connectConverter(ConvertMapScope converter);
+  /**
+   * Returns the viewer controller, which provides functionality for scrolling and scaling the map window
+   *
+   * @return
+   */
+  IMapViewerController connectBasicViewer(MapViewerTabViewModel viewWindow);
 
-    /**
-     * shutdown the renderer's executor service
-     */
-    public void shutdown();
+  IMapViewerController connectEditorViewer(MapViewerTabViewModel viewWindow);
+
+  /**
+   * Returns the compositor controller, which is meant to give the compositor UI component access to necessary functionality
+   *
+   * @param compositor the scope will be used for passing events between the controller and the view model
+   * @return
+   */
+  IMapCompositorController connectCompositor(MapCompositorScope compositor);
+
+  /**
+   * Returns the converter controller, which is meant to give the converter UI component access to necessary functionality
+   *
+   * @param converter the scope will be used for passing events between the controller and the view model
+   * @return
+   */
+  IMapConverterController connectConverter(ConvertMapScope converter);
+
+  /**
+   * shutdown the renderer's executor service
+   */
+  public void shutdown();
 
 }

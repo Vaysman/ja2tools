@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 the_bob.
@@ -23,51 +23,50 @@
  */
 package thebob.assetloader.common;
 
-import java.nio.ByteBuffer;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelFormat;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
-import javafx.scene.paint.Color;
+
+import java.nio.ByteBuffer;
 
 /**
- *
  * @author the_bob
  */
 public class ImageAdapter {
 
-    public static Image convertStiImage(int width, int height, byte[] imagePixels, byte[][] palette) {
+  public static Image convertStiImage(int width, int height, byte[] imagePixels, byte[][] palette) {
 
-	int[] palette2 = new int[256];
-	// transparent color
-	int color0 = 0;
+    int[] palette2 = new int[256];
+    // transparent color
+    int color0 = 0;
 
-	// 255 looks like the highlight/outline color, it makes evetything suck.
-	//palette[0][255] = (byte) 0; //Byte.MIN_VALUE; 
-	//palette[1][255] = (byte) 0; //Byte.MIN_VALUE; 
-	//palette[2][255] = (byte) 0; //Byte.MIN_VALUE; 
-	for (int i = 0; i < 256; i++) {
+    // 255 looks like the highlight/outline color, it makes evetything suck.
+    //palette[0][255] = (byte) 0; //Byte.MIN_VALUE;
+    //palette[1][255] = (byte) 0; //Byte.MIN_VALUE;
+    //palette[2][255] = (byte) 0; //Byte.MIN_VALUE;
+    for (int i = 0; i < 256; i++) {
 
-	    int r = (palette[0][i] & 0xFF) << 16;
-	    int g = (palette[1][i] & 0xFF) << 8;
-	    int b = (palette[2][i] & 0xFF);
-	    int a = 0xFF << 24;
+      int r = (palette[0][i] & 0xFF) << 16;
+      int g = (palette[1][i] & 0xFF) << 8;
+      int b = (palette[2][i] & 0xFF);
+      int a = 0xFF << 24;
 
-	    int color = r | g | b | a;
+      int color = r | g | b | a;
 
-	    if (i == 0) {
-		color0 = color;
-	    } else if (color == color0) {
-		palette2[i] = 0;
-	    } else {
-		palette2[i] = color;
-	    }
+      if (i == 0) {
+        color0 = color;
+      } else if (color == color0) {
+        palette2[i] = 0;
+      } else {
+        palette2[i] = color;
+      }
 
-	}
-	WritableImage wimg = new WritableImage(width, height);
-	PixelWriter pw = wimg.getPixelWriter();
-	PixelFormat<ByteBuffer> pf = PixelFormat.createByteIndexedInstance(palette2);
-	pw.setPixels(0, 0, width, height, pf, imagePixels, 0, width);
-	return wimg;
     }
+    WritableImage wimg = new WritableImage(width, height);
+    PixelWriter pw = wimg.getPixelWriter();
+    PixelFormat<ByteBuffer> pf = PixelFormat.createByteIndexedInstance(palette2);
+    pw.setPixels(0, 0, width, height, pf, imagePixels, 0, width);
+    return wimg;
+  }
 }

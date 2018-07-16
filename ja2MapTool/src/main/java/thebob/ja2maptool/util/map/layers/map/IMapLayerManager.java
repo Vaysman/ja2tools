@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -24,22 +24,22 @@
 package thebob.ja2maptool.util.map.layers.map;
 
 import javafx.beans.property.BooleanProperty;
-import thebob.ja2maptool.util.compositor.SelectionPlacementOptions;
 import thebob.ja2maptool.util.compositor.SelectedTiles;
-import thebob.ja2maptool.util.map.controller.base.MapControllerBase;
+import thebob.ja2maptool.util.compositor.SelectionPlacementOptions;
 import thebob.ja2maptool.util.map.layers.base.ITileLayerGroup;
 import thebob.ja2maptool.util.map.layers.cursor.MapCursor;
 
 /**
  * Extended MapLayer interface including ITileLayerGroup access
+ *
  * @author the_bob
  */
-public interface IMapLayerManager extends IMapLayerControls, ITileLayerGroup{
+public interface IMapLayerManager extends IMapLayerControls, ITileLayerGroup {
 
-    public SelectedTiles getTilesForSelection(SelectedTiles selection);
+  public SelectedTiles getTilesForSelection(SelectedTiles selection);
 
-    public void appendTiles(MapCursor placement, SelectedTiles selection, SelectionPlacementOptions options);
+  public void appendTiles(MapCursor placement, SelectedTiles selection, SelectionPlacementOptions options);
 
-    public void setMapLayerButtons(BooleanProperty[] viewerButtons);
-    
+  public void setMapLayerButtons(BooleanProperty[] viewerButtons);
+
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 the_bob.
@@ -23,47 +23,46 @@
  */
 package thebob.assetloader.map;
 
-import java.io.File;
+import thebob.assetloader.map.core.MapData;
+import thebob.assetloader.xml.XmlLoader;
+
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
-import thebob.assetloader.map.core.MapData;
-import thebob.assetloader.xml.XmlLoader;
 
 public class MapLoader {
-    protected XmlLoader xml;
+  // ===================================================
+  public static final boolean logFileIO = false;
+  public static final boolean logEverything = false;
+  public static final boolean printJunk = false;
+  protected XmlLoader xml;
 
-    public MapLoader(XmlLoader xml) {
-        this.xml = xml;
-    }    
-    
-    public MapData loadMapFile(String fileName) {
-        try (final RandomAccessFile file = new RandomAccessFile(fileName, "r")) {
-            FileChannel fc = file.getChannel();
-            MappedByteBuffer fileBuffer = fc.map(FileChannel.MapMode.READ_ONLY, 0, file.length());
-            fileBuffer.order(ByteOrder.LITTLE_ENDIAN);
+  public MapLoader(XmlLoader xml) {
+    this.xml = xml;
+  }
 
-            return loadMap(fileBuffer);
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
-        return null;
+  public MapData loadMapFile(String fileName) {
+    try (final RandomAccessFile file = new RandomAccessFile(fileName, "r")) {
+      FileChannel fc = file.getChannel();
+      MappedByteBuffer fileBuffer = fc.map(FileChannel.MapMode.READ_ONLY, 0, file.length());
+      fileBuffer.order(ByteOrder.LITTLE_ENDIAN);
+
+      return loadMap(fileBuffer);
+    } catch (Exception exception) {
+      exception.printStackTrace();
     }
+    return null;
+  }
 
-    public MapData loadMap(ByteBuffer data) {
-        MapData map = new MapData();
-        
-        map.setXmlDataSource(xml);
-        map.loadMap(data);
-        
-        return map;
-    }
+  public MapData loadMap(ByteBuffer data) {
+    MapData map = new MapData();
 
-    // ===================================================
-    public static final boolean logFileIO = false;
-    public static final boolean logEverything = false;
-    public static final boolean printJunk = false;
+    map.setXmlDataSource(xml);
+    map.loadMap(data);
+
+    return map;
+  }
 
 }

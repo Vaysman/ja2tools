@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -26,19 +26,18 @@ package thebob.ja2maptool.ui.dialogs.scopeselect;
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
 import de.saxsys.mvvmfx.Scope;
-import java.io.File;
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import thebob.ja2maptool.scopes.mapping.ItemMappingScope;
 import thebob.ja2maptool.scopes.mapping.TilesetMappingScope;
+
+import java.net.URL;
+import java.util.ResourceBundle;
 
 /**
  * FXML Controller class
@@ -47,74 +46,72 @@ import thebob.ja2maptool.scopes.mapping.TilesetMappingScope;
  */
 public class ScopeSelectionDialogView implements FxmlView<ScopeSelectionDialogViewModel>, Initializable {
 
-    @FXML
-    private TreeView<Scope> map_list;
+  @FXML
+  private TreeView<Scope> map_list;
+  // MVVMFX inject
+  @InjectViewModel
+  private ScopeSelectionDialogViewModel viewModel;
+  private Stage showDialog;
 
-    @FXML
-    void canceled(MouseEvent event) {
-	showDialog.close();
-    }
+  @FXML
+  void canceled(MouseEvent event) {
+    showDialog.close();
+  }
 
-    @FXML
-    void load(MouseEvent event) {
-	viewModel.loadScope(map_list.getSelectionModel().getSelectedItem().getValue());
-	showDialog.close();
-    }
+  @FXML
+  void load(MouseEvent event) {
+    viewModel.loadScope(map_list.getSelectionModel().getSelectedItem().getValue());
+    showDialog.close();
+  }
 
-    // MVVMFX inject
-    @InjectViewModel
-    private ScopeSelectionDialogViewModel viewModel;
+  public void setDisplayingStage(Stage showDialog) {
+    this.showDialog = showDialog;
+  }
 
-    private Stage showDialog;
+  @Override
+  public void initialize(URL url, ResourceBundle rb) {
+    map_list.setCellFactory(new Callback<TreeView<Scope>, TreeCell<Scope>>() {
+      @Override
+      public TreeCell<Scope> call(TreeView<Scope> tree) {
+        return new TreeCell<Scope>() {
+          @Override
+          protected void updateItem(Scope item, boolean empty) {
+            super.updateItem(item, empty);
+            if (empty) {
+              setText(null);
+              setGraphic(null);
+            } else if (item == null) {
+              setText("Select mapping");
+            } else if (item instanceof TilesetMappingScope) {
+              TilesetMappingScope scope = (TilesetMappingScope) item;
+              setText(
+                  scope.getSourceAssets().getVfs().getPath().getFileName().toString()
+                      + "/tileset"
+                      + scope.getSourceTilesetId() + " (" + scope.getSourceTileset().getName() + ")"
+                      + " -> "
+                      + scope.getTargetAssets().getVfs().getPath().getFileName().toString()
+                      + "/tileset"
+                      + scope.getTargetTilesetId() + " (" + scope.getTargetTileset().getName() + ")"
+              );
+            } else if (item instanceof ItemMappingScope) {
+              ItemMappingScope scope = (ItemMappingScope) item;
+              setText(
+                  scope.getSourceAssets().getVfs().getPath().getFileName().toString()
+                      + " -> "
+                      + scope.getTargetAssets().getVfs().getPath().getFileName().toString()
+                      + " ( " + scope.getMapping().size() + " mappings ) "
+              );
+            }
+          }
+        };
+      }
+    });
 
-    public void setDisplayingStage(Stage showDialog) {
-	this.showDialog = showDialog;
-    }
+    map_list.setRoot(viewModel.getScopeListRoot());
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-	map_list.setCellFactory(new Callback<TreeView<Scope>, TreeCell<Scope>>() {
-	    @Override
-	    public TreeCell<Scope> call(TreeView<Scope> tree) {
-		return new TreeCell<Scope>() {
-		    @Override
-		    protected void updateItem(Scope item, boolean empty) {
-			super.updateItem(item, empty);
-			if (empty) {
-			    setText(null);
-			    setGraphic(null);
-			} else if (item == null) {
-			    setText("Select mapping");
-			} else if (item instanceof TilesetMappingScope) {
-			    TilesetMappingScope scope = (TilesetMappingScope) item;
-			    setText(
-				    scope.getSourceAssets().getVfs().getPath().getFileName().toString()
-				    + "/tileset"
-				    + scope.getSourceTilesetId() + " (" + scope.getSourceTileset().getName() + ")"
-				    + " -> "
-				    + scope.getTargetAssets().getVfs().getPath().getFileName().toString()
-				    + "/tileset"
-				    + scope.getTargetTilesetId() + " (" + scope.getTargetTileset().getName() + ")"
-			    );
-			} else if (item instanceof ItemMappingScope) {
-			    ItemMappingScope scope = (ItemMappingScope) item;
-			    setText(
-				    scope.getSourceAssets().getVfs().getPath().getFileName().toString()
-				    + " -> "
-				    + scope.getTargetAssets().getVfs().getPath().getFileName().toString()
-				    + " ( " + scope.getMapping().size() + " mappings ) "
-			    );
-			}
-		    }
-		};
-	    }
-	});
-
-	map_list.setRoot(viewModel.getScopeListRoot());
-
-	viewModel.subscribe(ScopeSelectionDialogViewModel.CLOSE_DIALOG_NOTIFICATION, (key, payload) -> {
-	    showDialog.close();
-	});
-    }
+    viewModel.subscribe(ScopeSelectionDialogViewModel.CLOSE_DIALOG_NOTIFICATION, (key, payload) -> {
+      showDialog.close();
+    });
+  }
 
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 the_bob.
@@ -26,20 +26,19 @@ package thebob.assetloader.map.structures.legacy;
 import thebob.assetloader.map.helpers.AutoLoadingMapStruct;
 
 /**
- *
  * @author the_bob
  */
 public class OLD_EXITGRID extends AutoLoadingMapStruct {
-    
-    public final Signed16 iMapIndex = new Signed16(); //dnl ch86 170214 not exist in v1.12, add to simplify load
-    public final Signed16 usGridNo = new Signed16(); // Sweet spot for placing mercs in new sector.
-    public final Unsigned8 ubGotoSectorX = new Unsigned8();
-    public final Unsigned8 ubGotoSectorY = new Unsigned8();
-    public final Unsigned8 ubGotoSectorZ = new Unsigned8();
 
-    @Override
-    public int getOffsetAdjustment() {
-        return -1;
-    }
-    
+  public final Signed16 iMapIndex = new Signed16(); //dnl ch86 170214 not exist in v1.12, add to simplify load
+  public final Signed16 usGridNo = new Signed16(); // Sweet spot for placing mercs in new sector.
+  public final Unsigned8 ubGotoSectorX = new Unsigned8();
+  public final Unsigned8 ubGotoSectorY = new Unsigned8();
+  public final Unsigned8 ubGotoSectorZ = new Unsigned8();
+
+  @Override
+  public int getOffsetAdjustment() {
+    return -1;
+  }
+
 }

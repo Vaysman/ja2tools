@@ -28,43 +28,42 @@ import thebob.ja2maptool.util.map.component.interaction.layer.MapInteractionLaye
 import thebob.ja2maptool.util.map.component.interaction.target.IMapInteractionListener;
 
 /**
- *
  * @author starcatter
  */
 public interface IMapInteractionComponent {
 
-    /**
-     * Returns an interaction layer mapped to the component passed to the
-     * method. If no layer exists yet it will be created. If no longer needed,
-     * the layer can be cleared to effectively disable it.
-     *
-     * @param self the component to be notified if user interacts with cells on
-     * this layer
-     * @return interaction layer for the component.
-     */
-    MapInteractionLayer getLayer(IMapInteractionListener self);
+  /**
+   * Returns an interaction layer mapped to the component passed to the
+   * method. If no layer exists yet it will be created. If no longer needed,
+   * the layer can be cleared to effectively disable it.
+   *
+   * @param self the component to be notified if user interacts with cells on
+   *             this layer
+   * @return interaction layer for the component.
+   */
+  MapInteractionLayer getLayer(IMapInteractionListener self);
 
-    /**
-     * Call this after performing any changes on interaction layers, this method
-     * rebuilds the main index of interactive cells for all layers
-     */
-    void refreshLayers();
+  /**
+   * Call this after performing any changes on interaction layers, this method
+   * rebuilds the main index of interactive cells for all layers
+   */
+  void refreshLayers();
 
-    /**
-     * Called by the map cursor component whenever the cursor is moved or
-     * dragged. Check the interaction data for pressed buttons to identify
-     * dragging.
-     *
-     * @param cell
-     * @param data
-     */
-    void hoverCell(int cell, MapInteractionData data);
+  /**
+   * Called by the map cursor component whenever the cursor is moved or
+   * dragged. Check the interaction data for pressed buttons to identify
+   * dragging.
+   *
+   * @param cell
+   * @param data
+   */
+  void hoverCell(int cell, MapInteractionData data);
 
-    /**
-     * * Called by the map cursor component on mouse click
-     *
-     * @param cell
-     * @param data
-     */
-    boolean activateCell(int cell, MapInteractionData data);
+  /**
+   * * Called by the map cursor component on mouse click
+   *
+   * @param cell
+   * @param data
+   */
+  boolean activateCell(int cell, MapInteractionData data);
 }

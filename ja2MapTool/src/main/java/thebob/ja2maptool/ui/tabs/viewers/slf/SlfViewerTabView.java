@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -25,31 +25,25 @@ package thebob.ja2maptool.ui.tabs.viewers.slf;
 
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
+import javafx.fxml.Initializable;
+
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.TilePane;
 
 /**
  * FXML Controller class
  *
  * @author the_bob
  */
-public class SlfViewerTabView  implements FxmlView<SlfViewerTabViewModel>, Initializable {
-   
-    // MVVMFX inject
-    @InjectViewModel
-    private SlfViewerTabViewModel viewModel;
-    
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-	// TODO
-    }    
-    
+public class SlfViewerTabView implements FxmlView<SlfViewerTabViewModel>, Initializable {
+
+  // MVVMFX inject
+  @InjectViewModel
+  private SlfViewerTabViewModel viewModel;
+
+  @Override
+  public void initialize(URL url, ResourceBundle rb) {
+    // TODO
+  }
+
 }

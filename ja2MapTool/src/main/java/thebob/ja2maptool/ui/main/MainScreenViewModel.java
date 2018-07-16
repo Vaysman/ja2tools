@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -23,78 +23,76 @@
  */
 package thebob.ja2maptool.ui.main;
 
-import thebob.ja2maptool.scopes.MainScope;
 import de.saxsys.mvvmfx.InjectScope;
 import de.saxsys.mvvmfx.Scope;
 import de.saxsys.mvvmfx.ScopeProvider;
 import de.saxsys.mvvmfx.ViewModel;
 import javafx.scene.control.Tab;
-import thebob.ja2maptool.scopes.mapping.ItemMappingScope;
-import static thebob.ja2maptool.scopes.MainScope.UPDATE_SCOPES;
-import thebob.ja2maptool.scopes.mapping.TilesetMappingScope;
+import thebob.ja2maptool.scopes.MainScope;
 import thebob.ja2maptool.scopes.VfsAssetScope;
+import thebob.ja2maptool.scopes.mapping.ItemMappingScope;
+import thebob.ja2maptool.scopes.mapping.TilesetMappingScope;
 import thebob.ja2maptool.ui.tabs.mapping.items.ItemMappingTabView;
 import thebob.ja2maptool.ui.tabs.mapping.tileset.TilesetMappingTabView;
 
 /**
- *
  * @author the_bob
  */
 @ScopeProvider(scopes = {VfsAssetScope.class, MainScope.class})
 public class MainScreenViewModel implements ViewModel {
 
-    public static final String ADD_TAB = "ADD_TAB";
-    public static final String SHOW_TAB = "SHOW_TAB";
-    public static final String UPDATE_SCOPE_MENUS = "UPDATE_SCOPE_MENUS";
+  public static final String ADD_TAB = "ADD_TAB";
+  public static final String SHOW_TAB = "SHOW_TAB";
+  public static final String UPDATE_SCOPE_MENUS = "UPDATE_SCOPE_MENUS";
 
-    @InjectScope
-    VfsAssetScope vfsAssets;
-    @InjectScope
-    MainScope mainScreen;
+  @InjectScope
+  VfsAssetScope vfsAssets;
+  @InjectScope
+  MainScope mainScreen;
 
-    public void initialize() {
-	mainScreen.subscribe(MainScope.NEW_TAB, (key, payload) -> {
-	    publish(ADD_TAB, payload);
-	});
-	mainScreen.subscribe(MainScope.GOTO_TAB, (key, payload) -> {
-	    publish(SHOW_TAB, payload);
-	});
-	mainScreen.subscribe(MainScope.UPDATE_SCOPES, (key, payload) -> {
-	    publish(UPDATE_SCOPE_MENUS, mainScreen.getActiveItemMappings(), payload);
-	});
-    }
+  public void initialize() {
+    mainScreen.subscribe(MainScope.NEW_TAB, (key, payload) -> {
+      publish(ADD_TAB, payload);
+    });
+    mainScreen.subscribe(MainScope.GOTO_TAB, (key, payload) -> {
+      publish(SHOW_TAB, payload);
+    });
+    mainScreen.subscribe(MainScope.UPDATE_SCOPES, (key, payload) -> {
+      publish(UPDATE_SCOPE_MENUS, mainScreen.getActiveItemMappings(), payload);
+    });
+  }
 
-    VfsAssetScope getVfsScope() {
-	return vfsAssets;
-    }
+  VfsAssetScope getVfsScope() {
+    return vfsAssets;
+  }
 
-    MainScope getMainScope() {
-	return mainScreen;
-    }
+  MainScope getMainScope() {
+    return mainScreen;
+  }
 
-    void registerScopeTab(Tab tab, Scope tabScope) {
-	mainScreen.registerScopeTab(tabScope, tab);
-    }
+  void registerScopeTab(Tab tab, Scope tabScope) {
+    mainScreen.registerScopeTab(tabScope, tab);
+  }
 
-    void loadItemMapping(String path) {
-	ItemMappingScope itemMappingScope = ItemMappingScope.loadFromFile(path, vfsAssets);
-	mainScreen.publish(MainScope.NEW_TAB, new Object[]{ItemMappingTabView.class, "Map items", itemMappingScope});
-	mainScreen.registerItemMappingScope(itemMappingScope);
-    }
+  void loadItemMapping(String path) {
+    ItemMappingScope itemMappingScope = ItemMappingScope.loadFromFile(path, vfsAssets);
+    mainScreen.publish(MainScope.NEW_TAB, new Object[]{ItemMappingTabView.class, "Map items", itemMappingScope});
+    mainScreen.registerItemMappingScope(itemMappingScope);
+  }
 
-    void loadTilesetMapping(String path) {
-	TilesetMappingScope tilesetMappingScope = TilesetMappingScope.loadFromFile(path, vfsAssets);
+  void loadTilesetMapping(String path) {
+    TilesetMappingScope tilesetMappingScope = TilesetMappingScope.loadFromFile(path, vfsAssets);
 
-	mainScreen.publish(MainScope.NEW_TAB, new Object[]{TilesetMappingTabView.class, "Map tileset", tilesetMappingScope});
-	mainScreen.registerTilesetMappingScope(tilesetMappingScope);
-    }
+    mainScreen.publish(MainScope.NEW_TAB, new Object[]{TilesetMappingTabView.class, "Map tileset", tilesetMappingScope});
+    mainScreen.registerTilesetMappingScope(tilesetMappingScope);
+  }
 
-    void loadSLF(String path) {
-	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+  void loadSLF(String path) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
 
-    void loadSTI(String path) {
-	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+  void loadSTI(String path) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
 
 }

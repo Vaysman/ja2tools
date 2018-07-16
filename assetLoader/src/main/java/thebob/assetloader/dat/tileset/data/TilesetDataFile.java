@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 the_bob.
@@ -27,13 +27,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author the_bob
  */
 public class TilesetDataFile {
 
-    public int tilesetCount;
-    public int filesPerTileset;
+  public int tilesetCount;
+  public int filesPerTileset;
 
-    public List<TilesetData> tilesets = new ArrayList<TilesetData>();
+  public List<TilesetData> tilesets = new ArrayList<TilesetData>();
 }

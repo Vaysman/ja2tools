@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -25,8 +25,6 @@ package thebob.ja2maptool.util.map;
 
 import com.google.common.collect.ClassToInstanceMap;
 import com.google.common.collect.MutableClassToInstanceMap;
-import java.util.Observable;
-import java.util.Observer;
 import javafx.beans.property.BooleanProperty;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyEvent;
@@ -50,17 +48,20 @@ import thebob.ja2maptool.util.map.layers.map.MapLayer;
 import thebob.ja2maptool.util.map.renderer.ITileRendererManager;
 import thebob.ja2maptool.util.map.renderer.TileRenderer;
 
+import java.util.Observable;
+import java.util.Observer;
+
 /**
  * MapDisplayManager is the replacement for OldMapRenderer, intended to
  * structure its functionality a bit better.
- *
+ * <p>
  * Currently its major components are:
- *
+ * <p>
  * - the TileRenderer, responsible for moving around the view window and
  * displaying stuff
- *
+ * <p>
  * - the MapLayer, responsible for loading and manipulating the map data
- *
+ * <p>
  * MapDisplayManager uses controllers (IMapController) to provide access to most
  * of its functionality.
  *
@@ -68,104 +69,102 @@ import thebob.ja2maptool.util.map.renderer.TileRenderer;
  */
 public class MapDisplayManager implements IMapDisplayManager, Observer {
 
-    private final ITileRendererManager renderer = new TileRenderer();
-    private final IMapLayerManager map = new MapLayer();
+  private final ITileRendererManager renderer = new TileRenderer();
+  private final IMapLayerManager map = new MapLayer();
+  private final ClassToInstanceMap<IMapController> controllers = MutableClassToInstanceMap.create();
+  // keep track of the current Canvas, we need it to intercept mouse/keyboard events
+  Canvas canvas = null;
 
-    // keep track of the current Canvas, we need it to intercept mouse/keyboard events
-    Canvas canvas = null;
+  public MapDisplayManager() {
+    renderer.addObserver(this);
+    map.subscribe(this);
 
-    private final ClassToInstanceMap<IMapController> controllers = MutableClassToInstanceMap.create();
+    renderer.addRenderLayer(map);
+  }
 
-    public MapDisplayManager() {
-        renderer.addObserver(this);
-        map.subscribe(this);
+  // -------------------
+  @Override
+  public void update(Observable o, Object arg) {
+    if (arg == null || !(arg instanceof MapEvent)) {
+      System.out.println("thebob.ja2maptool.util.map.MapDisplayManager.update() got weird message from " + o);
+      return;
+    }
+  }
 
-        renderer.addRenderLayer(map);
+  // -- renderer controls
+  @Override
+  public void setCanvas(Canvas canvas) {
+    if (canvas != this.canvas) {
+      this.canvas = canvas;
+      canvas.addEventFilter(MouseEvent.ANY, event -> {
+        controllers.forEach((t, c) -> {
+          c.mouseEvent(event);
+        });
+      });
+      canvas.addEventFilter(KeyEvent.ANY, event -> {
+        controllers.forEach((t, c) -> {
+          c.keyEvent(event);
+        });
+      });
+    }
+    renderer.setCanvas(canvas);
+  }
+
+  // -- map layer controls
+  @Override
+  public void loadMap(MapData mapData) {
+    map.loadMap(mapData);
+  }
+
+  @Override
+  public void setMapTileset(Tileset tileset) {
+    map.setMapTileset(tileset);
+  }
+
+  @Override
+  public void setMapLayerButtons(BooleanProperty[] viewerButtons) {
+    map.setMapLayerButtons(viewerButtons);
+  }
+
+  @Override
+  public void setMapDisplayButtons(BooleanProperty[] displayButtons) {
+    map.setMapDisplayButtons(displayButtons);
+  }
+
+  // -- controller access
+  private <E extends IMapController> E registerController(E controller, Class controllerType) {
+    if (controllers.containsKey(controllerType)) {
+      controllers.remove(controllerType).disconnect();
     }
 
-    // -------------------    
-    @Override
-    public void update(Observable o, Object arg) {
-        if (arg == null || !(arg instanceof MapEvent)) {
-            System.out.println("thebob.ja2maptool.util.map.MapDisplayManager.update() got weird message from " + o);
-            return;
-        }
-    }
+    controllers.put(controllerType, controller);
+    return controller;
+  }
 
-    // -- renderer controls
-    @Override
-    public void setCanvas(Canvas canvas) {
-        if (canvas != this.canvas) {
-            this.canvas = canvas;
-            canvas.addEventFilter(MouseEvent.ANY, event -> {
-                controllers.forEach((t, c) -> {
-                    c.mouseEvent(event);
-                });
-            });
-            canvas.addEventFilter(KeyEvent.ANY, event -> {
-                controllers.forEach((t, c) -> {
-                    c.keyEvent(event);
-                });
-            });
-        }
-        renderer.setCanvas(canvas);
-    }
+  // viewers
+  @Override
+  public IMapViewerController connectBasicViewer(MapViewerTabViewModel viewWindow) {
+    return registerController(new MapBrowserViewerController(renderer, map, viewWindow), IMapViewerController.class);
+  }
 
-    // -- map layer controls
-    @Override
-    public void loadMap(MapData mapData) {
-        map.loadMap(mapData);
-    }
+  public IMapViewerController connectEditorViewer(MapViewerTabViewModel viewWindow) {
+    return registerController(new MapEditorViewerController(renderer, map, viewWindow), IMapViewerController.class);
+  }
 
-    @Override
-    public void setMapTileset(Tileset tileset) {
-        map.setMapTileset(tileset);
-    }
+  // editors
+  @Override
+  public IMapCompositorController connectCompositor(MapCompositorScope compositor) {
+    return registerController(new MapCompositorController(renderer, map, compositor), IMapCompositorController.class);
+  }
 
-    @Override
-    public void setMapLayerButtons(BooleanProperty[] viewerButtons) {
-        map.setMapLayerButtons(viewerButtons);
-    }
+  @Override
+  public IMapConverterController connectConverter(ConvertMapScope converter) {
+    return registerController(new MapConverterController(renderer, map, converter), IMapConverterController.class);
+  }
 
-    @Override
-    public void setMapDisplayButtons(BooleanProperty[] displayButtons) {
-        map.setMapDisplayButtons(displayButtons);
-    }
-
-    // -- controller access
-    private <E extends IMapController> E registerController(E controller, Class controllerType) {
-        if (controllers.containsKey(controllerType)) {
-            controllers.remove(controllerType).disconnect();
-        }
-
-        controllers.put(controllerType, controller);
-        return controller;
-    }
-
-    // viewers
-    @Override
-    public IMapViewerController connectBasicViewer(MapViewerTabViewModel viewWindow) {
-        return registerController(new MapBrowserViewerController(renderer, map, viewWindow), IMapViewerController.class);
-    }
-
-    public IMapViewerController connectEditorViewer(MapViewerTabViewModel viewWindow) {
-        return registerController(new MapEditorViewerController(renderer, map, viewWindow), IMapViewerController.class);
-    }
-
-    // editors
-    @Override
-    public IMapCompositorController connectCompositor(MapCompositorScope compositor) {
-        return registerController(new MapCompositorController(renderer, map, compositor), IMapCompositorController.class);
-    }
-
-    @Override
-    public IMapConverterController connectConverter(ConvertMapScope converter) {
-        return registerController(new MapConverterController(renderer, map, converter), IMapConverterController.class);
-    }
-
-    @Override
-    public void shutdown() {
-        renderer.shutdown();
-    }
+  @Override
+  public void shutdown() {
+    renderer.shutdown();
+  }
 
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -23,107 +23,108 @@
  */
 package thebob.ja2maptool.util.map.component.placement.snippets;
 
-import java.util.List;
-import java.util.Map;
 import thebob.ja2maptool.util.compositor.SelectedTiles;
 import thebob.ja2maptool.util.compositor.SelectionPlacementOptions;
 import thebob.ja2maptool.util.compositor.SnippetPlacement;
 import thebob.ja2maptool.util.map.controller.base.IMapController;
 
+import java.util.List;
+import java.util.Map;
+
 /**
- *
  * @author the_bob
  */
 public interface IMapSnippetPlacementComponent extends IMapController {
 
-    /**
-     * Sets the currently placed snippet. Selection functionality is disabled
-     * while a snippet is loaded.
-     *
-     * @param preview
-     */
-    void setContents(SelectedTiles preview);
+  /**
+   * Sets the currently placed snippet. Selection functionality is disabled
+   * while a snippet is loaded.
+   *
+   * @param preview
+   */
+  void setContents(SelectedTiles preview);
 
-    /**
-     *
-     * @return true if a snippet is selected for placement
-     */
-    boolean hasContents();
+  /**
+   * @return true if a snippet is selected for placement
+   */
+  boolean hasContents();
 
-    /**
-     * Returns the placement map for the active placement layer. The keys are
-     * cell IDs where the placements are pinned, the values are the placements
-     * themselves. It is not recommended to manipulate this list directly.
-     *
-     * @return the currently selected placements map.
-     */
-    Map<Integer, SnippetPlacement> getPlacements();
+  /**
+   * Returns the placement map for the active placement layer. The keys are
+   * cell IDs where the placements are pinned, the values are the placements
+   * themselves. It is not recommended to manipulate this list directly.
+   *
+   * @return the currently selected placements map.
+   */
+  Map<Integer, SnippetPlacement> getPlacements();
 
-    // ----------------------------
-    // placement actions
-    // ----------------------------
-    /**
-     * Places all placement layers on the map
-     */
-    public void placeAll();
+  // ----------------------------
+  // placement actions
+  // ----------------------------
 
-    /**
-     * Sets a placement as selected and makes it look that way in the map
-     * window.
-     *
-     * @param selectedItem
-     */
-    public void selectPlacement(SnippetPlacement selectedItem);
+  /**
+   * Places all placement layers on the map
+   */
+  public void placeAll();
 
-    public void setPlacementVisibility(SelectionPlacementOptions snippetLayers);
+  /**
+   * Sets a placement as selected and makes it look that way in the map
+   * window.
+   *
+   * @param selectedItem
+   */
+  public void selectPlacement(SnippetPlacement selectedItem);
 
-    // ----------------------------
-    // placement movement
-    // ----------------------------
-    /**
-     * Moves the placement at this cell by specified number of cells. Doesn't
-     * refresh screen state.
-     *
-     * @param placementCell
-     * @param deltaX
-     * @param deltaY
-     */
-    void movePlacement(int placementCell, int deltaX, int deltaY);
+  public void setPlacementVisibility(SelectionPlacementOptions snippetLayers);
 
-    /**
-     * Moves all placements in the list by specified number of cells then
-     * rebuilds the interaction areas and cursor layers
-     *
-     * @param selectedPlacements
-     * @param deltaX
-     * @param deltaY
-     */
-    void movePlacementList(List<SnippetPlacement> selectedPlacements, int deltaX, int deltaY);
+  // ----------------------------
+  // placement movement
+  // ----------------------------
 
-    // ----------------------------
-    // layers
-    // ----------------------------
-    MapSnippetPlacementLayer addPlacementLayer(String name);
+  /**
+   * Moves the placement at this cell by specified number of cells. Doesn't
+   * refresh screen state.
+   *
+   * @param placementCell
+   * @param deltaX
+   * @param deltaY
+   */
+  void movePlacement(int placementCell, int deltaX, int deltaY);
 
-    List<MapSnippetPlacementLayer> getLayers();
+  /**
+   * Moves all placements in the list by specified number of cells then
+   * rebuilds the interaction areas and cursor layers
+   *
+   * @param selectedPlacements
+   * @param deltaX
+   * @param deltaY
+   */
+  void movePlacementList(List<SnippetPlacement> selectedPlacements, int deltaX, int deltaY);
 
-    void setCurrentLayer(MapSnippetPlacementLayer layer);
+  // ----------------------------
+  // layers
+  // ----------------------------
+  MapSnippetPlacementLayer addPlacementLayer(String name);
 
-    MapSnippetPlacementLayer getCurrentLayer();
+  List<MapSnippetPlacementLayer> getLayers();
 
-    public void updateVisibleLayers();
-    
-    public void appendPlacementsToCurrentLayer(Map<Integer, SnippetPlacement> placements);
-    // ----------------------------
-    // layer manipulation
-    // ----------------------------
+  public void setLayers(List<MapSnippetPlacementLayer> layers);
 
-    public void deletePlacementLayer(MapSnippetPlacementLayer layer);
+  MapSnippetPlacementLayer getCurrentLayer();
 
-    public void movePlacementLayer(MapSnippetPlacementLayer selectedItem, int i);
+  void setCurrentLayer(MapSnippetPlacementLayer layer);
 
-    public void copyPlacementLayer(MapSnippetPlacementLayer selectedItem);    
+  public void updateVisibleLayers();
+  // ----------------------------
+  // layer manipulation
+  // ----------------------------
 
-    public void setLayers(List<MapSnippetPlacementLayer> layers);
+  public void appendPlacementsToCurrentLayer(Map<Integer, SnippetPlacement> placements);
+
+  public void deletePlacementLayer(MapSnippetPlacementLayer layer);
+
+  public void movePlacementLayer(MapSnippetPlacementLayer selectedItem, int i);
+
+  public void copyPlacementLayer(MapSnippetPlacementLayer selectedItem);
 
 }

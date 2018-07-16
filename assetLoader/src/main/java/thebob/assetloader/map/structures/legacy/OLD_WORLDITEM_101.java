@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 the_bob.
@@ -23,10 +23,9 @@
  */
 package thebob.assetloader.map.structures.legacy;
 
-import java.nio.ByteOrder;
 import javolution.io.Struct;
-import thebob.assetloader.map.helpers.GridPos;
 import thebob.assetloader.map.helpers.AutoLoadingMapStruct;
+import thebob.assetloader.map.helpers.GridPos;
 
 /*
 	BOOLEAN				fExists;
@@ -40,39 +39,39 @@ import thebob.assetloader.map.helpers.AutoLoadingMapStruct;
  */
 public class OLD_WORLDITEM_101 extends AutoLoadingMapStruct {
 
-    public final Struct.Bool fExists = new Struct.Bool();
-    public final Struct.Signed16 sGridNo = new Struct.Signed16();
-    public final Struct.Signed8 ubLevel = new Struct.Signed8(32);
+  public final Struct.Bool fExists = new Struct.Bool();
+  public final Struct.Signed16 sGridNo = new Struct.Signed16();
+  public final Struct.Signed8 ubLevel = new Struct.Signed8(32);
 
-    public final OLD_OBJECTTYPE_101 oldObject = inner(new OLD_OBJECTTYPE_101());
+  public final OLD_OBJECTTYPE_101 oldObject = inner(new OLD_OBJECTTYPE_101());
 
-    public final Struct.Unsigned16 usFlags = new Struct.Unsigned16();
-    public final Struct.Signed8 bRenderZHeightAboveLevel = new Struct.Signed8();
-    public final Struct.Signed8 bVisible = new Struct.Signed8();
-    public final Struct.Unsigned8 ubNonExistChance = new Struct.Unsigned8(32);
+  public final Struct.Unsigned16 usFlags = new Struct.Unsigned16();
+  public final Struct.Signed8 bRenderZHeightAboveLevel = new Struct.Signed8();
+  public final Struct.Signed8 bVisible = new Struct.Signed8();
+  public final Struct.Unsigned8 ubNonExistChance = new Struct.Unsigned8(32);
 
-    @Override
-    public String toString() {
-        return "\tfExists=" + fExists.get() + " @" + fExists.offset() + ", " + fExists.bitLength() + "\n\t"
-                + "sGridNo=" + new GridPos(sGridNo.get()) + " @" + sGridNo.offset() + "\n\t"
-                + "ubLevel=" + ubLevel.get() + " @" + ubLevel.offset() + "\n\t"
-                + "oldObject: " + oldObject.size() + "\n\t\t"
-                + "usItem=" + oldObject.usItem.get() + "@ " + oldObject.usItem.offset() + "\n\t\t"
-                + "ubNumberOfObjects=" + oldObject.ubNumberOfObjects.get() + "@ " + oldObject.ubNumberOfObjects.offset() + "\n\t\t"
-                + "unionPlaceholder=" + oldObject.data.toString()+ "\n\t\t"
-                + "usAttachItem=" + oldObject.usAttachItem[0].offset() + "-" + oldObject.usAttachItem[3].offset() + "\n\t\t"
-                + "bAttachStatus=" + oldObject.bAttachStatus[0].offset() + "-" + oldObject.bAttachStatus[3].offset() + "\n\t\t"
-                + "fFlags=" + oldObject.fFlags.get() + "@ " + oldObject.fFlags.offset() + "\n\t\t"
-                + "ubMission=" + oldObject.ubMission.get() + "@ " + oldObject.ubMission.offset() + "\n\t\t"
-                + "bTrap=" + oldObject.bTrap.get() + "@ " + oldObject.bTrap.offset() + "\n\t\t"
-                + "ubImprintID=" + oldObject.ubImprintID.get() + "@ " + oldObject.ubImprintID.offset() + "\n\t\t"
-                + "ubWeight=" + oldObject.ubWeight.get() + "@ " + oldObject.ubWeight.offset() + "\n\t\t"
-                + "fUsed=" + oldObject.fUsed.get() + "@ " + oldObject.fUsed.offset() + "\n\t"
-                + "usFlags=" + usFlags.get() + " @" + usFlags.offset() + "\n\t"
-                + "bRenderZHeightAboveLevel=" + bRenderZHeightAboveLevel.get() + " @" + bRenderZHeightAboveLevel.offset() + "\n\t"
-                + "bVisible=" + bVisible.get() + " @" + bVisible.offset() + "\n\t"
-                + "ubNonExistChance=" + ubNonExistChance.get() + " @" + ubNonExistChance.offset()
-                + super.toString();
-    }
+  @Override
+  public String toString() {
+    return "\tfExists=" + fExists.get() + " @" + fExists.offset() + ", " + fExists.bitLength() + "\n\t"
+        + "sGridNo=" + new GridPos(sGridNo.get()) + " @" + sGridNo.offset() + "\n\t"
+        + "ubLevel=" + ubLevel.get() + " @" + ubLevel.offset() + "\n\t"
+        + "oldObject: " + oldObject.size() + "\n\t\t"
+        + "usItem=" + oldObject.usItem.get() + "@ " + oldObject.usItem.offset() + "\n\t\t"
+        + "ubNumberOfObjects=" + oldObject.ubNumberOfObjects.get() + "@ " + oldObject.ubNumberOfObjects.offset() + "\n\t\t"
+        + "unionPlaceholder=" + oldObject.data.toString() + "\n\t\t"
+        + "usAttachItem=" + oldObject.usAttachItem[0].offset() + "-" + oldObject.usAttachItem[3].offset() + "\n\t\t"
+        + "bAttachStatus=" + oldObject.bAttachStatus[0].offset() + "-" + oldObject.bAttachStatus[3].offset() + "\n\t\t"
+        + "fFlags=" + oldObject.fFlags.get() + "@ " + oldObject.fFlags.offset() + "\n\t\t"
+        + "ubMission=" + oldObject.ubMission.get() + "@ " + oldObject.ubMission.offset() + "\n\t\t"
+        + "bTrap=" + oldObject.bTrap.get() + "@ " + oldObject.bTrap.offset() + "\n\t\t"
+        + "ubImprintID=" + oldObject.ubImprintID.get() + "@ " + oldObject.ubImprintID.offset() + "\n\t\t"
+        + "ubWeight=" + oldObject.ubWeight.get() + "@ " + oldObject.ubWeight.offset() + "\n\t\t"
+        + "fUsed=" + oldObject.fUsed.get() + "@ " + oldObject.fUsed.offset() + "\n\t"
+        + "usFlags=" + usFlags.get() + " @" + usFlags.offset() + "\n\t"
+        + "bRenderZHeightAboveLevel=" + bRenderZHeightAboveLevel.get() + " @" + bRenderZHeightAboveLevel.offset() + "\n\t"
+        + "bVisible=" + bVisible.get() + " @" + bVisible.offset() + "\n\t"
+        + "ubNonExistChance=" + ubNonExistChance.get() + " @" + ubNonExistChance.offset()
+        + super.toString();
+  }
 
 }

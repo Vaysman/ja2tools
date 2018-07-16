@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 the_bob.
@@ -23,97 +23,100 @@
  */
 package thebob.assetloader.map.wrappers;
 
+import thebob.assetloader.map.MapLoader;
+import thebob.assetloader.map.structures.ObjectType;
+import thebob.assetloader.map.structures.legacy.OLD_OBJECTTYPE_101;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.MappedByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import thebob.assetloader.map.MapLoader;
-import thebob.assetloader.map.structures.DOOR;
-import thebob.assetloader.map.structures.ObjectType;
-import thebob.assetloader.map.structures.legacy.OLD_OBJECTTYPE_101;
 
 /**
- *
  * @author the_bob
  */
 public class ObjectStack extends MapLoaderWrapperBase {
 
-    public static final int MAX_REASONABLE_STACKSIZE = 1024;
-    
-    int stackSize = 0;
-    ObjectType object = new ObjectType();
-    List<StackedObjectData> objects = new ArrayList<StackedObjectData>();
+  public static final int MAX_REASONABLE_STACKSIZE = 1024;
 
-    protected void load(ByteBuffer source) {
-        if (MapLoader.logEverything) 
-            System.out.println("loader.wrappers.ObjectStack.load(): loading ObjectType @"+source.position());
-        
-        object.setSource(source);
-        if (MapLoader.logEverything) System.out.println("loader.wrappers.ObjectStack.load(): "+object);
-        
-        stackSize = source.getInt();
-        if (MapLoader.logEverything) System.out.println("loader.wrappers.ObjectStack.load(): stackSize="+stackSize+" @"+ (source.position()-4) );
-        
-        if( stackSize > MAX_REASONABLE_STACKSIZE || stackSize < 0 ){
-            throw new RuntimeException("Object stack invalid!");
-        }
-        
-        for (int i = 0; i < stackSize; i++) {
-            if (MapLoader.logEverything) {
-                System.out.println("loader.wrappers.ObjectStack.load(): loading object " + (i + 1) + " / " + stackSize +" @"+ (source.position()-4) );
-            }
-            StackedObjectData stackedObject = new StackedObjectData();
-            stackedObject.loadAsset(map);
-            objects.add(stackedObject);
-        }
-        if (MapLoader.logEverything) {
-            System.out.println("loader.wrappers.ObjectStack.load(): loaded " + objects.size() + " objects: " + objects+" @"+ (source.position()-4) );
-        }
+  int stackSize = 0;
+  ObjectType object = new ObjectType();
+  List<StackedObjectData> objects = new ArrayList<StackedObjectData>();
+
+  protected void load(ByteBuffer source) {
+    if (MapLoader.logEverything)
+      System.out.println("loader.wrappers.ObjectStack.load(): loading ObjectType @" + source.position());
+
+    object.setSource(source);
+    if (MapLoader.logEverything) System.out.println("loader.wrappers.ObjectStack.load(): " + object);
+
+    stackSize = source.getInt();
+    if (MapLoader.logEverything)
+      System.out.println("loader.wrappers.ObjectStack.load(): stackSize=" + stackSize + " @" + (source.position() - 4));
+
+    if (stackSize > MAX_REASONABLE_STACKSIZE || stackSize < 0) {
+      throw new RuntimeException("Object stack invalid!");
     }
 
-    void loadOld(OLD_OBJECTTYPE_101 oldItem) {
-        object.loadOld(oldItem);
-        stackSize = oldItem.ubNumberOfObjects.get();
-        for (int i = 0; i < oldItem.ubNumberOfObjects.get(); i++) {
-            // if(MapLoader.logEverything) System.out.println("loader.wrappers.ObjectStack.loadOld() converting item "+(i+1)+"/"+oldItem.ubNumberOfObjects.get());
-            StackedObjectData objectInStack = new StackedObjectData();
-            objectInStack.loadOld(oldItem, i);
-            objects.add(objectInStack);
-        }
+    for (int i = 0; i < stackSize; i++) {
+      if (MapLoader.logEverything) {
+        System.out.println("loader.wrappers.ObjectStack.load(): loading object " + (i + 1) + " / " + stackSize + " @" + (source.position() - 4));
+      }
+      StackedObjectData stackedObject = new StackedObjectData();
+      stackedObject.loadAsset(map);
+      objects.add(stackedObject);
+    }
+    if (MapLoader.logEverything) {
+      System.out.println("loader.wrappers.ObjectStack.load(): loaded " + objects.size() + " objects: " + objects + " @" + (source.position() - 4));
+    }
+  }
+
+  void loadOld(OLD_OBJECTTYPE_101 oldItem) {
+    object.loadOld(oldItem);
+    stackSize = oldItem.ubNumberOfObjects.get();
+    for (int i = 0; i < oldItem.ubNumberOfObjects.get(); i++) {
+      // if(MapLoader.logEverything) System.out.println("loader.wrappers.ObjectStack.loadOld() converting item "+(i+1)+"/"+oldItem.ubNumberOfObjects.get());
+      StackedObjectData objectInStack = new StackedObjectData();
+      objectInStack.loadOld(oldItem, i);
+      objects.add(objectInStack);
+    }
+  }
+
+  void saveTo(ByteBuffer outputBuffer) {
+    try {
+      ByteArrayOutputStream itemAsBytes = new ByteArrayOutputStream();
+      object.write(itemAsBytes);
+      if (MapLoader.logFileIO)
+        System.out.println("\nloader.wrappers.ObjectStack.saveTo(): save object @" + outputBuffer.position() + ", size=" + object.size());
+      outputBuffer.put(itemAsBytes.toByteArray());
+      if (MapLoader.logFileIO)
+        System.out.println("loader.wrappers.ObjectStack.saveTo(): object end @" + outputBuffer.position());
+      outputBuffer.position(outputBuffer.position() + object.getOffsetAdjustment());
+      if (MapLoader.logFileIO)
+        System.out.println("loader.wrappers.ObjectStack.saveTo(): object offset adjust @" + outputBuffer.position() + "\n");
+    } catch (IOException ex) {
+      Logger.getLogger(WorldItemStack.class.getName()).log(Level.SEVERE, null, ex);
     }
 
-    void saveTo(ByteBuffer outputBuffer) {
-        try {
-            ByteArrayOutputStream itemAsBytes = new ByteArrayOutputStream();
-            object.write(itemAsBytes);
-            if(MapLoader.logFileIO) System.out.println("\nloader.wrappers.ObjectStack.saveTo(): save object @"+outputBuffer.position()+", size="+object.size());
-            outputBuffer.put(itemAsBytes.toByteArray());
-            if(MapLoader.logFileIO) System.out.println("loader.wrappers.ObjectStack.saveTo(): object end @"+outputBuffer.position());
-            outputBuffer.position( outputBuffer.position() + object.getOffsetAdjustment() );
-            if(MapLoader.logFileIO) System.out.println("loader.wrappers.ObjectStack.saveTo(): object offset adjust @"+outputBuffer.position() + "\n");
-        } catch (IOException ex) {
-            Logger.getLogger(WorldItemStack.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        if(MapLoader.logFileIO) System.out.println("loader.wrappers.ObjectStack.saveTo(): save stackSize ("+stackSize+") @"+outputBuffer.position());
-        outputBuffer.putInt(stackSize);
-        
-        for (StackedObjectData object : objects) {
-            object.saveTo(outputBuffer);
-        }
-    }
+    if (MapLoader.logFileIO)
+      System.out.println("loader.wrappers.ObjectStack.saveTo(): save stackSize (" + stackSize + ") @" + outputBuffer.position());
+    outputBuffer.putInt(stackSize);
 
-    public ObjectType getObject() {
-	return object;
+    for (StackedObjectData object : objects) {
+      object.saveTo(outputBuffer);
     }
+  }
 
-    public List<StackedObjectData> getObjects() {
-	return objects;
-    }
+  public ObjectType getObject() {
+    return object;
+  }
 
-    
+  public List<StackedObjectData> getObjects() {
+    return objects;
+  }
+
+
 }

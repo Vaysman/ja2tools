@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -32,35 +32,34 @@ import thebob.ja2maptool.util.map.layers.map.IMapLayerManager;
 import thebob.ja2maptool.util.map.renderer.ITileRendererManager;
 
 /**
- *
  * @author the_bob
  */
 public class MapCursorComponent extends MapCursorComponentBase {
 
-    ICursorController cursor = null;
+  ICursorController cursor = null;
 
-    public MapCursorComponent(ITileRendererManager renderer, IMapLayerManager map, ICursorLayerManager cursors, IMapInteractionComponent cells) {
-        super(renderer, map, cursors, cells);
+  public MapCursorComponent(ITileRendererManager renderer, IMapLayerManager map, ICursorLayerManager cursors, IMapInteractionComponent cells) {
+    super(renderer, map, cursors, cells);
+  }
+
+  public void setCursor(ICursorController cursorController) {
+    this.cursor = cursorController;
+    cursorController.setController(this);
+    cursor.updateCursor();
+  }
+
+  @Override
+  public void mouseEvent(MouseEvent e) {
+    super.mouseEvent(e);
+    if (!e.isConsumed()) {
+      cursor.mouseEvent(e);
     }
+  }
 
-    public void setCursor(ICursorController cursorController) {
-        this.cursor = cursorController;
-        cursorController.setController(this);
-        cursor.updateCursor();
-    }
+  @Override
+  protected void updateCursor() {
+    cursor.updateCursor();
 
-    @Override
-    public void mouseEvent(MouseEvent e) {
-        super.mouseEvent(e);
-        if (!e.isConsumed()) {
-            cursor.mouseEvent(e);
-        }
-    }
-
-    @Override
-    protected void updateCursor() {
-        cursor.updateCursor();
-
-    }
+  }
 
 }

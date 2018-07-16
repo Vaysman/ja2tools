@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 the_bob.
@@ -25,11 +25,6 @@ package thebob.assetmanager.managers;
 
 import ja2.xml.tilesets.TilesetDef;
 import ja2.xml.tilesets.TilesetList;
-import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 import thebob.assetloader.dat.tileset.TilesetDataFileLoader;
 import thebob.assetloader.dat.tileset.data.TilesetDataFile;
 import thebob.assetloader.tileset.Tileset;
@@ -38,91 +33,95 @@ import thebob.assetloader.vfs.VFSConfig;
 import thebob.assetloader.xml.XmlLoader;
 import thebob.assetmanager.AssetManager;
 
+import java.nio.ByteBuffer;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
 /**
- *
  * @author the_bob
  */
 public class TilesetManager extends VFSContextBoundManager {
 
-    Map<Integer, Tileset> tilesets = new HashMap<Integer, Tileset>();
-    private short numTilesets;
-    private short numFiles;
+  Map<Integer, Tileset> tilesets = new HashMap<Integer, Tileset>();
+  private short numTilesets;
+  private short numFiles;
 
-    public TilesetManager(AssetManager context) {
-	super(context);
+  public TilesetManager(AssetManager context) {
+    super(context);
+  }
+
+  @Override
+  public boolean init() {
+    VFSConfig vfs = context.getVfs();
+
+    if (vfs == null) {
+      return false;
     }
 
-    @Override
-    public boolean init() {
-	VFSConfig vfs = context.getVfs();
+    if (vfs.getUseXmlTileset()) {
+      XmlLoader xml = context.getXml();
+      if (xml == null) {
+        return false;
+      }
 
-	if (vfs == null) {
-	    return false;
-	}
+      TilesetList tilesetDefs = xml.getTilesets().getTilesets();
+      if (tilesetDefs == null) {
+        return false;
+      }
 
-	if (vfs.getUseXmlTileset()) {
-	    XmlLoader xml = context.getXml();
-	    if (xml == null) {
-		return false;
-	    }
+      numFiles = tilesetDefs.getNumFiles();
+      numTilesets = tilesetDefs.getNumTilesets();
 
-	    TilesetList tilesetDefs = xml.getTilesets().getTilesets();
-	    if (tilesetDefs == null) {
-		return false;
-	    }
+      // System.out.println("thebob.assetloader.vfs.TilesetManager.init(): numFiles=" + numFiles + ", numTilesets=" + numTilesets);
+      if (numFiles == 0 || numTilesets == 0) {
+        return false;
+      }
 
-	    numFiles = tilesetDefs.getNumFiles();
-	    numTilesets = tilesetDefs.getNumTilesets();
+      TilesetLoader loader = new TilesetLoader(vfs, numFiles);
 
-	    // System.out.println("thebob.assetloader.vfs.TilesetManager.init(): numFiles=" + numFiles + ", numTilesets=" + numTilesets);
-	    if (numFiles == 0 || numTilesets == 0) {
-		return false;
-	    }
+      for (TilesetDef tileDef : tilesetDefs.getTileset()) {
+        Tileset tileset = loader.loadTilesetFromXmlDef(tileDef);
+        tilesets.put((int) tileDef.getIndex(), tileset);
+      }
+    } else {
+      ByteBuffer tilesetDefs = vfs.getFile("\\BinaryData\\JA2set.dat");
+      TilesetDataFile tileData = TilesetDataFileLoader.load(tilesetDefs);
 
-	    TilesetLoader loader = new TilesetLoader(vfs, numFiles);
+      numTilesets = (short) tileData.tilesetCount;
+      numFiles = (short) tileData.filesPerTileset;
 
-	    for (TilesetDef tileDef : tilesetDefs.getTileset()) {
-		Tileset tileset = loader.loadTilesetFromXmlDef(tileDef);
-		tilesets.put((int) tileDef.getIndex(), tileset);
-	    }
-	} else {
-	    ByteBuffer tilesetDefs = vfs.getFile("\\BinaryData\\JA2set.dat");
-	    TilesetDataFile tileData = TilesetDataFileLoader.load(tilesetDefs);
+      TilesetLoader loader = new TilesetLoader(vfs, numFiles);
 
-	    numTilesets = (short) tileData.tilesetCount;
-	    numFiles = (short) tileData.filesPerTileset;
+      for (int i = 0; i < tileData.tilesetCount; i++) {
+        Tileset tileset = loader.loadTilesetFromData(tileData.tilesets.get(i));
+        tilesets.put(i, tileset);
+      }
 
-	    TilesetLoader loader = new TilesetLoader(vfs, numFiles);
-
-	    for (int i = 0; i < tileData.tilesetCount; i++) {
-		Tileset tileset = loader.loadTilesetFromData(tileData.tilesets.get(i));
-		tilesets.put(i, tileset);
-	    }
-
-	}
-
-	return true;
     }
 
-    public Tileset getTileset(int tilesetId) {
-	return tilesets.get(tilesetId);
-    }
+    return true;
+  }
 
-    public Set<Integer> getTilesetIds() {
-	return tilesets.keySet();
-    }
+  public Tileset getTileset(int tilesetId) {
+    return tilesets.get(tilesetId);
+  }
 
-    public short getNumTilesets() {
-	return numTilesets;
-    }
+  public Set<Integer> getTilesetIds() {
+    return tilesets.keySet();
+  }
 
-    public short getNumFiles() {
-	return numFiles;
-    }
+  public short getNumTilesets() {
+    return numTilesets;
+  }
 
-    @Override
-    public String toString() {
-	return "TilesetManager{" + "tilesets=" + tilesets.size() + "}";
-    }
+  public short getNumFiles() {
+    return numFiles;
+  }
+
+  @Override
+  public String toString() {
+    return "TilesetManager{" + "tilesets=" + tilesets.size() + "}";
+  }
 
 }

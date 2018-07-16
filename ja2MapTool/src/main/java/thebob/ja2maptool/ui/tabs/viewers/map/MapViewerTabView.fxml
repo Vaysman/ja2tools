@@ -24,52 +24,52 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -->
 
-<?import javafx.scene.Cursor?>
-<?import javafx.scene.canvas.Canvas?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.ToggleButton?>
-<?import javafx.scene.control.ToolBar?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.StackPane?>
-
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="thebob.ja2maptool.ui.tabs.viewers.map.MapViewerTabView">
-   <children>
-      <BorderPane fx:id="preview_wrapper" layoutX="189.0" layoutY="67.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <top>
-            <Label fx:id="map_name" text="Map name" BorderPane.alignment="CENTER" />
-         </top>
-         <center>
-            <AnchorPane BorderPane.alignment="CENTER">
-               <children>
-                  <StackPane onContextMenuRequested="#prev_window_context" onKeyPressed="#prev_window_key_press" onKeyReleased="#prev_window_key_release" onKeyTyped="#prev_window_key_typed" onMouseClicked="#prev_window_click" onMouseDragged="#prev_window_dragged" onMouseEntered="#prev_window_entered" onMouseExited="#prev_window_exited" onMouseMoved="#prev_window_moved" onMousePressed="#prev_window_pressed" onMouseReleased="#prev_window_released" onScroll="#prev_window_scroll" onScrollFinished="#prev_window_scroll_end" onScrollStarted="#prev_window_scroll_start" style="-fx-background-color: black;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <children>
-                        <Canvas fx:id="prev_window" focusTraversable="true" height="200.0" width="200.0">
-                           <cursor>
-                              <Cursor fx:constant="MOVE" />
-                           </cursor>
-                        </Canvas>
-                     </children>
-                  </StackPane>
-               </children>
-            </AnchorPane>
-         </center>
-         <right>
-            <ToolBar fx:id="preview_controls_right" orientation="VERTICAL" BorderPane.alignment="CENTER">
-              <items>
-                  <ToggleButton fx:id="layer_land" mnemonicParsing="false" text="1" />
-                  <ToggleButton fx:id="layer_object" mnemonicParsing="false" text="2" />
-                  <ToggleButton fx:id="layer_struct" mnemonicParsing="false" text="3" />
-                  <ToggleButton fx:id="layer_shadow" mnemonicParsing="false" text="4" />
-                  <ToggleButton fx:id="layer_roof" mnemonicParsing="false" text="5" />
-                  <ToggleButton fx:id="layer_onroof" mnemonicParsing="false" text="6" />
-                  <Separator />
-                  <ToggleButton fx:id="render_limit" mnemonicParsing="false" text="L" />
-                  <ToggleButton fx:id="render_trim" mnemonicParsing="false" text="T" />
-              </items>
-            </ToolBar>
-         </right>
-      </BorderPane>
-   </children>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" id="AnchorPane" prefHeight="400.0" prefWidth="600.0"
+            xmlns="http://javafx.com/javafx/8.0.111" fx:controller="thebob.ja2maptool.ui.tabs.viewers.map.MapViewerTabView">
+  <children>
+    <BorderPane fx:id="preview_wrapper" layoutX="189.0" layoutY="67.0" AnchorPane.bottomAnchor="0.0"
+                AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <top>
+        <Label fx:id="map_name" text="Map name" BorderPane.alignment="CENTER"/>
+      </top>
+      <center>
+        <AnchorPane BorderPane.alignment="CENTER">
+          <children>
+            <StackPane onContextMenuRequested="#prev_window_context" onKeyPressed="#prev_window_key_press"
+                       onKeyReleased="#prev_window_key_release" onKeyTyped="#prev_window_key_typed"
+                       onMouseClicked="#prev_window_click" onMouseDragged="#prev_window_dragged"
+                       onMouseEntered="#prev_window_entered" onMouseExited="#prev_window_exited"
+                       onMouseMoved="#prev_window_moved" onMousePressed="#prev_window_pressed"
+                       onMouseReleased="#prev_window_released" onScroll="#prev_window_scroll"
+                       onScrollFinished="#prev_window_scroll_end" onScrollStarted="#prev_window_scroll_start"
+                       style="-fx-background-color: black;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                       AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <children>
+                <Canvas fx:id="prev_window" focusTraversable="true" height="200.0" width="200.0">
+                  <cursor>
+                    <Cursor fx:constant="MOVE"/>
+                  </cursor>
+                </Canvas>
+              </children>
+            </StackPane>
+          </children>
+        </AnchorPane>
+      </center>
+      <right>
+        <ToolBar fx:id="preview_controls_right" orientation="VERTICAL" BorderPane.alignment="CENTER">
+          <items>
+            <ToggleButton fx:id="layer_land" mnemonicParsing="false" text="1"/>
+            <ToggleButton fx:id="layer_object" mnemonicParsing="false" text="2"/>
+            <ToggleButton fx:id="layer_struct" mnemonicParsing="false" text="3"/>
+            <ToggleButton fx:id="layer_shadow" mnemonicParsing="false" text="4"/>
+            <ToggleButton fx:id="layer_roof" mnemonicParsing="false" text="5"/>
+            <ToggleButton fx:id="layer_onroof" mnemonicParsing="false" text="6"/>
+            <Separator/>
+            <ToggleButton fx:id="render_limit" mnemonicParsing="false" text="L"/>
+            <ToggleButton fx:id="render_trim" mnemonicParsing="false" text="T"/>
+          </items>
+        </ToolBar>
+      </right>
+    </BorderPane>
+  </children>
 </AnchorPane>

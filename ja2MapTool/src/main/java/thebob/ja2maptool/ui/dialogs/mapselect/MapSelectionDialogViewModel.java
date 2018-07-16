@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -25,10 +25,6 @@ package thebob.ja2maptool.ui.dialogs.mapselect;
 
 import de.saxsys.mvvmfx.InjectScope;
 import de.saxsys.mvvmfx.ViewModel;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
@@ -39,187 +35,192 @@ import thebob.assetloader.vfs.accessors.VFSAccessor;
 import thebob.assetmanager.AssetManager;
 import thebob.ja2maptool.components.MapSelectionTreeItem;
 import thebob.ja2maptool.components.TilesetMappingTreeItem;
-import thebob.ja2maptool.scopes.map.MapScope;
 import thebob.ja2maptool.scopes.VfsAssetScope;
+import thebob.ja2maptool.scopes.map.MapScope;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collections;
+
 import static thebob.ja2maptool.scopes.VfsAssetScope.REFRESH_CONFIGS;
 
 /**
- *
  * @author the_bob
  */
 public class MapSelectionDialogViewModel implements ViewModel {
 
-    public static final String CLOSE_DIALOG_NOTIFICATION = "CLOSE_DIALOG_NOTIFICATION";
-    public static final String VFS_LOCAL_CHANGED = "VFS_NAME_CHANGED";// TODO: handle or get rid of this
-    public static final String FILE_NAME_CHANGED = "FILE_NAME_CHANGED";
+  public static final String CLOSE_DIALOG_NOTIFICATION = "CLOSE_DIALOG_NOTIFICATION";
+  public static final String VFS_LOCAL_CHANGED = "VFS_NAME_CHANGED";// TODO: handle or get rid of this
+  public static final String FILE_NAME_CHANGED = "FILE_NAME_CHANGED";
 
-    ObservableList<VFSConfig> localConfigs = FXCollections.observableArrayList();
-    private String mapFileName;
-    private String mapFilePath;
+  ObservableList<VFSConfig> localConfigs = FXCollections.observableArrayList();
+  @InjectScope
+  VfsAssetScope vfsAssets;
+  @InjectScope
+  MapScope mapScope;
+  private String mapFileName;
+  private String mapFilePath;
 
-    ObservableList<VFSConfig> getLocalVfsList() {
-	return localConfigs;
+  ObservableList<VFSConfig> getLocalVfsList() {
+    return localConfigs;
+  }
+
+  ObservableList<AssetManager> getLoadedVfsList() {
+    return FXCollections.observableArrayList(vfsAssets.getManagers().values());
+  }
+
+  VfsAssetScope getVfs() {
+    return vfsAssets;
+  }
+
+  void selectFile(String path) {
+    Path filePath = Paths.get(path);
+    mapFilePath = filePath.getParent().toString();
+    mapFileName = filePath.getFileName().toString();
+    publish(FILE_NAME_CHANGED, mapFileName);
+
+    Path possibleRootDir = null;
+    try {
+      possibleRootDir = filePath.getParent().getParent().getParent();
+    } catch (NullPointerException e) {
+
     }
 
-    ObservableList<AssetManager> getLoadedVfsList() {
-	return FXCollections.observableArrayList(vfsAssets.getManagers().values());
-    }
-
-    VfsAssetScope getVfs() {
-	return vfsAssets;
-    }
-
-    public enum VfsMode {
-	Local, Workspace
-    }
-
-    @InjectScope
-    VfsAssetScope vfsAssets;
-    @InjectScope
-    MapScope mapScope;
-
-    void selectFile(String path) {
-	Path filePath = Paths.get(path);
-	mapFilePath = filePath.getParent().toString();
-	mapFileName = filePath.getFileName().toString();
-	publish(FILE_NAME_CHANGED, mapFileName);
-
-	Path possibleRootDir = null;
-	try {
-	    possibleRootDir = filePath.getParent().getParent().getParent();
-	} catch (NullPointerException e) {
-
-	}
-
-	if (possibleRootDir != null) {
-	    VirtualFileSystem vfs = new VirtualFileSystem(possibleRootDir.toString());
-	    if (vfs.getConfigNames().size() > 0) {
+    if (possibleRootDir != null) {
+      VirtualFileSystem vfs = new VirtualFileSystem(possibleRootDir.toString());
+      if (vfs.getConfigNames().size() > 0) {
 		/*
-		for( VFSConfig config : vfs.getConfigs()){		    
+		for( VFSConfig config : vfs.getConfigs()){
 		    // only add configs that contain this map (in some version)
 		    if( config.getFileVariants( ("\\MAPS\\" + mapFileName).toUpperCase() ).isEmpty() == false ){
 			localConfigs.add(config);
-		    }		    
+		    }
 		}
 		 */  // then again, most mods contain all map files via VFS so we need better criteria
 
-		localConfigs.addAll(vfs.getConfigs());
-		return;
-	    }
-	}
-
-	// TODO: handle or get rid of this
-	publish(VFS_LOCAL_CHANGED, "VFS not found", false);
+        localConfigs.addAll(vfs.getConfigs());
+        return;
+      }
     }
 
-    TreeItem<String> getMapListRoot() {
-	TreeItem<String> root = new TreeItem<String>("Loaded VFS configs");
-	root.setExpanded(true);
+    // TODO: handle or get rid of this
+    publish(VFS_LOCAL_CHANGED, "VFS not found", false);
+  }
 
-	for (AssetManager assets : vfsAssets.getManagers().values()) {
-	    String managerName = assets.getVfs().getPath().getFileName().toString();
-	    TreeItem<String> assetManagerNode = new TilesetMappingTreeItem(managerName, null, assets);
-	    assetManagerNode.setExpanded(true);
+  TreeItem<String> getMapListRoot() {
+    TreeItem<String> root = new TreeItem<String>("Loaded VFS configs");
+    root.setExpanded(true);
 
-	    for (String profile : assets.getVfs().getProfiles().keySet()) {
-		TreeItem<String> profileNode = new TreeItem<String>(profile);
-		profileNode.setExpanded(true);
+    for (AssetManager assets : vfsAssets.getManagers().values()) {
+      String managerName = assets.getVfs().getPath().getFileName().toString();
+      TreeItem<String> assetManagerNode = new TilesetMappingTreeItem(managerName, null, assets);
+      assetManagerNode.setExpanded(true);
 
-		ArrayList<VFSAccessor> files = assets.getVfs().getProfiles().get(profile);
-		files.stream().filter(f -> f.getVFSPath().startsWith("\\MAPS\\")).sorted().forEach(mapAccessor -> {
-		    TreeItem<String> mapNode = new MapSelectionTreeItem(mapAccessor.getVFSPath().replace("\\MAPS\\", ""), mapAccessor, assets);;
-		    profileNode.getChildren().add(mapNode);
-		});
+      for (String profile : assets.getVfs().getProfiles().keySet()) {
+        TreeItem<String> profileNode = new TreeItem<String>(profile);
+        profileNode.setExpanded(true);
 
-		assetManagerNode.getChildren().add(profileNode);		
-	    }
+        ArrayList<VFSAccessor> files = assets.getVfs().getProfiles().get(profile);
+        files.stream().filter(f -> f.getVFSPath().startsWith("\\MAPS\\")).sorted().forEach(mapAccessor -> {
+          TreeItem<String> mapNode = new MapSelectionTreeItem(mapAccessor.getVFSPath().replace("\\MAPS\\", ""), mapAccessor, assets);
+          ;
+          profileNode.getChildren().add(mapNode);
+        });
 
-	    Collections.reverse(assetManagerNode.getChildren());
-	    root.getChildren().add(assetManagerNode);
-	}
+        assetManagerNode.getChildren().add(profileNode);
+      }
 
-	return root;
+      Collections.reverse(assetManagerNode.getChildren());
+      root.getChildren().add(assetManagerNode);
     }
 
-    // Load map file using a loaded asset manager
-    void loadFile(AssetManager manager) {
-	String mapAssetPath = mapFilePath + "/" + mapFileName;
-	MapData data = manager.getMaps().loadMapFile(mapAssetPath);
+    return root;
+  }
 
-	if (data != null) {
-	    mapScope.setMapName(mapFileName);
-	    mapScope.setMapAssetPath(mapAssetPath);
-	    mapScope.setLoadMode(MapScope.MapLoadMode.From_File);
+  // Load map file using a loaded asset manager
+  void loadFile(AssetManager manager) {
+    String mapAssetPath = mapFilePath + "/" + mapFileName;
+    MapData data = manager.getMaps().loadMapFile(mapAssetPath);
 
-	    mapScope.setMapData(data);
+    if (data != null) {
+      mapScope.setMapName(mapFileName);
+      mapScope.setMapAssetPath(mapAssetPath);
+      mapScope.setLoadMode(MapScope.MapLoadMode.From_File);
 
-	    mapScope.setTilesetId(data.getSettings().iTilesetID);
-	    mapScope.setTileset(manager.getTilesets().getTileset(data.getSettings().iTilesetID));
-	    mapScope.setMapAssets(manager);
+      mapScope.setMapData(data);
 
-	    mapScope.publish(MapScope.MAP_UPDATED);
-	    publish(CLOSE_DIALOG_NOTIFICATION);
-	    return;
-	}
+      mapScope.setTilesetId(data.getSettings().iTilesetID);
+      mapScope.setTileset(manager.getTilesets().getTileset(data.getSettings().iTilesetID));
+      mapScope.setMapAssets(manager);
 
-	System.err.println("thebob.ja2maptool.ui.dialogs.mapselect.MapSelectionDialogViewModel.loadFile(): error loading map");
+      mapScope.publish(MapScope.MAP_UPDATED);
+      publish(CLOSE_DIALOG_NOTIFICATION);
+      return;
     }
 
-    // Load map file using a VFS config from parent dir
-    void loadFileVFS(VFSConfig selectedConfig) {
-	selectedConfig.loadConfig();
-	AssetManager manager = new AssetManager(selectedConfig);
+    System.err.println("thebob.ja2maptool.ui.dialogs.mapselect.MapSelectionDialogViewModel.loadFile(): error loading map");
+  }
 
-	if (manager != null) {
-	    String mapAssetPath = "\\MAPS\\" + mapFileName;
+  // Load map file using a VFS config from parent dir
+  void loadFileVFS(VFSConfig selectedConfig) {
+    selectedConfig.loadConfig();
+    AssetManager manager = new AssetManager(selectedConfig);
 
-	    MapData data = manager.getMaps().loadMap(mapAssetPath);
-	    if (data != null) {
-		mapScope.setMapName(mapFileName);
-		mapScope.setMapAssetPath(mapAssetPath);
-		mapScope.setLoadMode(MapScope.MapLoadMode.From_VFS);
+    if (manager != null) {
+      String mapAssetPath = "\\MAPS\\" + mapFileName;
 
-		mapScope.setMapData(data);
+      MapData data = manager.getMaps().loadMap(mapAssetPath);
+      if (data != null) {
+        mapScope.setMapName(mapFileName);
+        mapScope.setMapAssetPath(mapAssetPath);
+        mapScope.setLoadMode(MapScope.MapLoadMode.From_VFS);
 
-		mapScope.setTilesetId(data.getSettings().iTilesetID);
-		mapScope.setTileset(manager.getTilesets().getTileset(data.getSettings().iTilesetID));
-		mapScope.setMapAssets(manager);
+        mapScope.setMapData(data);
 
-		vfsAssets.getConfigs().put(selectedConfig.getPath().getParent().toString(), new VirtualFileSystem(selectedConfig.getPath().getParent().toString()));
-		vfsAssets.getManagers().put(selectedConfig.getPath().toString(), manager);
-		vfsAssets.publish(REFRESH_CONFIGS);
+        mapScope.setTilesetId(data.getSettings().iTilesetID);
+        mapScope.setTileset(manager.getTilesets().getTileset(data.getSettings().iTilesetID));
+        mapScope.setMapAssets(manager);
 
-		mapScope.publish(MapScope.MAP_UPDATED);
+        vfsAssets.getConfigs().put(selectedConfig.getPath().getParent().toString(), new VirtualFileSystem(selectedConfig.getPath().getParent().toString()));
+        vfsAssets.getManagers().put(selectedConfig.getPath().toString(), manager);
+        vfsAssets.publish(REFRESH_CONFIGS);
 
-		publish(CLOSE_DIALOG_NOTIFICATION);
-		return;
-	    }
-	}
+        mapScope.publish(MapScope.MAP_UPDATED);
 
-	System.err.println("thebob.ja2maptool.ui.dialogs.mapselect.MapSelectionDialogViewModel.loadFileVFS(): error loading map");
+        publish(CLOSE_DIALOG_NOTIFICATION);
+        return;
+      }
     }
 
-    void loadVfs(TreeItem<String> selectedItem) {
-	MapSelectionTreeItem item = (MapSelectionTreeItem) selectedItem;
-	AssetManager manager = item.getManager();
-	VFSAccessor accessor = item.getAccessor();
-	String mapFileName = item.getValue();
+    System.err.println("thebob.ja2maptool.ui.dialogs.mapselect.MapSelectionDialogViewModel.loadFileVFS(): error loading map");
+  }
 
-	MapData data = manager.getMaps().loadMapData(accessor.getBytes());
-	if (data != null) {
-	    mapScope.setMapName(mapFileName);
-	    mapScope.setMapAssetPath(accessor.getVFSPath());
-	    mapScope.setLoadMode(MapScope.MapLoadMode.From_VFS);
+  void loadVfs(TreeItem<String> selectedItem) {
+    MapSelectionTreeItem item = (MapSelectionTreeItem) selectedItem;
+    AssetManager manager = item.getManager();
+    VFSAccessor accessor = item.getAccessor();
+    String mapFileName = item.getValue();
 
-	    mapScope.setMapData(data);
+    MapData data = manager.getMaps().loadMapData(accessor.getBytes());
+    if (data != null) {
+      mapScope.setMapName(mapFileName);
+      mapScope.setMapAssetPath(accessor.getVFSPath());
+      mapScope.setLoadMode(MapScope.MapLoadMode.From_VFS);
 
-	    mapScope.setTilesetId(data.getSettings().iTilesetID);
-	    mapScope.setTileset(manager.getTilesets().getTileset(data.getSettings().iTilesetID));
-	    mapScope.setMapAssets(manager);
+      mapScope.setMapData(data);
 
-	    mapScope.publish(MapScope.MAP_UPDATED);
-	} else {
-	    System.err.println("thebob.ja2maptool.ui.dialogs.mapselect.MapSelectionDialogViewModel.loadVfs(): error loading map");
-	}
+      mapScope.setTilesetId(data.getSettings().iTilesetID);
+      mapScope.setTileset(manager.getTilesets().getTileset(data.getSettings().iTilesetID));
+      mapScope.setMapAssets(manager);
+
+      mapScope.publish(MapScope.MAP_UPDATED);
+    } else {
+      System.err.println("thebob.ja2maptool.ui.dialogs.mapselect.MapSelectionDialogViewModel.loadVfs(): error loading map");
     }
+  }
+
+  public enum VfsMode {
+    Local, Workspace
+  }
 }

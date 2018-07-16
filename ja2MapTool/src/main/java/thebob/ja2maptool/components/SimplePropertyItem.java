@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -23,62 +23,61 @@
  */
 package thebob.ja2maptool.components;
 
-import java.util.Optional;
-import javafx.beans.value.ObservableStringValue;
 import javafx.beans.value.ObservableValue;
 import org.controlsfx.control.PropertySheet;
 
+import java.util.Optional;
+
 /**
- *
  * @author the_bob
  */
-public class SimplePropertyItem implements PropertySheet.Item{
-    
-    String category;
-    String name;
-    String description;
-    String value;
+public class SimplePropertyItem implements PropertySheet.Item {
 
-    public SimplePropertyItem(String name, String value, String category, String description) {
-	this.category = category;
-	this.name = name;
-	this.description = description;
-	this.value = value;
-    }        
-    
-    @Override
-    public Class<?> getType() {
-	return "".getClass();
-    }
+  String category;
+  String name;
+  String description;
+  String value;
 
-    @Override
-    public String getCategory() {
-	return category;
-    }
+  public SimplePropertyItem(String name, String value, String category, String description) {
+    this.category = category;
+    this.name = name;
+    this.description = description;
+    this.value = value;
+  }
 
-    @Override
-    public String getName() {
-	return name;
-    }
+  @Override
+  public Class<?> getType() {
+    return "".getClass();
+  }
 
-    @Override
-    public String getDescription() {
-	return description;
-    }
+  @Override
+  public String getCategory() {
+    return category;
+  }
 
-    @Override
-    public Object getValue() {
-	return value;
-    }
+  @Override
+  public String getName() {
+    return name;
+  }
 
-    @Override
-    public void setValue(Object value) {
-	    this.value = (String)value.toString();
-    }
+  @Override
+  public String getDescription() {
+    return description;
+  }
 
-    @Override
-    public Optional<ObservableValue<? extends Object>> getObservableValue() {
-	return Optional.empty();
-    }
-    
+  @Override
+  public Object getValue() {
+    return value;
+  }
+
+  @Override
+  public void setValue(Object value) {
+    this.value = (String) value.toString();
+  }
+
+  @Override
+  public Optional<ObservableValue<? extends Object>> getObservableValue() {
+    return Optional.empty();
+  }
+
 }

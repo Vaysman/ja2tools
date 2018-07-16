@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 the_bob.
@@ -24,24 +24,21 @@
 package thebob.assetloader.map.structures;
 
 import thebob.assetloader.map.helpers.AutoLoadingMapStruct;
-import java.nio.ByteOrder;
-import javolution.io.Struct;
 
 /**
- *
  * @author the_bob
  */
 public class MAPCREATE_STRUCT extends AutoLoadingMapStruct {
-    
-    public final Signed32 sNorthGridNo = new Signed32();
-    public final Signed32 sEastGridNo = new Signed32();
-    public final Signed32 sSouthGridNo = new Signed32();
-    public final Signed32 sWestGridNo = new Signed32();
-    public final Signed32 sCenterGridNo = new Signed32();
-    public final Signed32 sIsolatedGridNo = new Signed32();
-    public final Unsigned16 ubNumIndividuals = new Unsigned16();
-    public final Unsigned8 ubMapVersion = new Unsigned8();
-    public final Unsigned8 ubRestrictedScrollID = new Unsigned8();
-    public final Unsigned8 ubEditorSmoothingType = new Unsigned8();
-    
+
+  public final Signed32 sNorthGridNo = new Signed32();
+  public final Signed32 sEastGridNo = new Signed32();
+  public final Signed32 sSouthGridNo = new Signed32();
+  public final Signed32 sWestGridNo = new Signed32();
+  public final Signed32 sCenterGridNo = new Signed32();
+  public final Signed32 sIsolatedGridNo = new Signed32();
+  public final Unsigned16 ubNumIndividuals = new Unsigned16();
+  public final Unsigned8 ubMapVersion = new Unsigned8();
+  public final Unsigned8 ubRestrictedScrollID = new Unsigned8();
+  public final Unsigned8 ubEditorSmoothingType = new Unsigned8();
+
 }

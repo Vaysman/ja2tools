@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -30,81 +30,80 @@ import thebob.assetloader.vfs.VirtualFileSystem;
 import thebob.ja2maptool.scopes.VfsAssetScope;
 
 /**
- *
  * @author the_bob
  */
 public class VFSMenu extends Menu {
 
-    VfsAssetScope scope;
+  VfsAssetScope scope;
 
-    public VFSMenu(VfsAssetScope scope) {
-	super("VFS configs");
-	this.scope = scope;
-	for (VirtualFileSystem vfs : scope.getConfigs().values()) {
-	    getItems().add(new VFSActionMenu(vfs));
-	}
+  public VFSMenu(VfsAssetScope scope) {
+    super("VFS configs");
+    this.scope = scope;
+    for (VirtualFileSystem vfs : scope.getConfigs().values()) {
+      getItems().add(new VFSActionMenu(vfs));
+    }
+  }
+
+  public class VFSActionMenu extends Menu {
+
+    public VFSActionMenu(VirtualFileSystem vfs) {
+      super(vfs.getBaseDir());
+
+      for (VFSConfig config : vfs.getConfigs()) {
+        getItems().add(new VFSConfigActionMenu(config));
+      }
     }
 
-    public class VFSActionMenu extends Menu {
+    public class VFSConfigActionMenu extends Menu {
 
-	public VFSActionMenu(VirtualFileSystem vfs) {
-	    super(vfs.getBaseDir());
+      VFSConfig config;
 
-	    for (VFSConfig config : vfs.getConfigs()) {
-		getItems().add(new VFSConfigActionMenu(config));
-	    }
-	}
+      MenuItem load = new MenuItem("Load");
+      MenuItem unload = new MenuItem("Unload");
+      MenuItem browse = new MenuItem("Browse");
 
-	public class VFSConfigActionMenu extends Menu {
+      public VFSConfigActionMenu(VFSConfig config) {
+        super(config.getPath().getFileName().toString());
+        this.config = config;
 
-	    VFSConfig config;
+        getItems().add(load);
+        getItems().add(unload);
+        getItems().add(browse);
 
-	    MenuItem load = new MenuItem("Load");
-	    MenuItem unload = new MenuItem("Unload");
-	    MenuItem browse = new MenuItem("Browse");
+        load.setOnAction(event -> {
+          scope.getOrLoadAssetManager(config.getPath().getParent().toString(), config.getPath().getFileName().toString());
+        });
 
-	    @Override
-	    public void show() {
-		super.show();
+        unload.setOnAction(event -> {
+          scope.unloadConfig(config.getPath().toString());
+        });
 
-		if (scope.getManagers().get(config.getPath().toString()) == null) {
-		    load.setDisable(false);
-		    unload.setDisable(true);
-		    browse.setDisable(true);
-		} else {
-		    load.setDisable(true);
-		    unload.setDisable(false);
-		    browse.setDisable(false);
-		}
-	    }
+        browse.setOnAction(event -> {
+          if (!config.isLoaded()) {
+            config.loadConfig();
+          }
+          scope.publish(VfsAssetScope.BROWSE_CONFIG, config);
+        });
+      }
 
-	    public VFSConfigActionMenu(VFSConfig config) {
-		super(config.getPath().getFileName().toString());
-		this.config = config;
+      @Override
+      public void show() {
+        super.show();
 
-		getItems().add(load);
-		getItems().add(unload);
-		getItems().add(browse);
+        if (scope.getManagers().get(config.getPath().toString()) == null) {
+          load.setDisable(false);
+          unload.setDisable(true);
+          browse.setDisable(true);
+        } else {
+          load.setDisable(true);
+          unload.setDisable(false);
+          browse.setDisable(false);
+        }
+      }
 
-		load.setOnAction(event -> {
-		    scope.getOrLoadAssetManager(config.getPath().getParent().toString(), config.getPath().getFileName().toString());
-		});
-
-		unload.setOnAction(event -> {
-		    scope.unloadConfig(config.getPath().toString());
-		});
-
-		browse.setOnAction(event -> {
-		    if (!config.isLoaded()) {
-			config.loadConfig();
-		    }
-		    scope.publish(VfsAssetScope.BROWSE_CONFIG, config);
-		});
-	    }
-
-	}
-	// end class VFSConfigActionMenu
     }
+    // end class VFSConfigActionMenu
+  }
 
-    // end class VFSActionMenu
+  // end class VFSActionMenu
 }

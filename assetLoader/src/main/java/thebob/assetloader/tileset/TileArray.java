@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 the_bob.
@@ -23,42 +23,40 @@
  */
 package thebob.assetloader.tileset;
 
-import java.nio.ByteBuffer;
 import thebob.assetloader.sti.StiLoader;
 import thebob.assetloader.vfs.accessors.VFSAccessor;
 
 /**
- *
  * @author the_bob
  */
 public class TileArray {
-    
-    StiLoader loader = new StiLoader();
-    VFSAccessor file;
-    Tile[] tileArray;
 
-    public TileArray(VFSAccessor file, int tileType) {
-	this.file=file;
-	
-        loader.loadAsset(file.getBytes());
-        int tileCount = loader.getImageCount();
-        
-        tileArray = new Tile[tileCount];
-        for (int i = 0; i < tileCount; i++) {
-            tileArray[i] = new Tile(loader, i, tileType);
-        }
+  StiLoader loader = new StiLoader();
+  VFSAccessor file;
+  Tile[] tileArray;
+
+  public TileArray(VFSAccessor file, int tileType) {
+    this.file = file;
+
+    loader.loadAsset(file.getBytes());
+    int tileCount = loader.getImageCount();
+
+    tileArray = new Tile[tileCount];
+    for (int i = 0; i < tileCount; i++) {
+      tileArray[i] = new Tile(loader, i, tileType);
     }
+  }
 
-    public Tile[] getTiles() {
-        return tileArray;
-    }
+  public Tile[] getTiles() {
+    return tileArray;
+  }
 
-    public VFSAccessor getFile() {
-	return file;
-    }        
+  public VFSAccessor getFile() {
+    return file;
+  }
 
-    public StiLoader getLoader() {
-	return loader;
-    }
-    
+  public StiLoader getLoader() {
+    return loader;
+  }
+
 }

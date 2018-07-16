@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -25,9 +25,6 @@ package thebob.ja2maptool.ui.tabs.mapping.items;
 
 import de.saxsys.mvvmfx.InjectScope;
 import de.saxsys.mvvmfx.ViewModel;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
 import org.controlsfx.control.PropertySheet;
@@ -41,168 +38,172 @@ import thebob.ja2maptool.scopes.mapping.ItemMappingScope;
 import thebob.ja2maptool.util.mapping.ItemMapping;
 import thebob.ja2maptool.util.mapping.MappingIO;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 public class ItemMappingTabViewModel implements ViewModel {
 
-	public static final String SELECT_MAPPING_LIST = "SELECT_MAPPING_LIST";
-	public static final String SELECT_MAPPING_RIGHT = "SELECT_MAPPING_RIGHT";
-	public static final String SELECT_MAPPING_LEFT = "SELECT_MAPPING_LEFT";
-	public static final String UPDATE_MAPPING = "UPDATE_MAPPING";
-	public static final String UPDATE_PROPS_LEFT = "UPDATE_PROPS_LEFT";
-	public static final String UPDATE_PROPS_RIGHT = "UPDATE_PROPS_RIGHT";
+  public static final String SELECT_MAPPING_LIST = "SELECT_MAPPING_LIST";
+  public static final String SELECT_MAPPING_RIGHT = "SELECT_MAPPING_RIGHT";
+  public static final String SELECT_MAPPING_LEFT = "SELECT_MAPPING_LEFT";
+  public static final String UPDATE_MAPPING = "UPDATE_MAPPING";
+  public static final String UPDATE_PROPS_LEFT = "UPDATE_PROPS_LEFT";
+  public static final String UPDATE_PROPS_RIGHT = "UPDATE_PROPS_RIGHT";
 
-	@InjectScope
-	VfsAssetScope vfsAssets;
-	@InjectScope
-	MainScope mainScreen;
+  @InjectScope
+  VfsAssetScope vfsAssets;
+  @InjectScope
+  MainScope mainScreen;
 
-	@InjectScope
-	ItemMappingScope mappingScope;
+  @InjectScope
+  ItemMappingScope mappingScope;
 
-	ObservableList<PropertySheet.Item> propsRight;
-	ObservableList<PropertySheet.Item> propsLeft;
+  ObservableList<PropertySheet.Item> propsRight;
+  ObservableList<PropertySheet.Item> propsLeft;
 
-	Map<Item, TreeItem> itemNodesLeft = new HashMap<Item, TreeItem>();
-	Map<Item, TreeItem> itemNodesRight = new HashMap<Item, TreeItem>();
+  Map<Item, TreeItem> itemNodesLeft = new HashMap<Item, TreeItem>();
+  Map<Item, TreeItem> itemNodesRight = new HashMap<Item, TreeItem>();
 
-	TreeItem<String> root_left;
-	TreeItem<String> root_right;
+  TreeItem<String> root_left;
+  TreeItem<String> root_right;
 
-	public void initialize() {
-		initTreePanes();
-	}
+  public void initialize() {
+    initTreePanes();
+  }
 
-	private void initTreePanes() {
-		root_left = new TreeItem<>("Source items");
-		root_left.setExpanded(true);
-		populateTreePane(root_left, mappingScope.getSourceAssets(), itemNodesLeft);
-		root_right = new TreeItem<>("Target items");
-		root_right.setExpanded(true);
-		populateTreePane(root_right, mappingScope.getTargetAssets(), itemNodesRight);
-	}
+  private void initTreePanes() {
+    root_left = new TreeItem<>("Source items");
+    root_left.setExpanded(true);
+    populateTreePane(root_left, mappingScope.getSourceAssets(), itemNodesLeft);
+    root_right = new TreeItem<>("Target items");
+    root_right.setExpanded(true);
+    populateTreePane(root_right, mappingScope.getTargetAssets(), itemNodesRight);
+  }
 
-	private void populateTreePane(TreeItem<String> root, AssetManager assets, Map<Item, TreeItem> itemNodes) {
-		ItemCategory categoryRoot = assets.getItems().getCategories().getRootNode();
-		Iterator<ItemCategory> iterator = categoryRoot.categoryIterator();
-		insertNodes(root, iterator, itemNodes);
-	}
+  private void populateTreePane(TreeItem<String> root, AssetManager assets, Map<Item, TreeItem> itemNodes) {
+    ItemCategory categoryRoot = assets.getItems().getCategories().getRootNode();
+    Iterator<ItemCategory> iterator = categoryRoot.categoryIterator();
+    insertNodes(root, iterator, itemNodes);
+  }
 
-	private boolean insertNodes(TreeItem<String> root, Iterator<ItemCategory> iterator, Map<Item, TreeItem> itemNodes) {
-		boolean displayThisTree = false;
-		while (iterator.hasNext()) {
-			boolean displayThisNode = false;
-			ItemCategory category = iterator.next();
+  private boolean insertNodes(TreeItem<String> root, Iterator<ItemCategory> iterator, Map<Item, TreeItem> itemNodes) {
+    boolean displayThisTree = false;
+    while (iterator.hasNext()) {
+      boolean displayThisNode = false;
+      ItemCategory category = iterator.next();
 
-			TreeItem<String> categoryNode = new TreeItem<>(category.getName());
+      TreeItem<String> categoryNode = new TreeItem<>(category.getName());
 
-			if (category.totalItemCount() > 0) {
-				displayThisNode = true;
-				for (Iterator<Item> items = category.itemIterator(); items.hasNext();) {
-					Item item = items.next();
-					ItemMappingTreeItem itemNode = new ItemMappingTreeItem(item);
-					categoryNode.getChildren().add(itemNode);
-					if (itemNodes != null) {
-						itemNodes.put(item, itemNode);
-					}
-				}
-			}
+      if (category.totalItemCount() > 0) {
+        displayThisNode = true;
+        for (Iterator<Item> items = category.itemIterator(); items.hasNext(); ) {
+          Item item = items.next();
+          ItemMappingTreeItem itemNode = new ItemMappingTreeItem(item);
+          categoryNode.getChildren().add(itemNode);
+          if (itemNodes != null) {
+            itemNodes.put(item, itemNode);
+          }
+        }
+      }
 
-			if (category.subCategoryCount() > 0) {
-				Iterator<ItemCategory> subCategories = category.categoryIterator();
+      if (category.subCategoryCount() > 0) {
+        Iterator<ItemCategory> subCategories = category.categoryIterator();
 
-				boolean worthDisplaying = insertNodes(categoryNode, subCategories, itemNodes);
-				displayThisNode = displayThisNode || worthDisplaying;
-			}
+        boolean worthDisplaying = insertNodes(categoryNode, subCategories, itemNodes);
+        displayThisNode = displayThisNode || worthDisplaying;
+      }
 
-			if (displayThisNode) {
-				root.getChildren().add(categoryNode);
-			}
-			displayThisTree = displayThisTree || displayThisNode;
-		}
-		return displayThisTree;
-	}
+      if (displayThisNode) {
+        root.getChildren().add(categoryNode);
+      }
+      displayThisTree = displayThisTree || displayThisNode;
+    }
+    return displayThisTree;
+  }
 
-	// auto mapping
-	void autoMapping() {
-		mappingScope.getMapping().clear();
-		
-		ItemAutoMapper mapper = new ItemAutoMapper( mappingScope.getSourceAssets().getItems(),  mappingScope.getTargetAssets().getItems());
-		Map<Item, Item> mapping = mapper.getMapping();
-		mapping.forEach(mappingScope::mapItems);	
+  // auto mapping
+  void autoMapping() {
+    mappingScope.getMapping().clear();
 
-		publish(UPDATE_MAPPING);
-	}
+    ItemAutoMapper mapper = new ItemAutoMapper(mappingScope.getSourceAssets().getItems(), mappingScope.getTargetAssets().getItems());
+    Map<Item, Item> mapping = mapper.getMapping();
+    mapping.forEach(mappingScope::mapItems);
 
-	// load/save
-	void loadMapping(String path) {
-		ItemMappingScope scope = ItemMappingScope.loadFromFile(path, vfsAssets);
-		mainScreen.freeItemMappingScope(mappingScope);
-		mainScreen.registerItemMappingScope(scope);
-		mappingScope = scope;
-	}
+    publish(UPDATE_MAPPING);
+  }
 
-	void saveMapping(String path) {
-		MappingIO.saveItemMapping(path, mappingScope);
-	}
+  // load/save
+  void loadMapping(String path) {
+    ItemMappingScope scope = ItemMappingScope.loadFromFile(path, vfsAssets);
+    mainScreen.freeItemMappingScope(mappingScope);
+    mainScreen.registerItemMappingScope(scope);
+    mappingScope = scope;
+  }
 
-	// View bindings
-	public ObservableList<PropertySheet.Item> getPropsRight() {
-		return propsRight;
-	}
+  void saveMapping(String path) {
+    MappingIO.saveItemMapping(path, mappingScope);
+  }
 
-	public void setPropsRight(ObservableList<PropertySheet.Item> propsRight) {
-		this.propsRight = propsRight;
-	}
+  // View bindings
+  public ObservableList<PropertySheet.Item> getPropsRight() {
+    return propsRight;
+  }
 
-	public ObservableList<PropertySheet.Item> getPropsLeft() {
-		return propsLeft;
-	}
+  public void setPropsRight(ObservableList<PropertySheet.Item> propsRight) {
+    this.propsRight = propsRight;
+  }
 
-	public void setPropsLeft(ObservableList<PropertySheet.Item> propsLeft) {
-		this.propsLeft = propsLeft;
-	}
+  public ObservableList<PropertySheet.Item> getPropsLeft() {
+    return propsLeft;
+  }
 
-	TreeItem<String> getRootLeft() {
-		return root_left;
-	}
+  public void setPropsLeft(ObservableList<PropertySheet.Item> propsLeft) {
+    this.propsLeft = propsLeft;
+  }
 
-	TreeItem<String> getRootRight() {
-		return root_right;
-	}
+  TreeItem<String> getRootLeft() {
+    return root_left;
+  }
 
-	void setItemMapping(Item itemLeft, Item itemRight, TreeItem node) {
-		mappingScope.mapItems(itemLeft, itemRight);
-		publish(UPDATE_MAPPING);
-	}
+  TreeItem<String> getRootRight() {
+    return root_right;
+  }
 
-	void selectedSource(Item item) {
-		int srcId = item.getId();
-		ItemMapping oldMapping = mappingScope.getMappingIndex().get(srcId);
-		if (oldMapping == null) {
-			return;
-		}
+  void setItemMapping(Item itemLeft, Item itemRight, TreeItem node) {
+    mappingScope.mapItems(itemLeft, itemRight);
+    publish(UPDATE_MAPPING);
+  }
 
-		Integer oldMappingId = oldMapping.getDstItem().getId();
-		if (oldMappingId != null) {
-			Item mappedItem = mappingScope.getTargetAssets().getItems().getItem(oldMappingId);
-			publish(SELECT_MAPPING_RIGHT, itemNodesRight.get(mappedItem));
-			publish(SELECT_MAPPING_LIST, oldMapping);
-		}
-	}
+  void selectedSource(Item item) {
+    int srcId = item.getId();
+    ItemMapping oldMapping = mappingScope.getMappingIndex().get(srcId);
+    if (oldMapping == null) {
+      return;
+    }
 
-	ObservableList<ItemMapping> getMappingList() {
-		return mappingScope.getMapping();
-	}
+    Integer oldMappingId = oldMapping.getDstItem().getId();
+    if (oldMappingId != null) {
+      Item mappedItem = mappingScope.getTargetAssets().getItems().getItem(oldMappingId);
+      publish(SELECT_MAPPING_RIGHT, itemNodesRight.get(mappedItem));
+      publish(SELECT_MAPPING_LIST, oldMapping);
+    }
+  }
 
-	void showMapping(ItemMapping selectedMapping) {
-		if (selectedMapping == null) {
-			return;
-		}
+  ObservableList<ItemMapping> getMappingList() {
+    return mappingScope.getMapping();
+  }
 
-		Item src = selectedMapping.getSrcItem();
-		Item dst = selectedMapping.getDstItem();
+  void showMapping(ItemMapping selectedMapping) {
+    if (selectedMapping == null) {
+      return;
+    }
 
-		publish(SELECT_MAPPING_LEFT, itemNodesLeft.get(src));
-		publish(SELECT_MAPPING_RIGHT, itemNodesRight.get(dst));
-		publish(SELECT_MAPPING_LIST, selectedMapping);
-	}
+    Item src = selectedMapping.getSrcItem();
+    Item dst = selectedMapping.getDstItem();
+
+    publish(SELECT_MAPPING_LEFT, itemNodesLeft.get(src));
+    publish(SELECT_MAPPING_RIGHT, itemNodesRight.get(dst));
+    publish(SELECT_MAPPING_LIST, selectedMapping);
+  }
 }

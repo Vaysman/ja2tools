@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -23,20 +23,20 @@
  */
 package thebob.ja2maptool.util.map.renderer;
 
-import java.util.List;
 import javafx.scene.canvas.Canvas;
 
 /**
  * interface for whatever we still need to expose in the renderer, should be passed through by MapDisplayManagerBase
+ *
  * @author the_bob
  */
 public interface ITileRendererControls {
 
-    /*
-     *
-     * sets the canvas to draw on, will automatically detect its size and adjust *
-     */
-    void setCanvas(Canvas canvas);
+  /*
+   *
+   * sets the canvas to draw on, will automatically detect its size and adjust *
+   */
+  void setCanvas(Canvas canvas);
 
 
 }

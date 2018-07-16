@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -28,7 +28,6 @@ import de.saxsys.mvvmfx.ViewModel;
 import de.saxsys.mvvmfx.utils.commands.Action;
 import de.saxsys.mvvmfx.utils.commands.Command;
 import de.saxsys.mvvmfx.utils.commands.DelegateCommand;
-import java.nio.file.Paths;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -40,120 +39,119 @@ import thebob.assetloader.vfs.VirtualFileSystem;
 import thebob.assetmanager.AssetManager;
 import thebob.ja2maptool.scopes.VfsAssetScope;
 
+import java.nio.file.Paths;
+
 
 /**
- *
  * @author the_bob
  */
 public class VfsSetupTabViewModel implements ViewModel {
 
-    @InjectScope
-    VfsAssetScope vfsAssets;
-    
-    CheckBoxTreeItem configListRoot = new CheckBoxTreeItem<String>("VFS configs");
+  private final BooleanProperty precondition = new SimpleBooleanProperty();
+  @InjectScope
+  VfsAssetScope vfsAssets;
+  CheckBoxTreeItem configListRoot = new CheckBoxTreeItem<String>("VFS configs");
+  private Command loadSelectedConfigsCommand;
+  private DoubleProperty progress = new SimpleDoubleProperty();
 
-    private Command loadSelectedConfigsCommand;
-    private final BooleanProperty precondition = new SimpleBooleanProperty();
-    private DoubleProperty progress = new SimpleDoubleProperty();
-    
-    public void initialize() {
-        vfsAssets.subscribe(VfsAssetScope.REFRESH_CONFIGS, (key, payload) -> { 
-            refreshConfigRoot();
-        });
-	
-        loadSelectedConfigsCommand = new DelegateCommand(() -> new Action() {
-			@Override
-			protected void action() throws Exception {
-			    loadSelectedConfigs();
-			    vfsAssets.publish(VfsAssetScope.REFRESH_CONFIGS);
-			}
-        }, precondition, true); //Async
-        
-		addConfig(".");
+  public void initialize() {
+    vfsAssets.subscribe(VfsAssetScope.REFRESH_CONFIGS, (key, payload) -> {
+      refreshConfigRoot();
+    });
+
+    loadSelectedConfigsCommand = new DelegateCommand(() -> new Action() {
+      @Override
+      protected void action() throws Exception {
+        loadSelectedConfigs();
+        vfsAssets.publish(VfsAssetScope.REFRESH_CONFIGS);
+      }
+    }, precondition, true); //Async
+
+    addConfig(".");
 
 //		vfsAssets.getOrLoadAssetManager("../../JA113.data/gameData", "vfs_config.JA2Vanilla.ini");
 //		vfsAssets.getOrLoadAssetManager("../../JA113.data/gameData", "vfs_config.JA2113.ini");
+  }
+
+  public Command getLoadSelectedConfigsCommand() {
+    return loadSelectedConfigsCommand;
+  }
+
+  private boolean addConfigDir(String dir) {
+    String dirUnified = Paths.get(dir).toAbsolutePath().normalize().toString();
+    System.out.println("thebob.ja2maptool.MainScreenViewModel.addConfigDir() " + dir + " -> " + dirUnified);
+    if (vfsAssets.getConfigs().containsKey(dirUnified)) {
+      return false;
+    }
+    VirtualFileSystem vfs = new VirtualFileSystem(dirUnified);
+    if (vfs.getConfigNames().size() > 0) {
+      vfsAssets.getConfigs().put(dirUnified, vfs);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public boolean addConfig(String dir) {
+    if (addConfigDir(dir)) {
+      vfsAssets.publish(VfsAssetScope.REFRESH_CONFIGS);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public void refreshConfigRoot() {
+    configListRoot.getChildren().clear();
+    configListRoot.setExpanded(true);
+
+    for (String vfsDir : vfsAssets.getConfigs().keySet()) {
+      CheckBoxTreeItem confNode = new CheckBoxTreeItem<String>(vfsDir);
+      confNode.setExpanded(true);
+      configListRoot.getChildren().add(confNode);
+
+      VirtualFileSystem vfs = vfsAssets.getConfigs().get(vfsDir);
+      for (String config : vfs.getConfigNames()) {
+        CheckBoxTreeItem confNodeConfig = new CheckBoxTreeItem<String>(config);
+        confNode.getChildren().add(confNodeConfig);
+
+        String path = Paths.get(vfs.getBaseDir() + "/" + config).toAbsolutePath().normalize().toString();
+        confNodeConfig.setSelected(vfsAssets.getManagers().get(path) != null);
+      }
+    }
+  }
+
+  public CheckBoxTreeItem<String> getConfigTreeRoot() {
+    return configListRoot;
+  }
+
+  void loadSelectedConfigs() {
+    vfsAssets.getManagers().clear();
+
+    for (Object vfsPathObject : configListRoot.getChildren()) {
+      CheckBoxTreeItem<String> vfsPathNode = (CheckBoxTreeItem<String>) vfsPathObject;
+
+      for (TreeItem<String> vfsConfigItem : vfsPathNode.getChildren()) {
+        CheckBoxTreeItem<String> vfsConfigNode = (CheckBoxTreeItem<String>) vfsConfigItem;
+        if (vfsConfigNode.isSelected()) {
+          String vfsName = vfsPathNode.getValue();
+          String configName = vfsConfigNode.getValue();
+
+          VirtualFileSystem vfs = vfsAssets.getConfigs().get(vfsName);
+          VFSConfig config = vfs.getConfig(configName);
+          AssetManager assets = new AssetManager(config);
+
+          vfsAssets.getManagers().put(assets.getVfs().getPath().toAbsolutePath().toString(), assets);
+        }
+      }
+
     }
 
-    public Command getLoadSelectedConfigsCommand() {
-	return loadSelectedConfigsCommand;
-    }
-        
-    private boolean addConfigDir(String dir) {
-	String dirUnified = Paths.get(dir).toAbsolutePath().normalize().toString();
-	System.out.println("thebob.ja2maptool.MainScreenViewModel.addConfigDir() " + dir + " -> " + dirUnified);
-	if (vfsAssets.getConfigs().containsKey(dirUnified)) {
-	    return false;
-	}
-	VirtualFileSystem vfs = new VirtualFileSystem(dirUnified);
-	if (vfs.getConfigNames().size() > 0) {
-	    vfsAssets.getConfigs().put(dirUnified, vfs);
-	    return true;
-	} else {
-	    return false;
-	}
-    }
+    vfsAssets.publish(VfsAssetScope.UPDATE_MAP_SCREEN);
+  }
 
-    public boolean addConfig(String dir) {
-	if (addConfigDir(dir)) {
-	    vfsAssets.publish(VfsAssetScope.REFRESH_CONFIGS);
-	    return true;
-	} else {
-	    return false;
-	}
-    }
+  void configSelected(boolean b) {
+    precondition.set(b);
+  }
 
-    public void refreshConfigRoot() {
-	configListRoot.getChildren().clear();
-	configListRoot.setExpanded(true);
-
-	for (String vfsDir : vfsAssets.getConfigs().keySet()) {
-	    CheckBoxTreeItem confNode = new CheckBoxTreeItem<String>(vfsDir);
-	    confNode.setExpanded(true);
-	    configListRoot.getChildren().add(confNode);
-
-	    VirtualFileSystem vfs = vfsAssets.getConfigs().get(vfsDir);
-	    for (String config : vfs.getConfigNames()) {
-		CheckBoxTreeItem confNodeConfig = new CheckBoxTreeItem<String>(config);
-		confNode.getChildren().add(confNodeConfig);
-		
-		String path = Paths.get( vfs.getBaseDir() + "/" + config ).toAbsolutePath().normalize().toString();
-		confNodeConfig.setSelected(vfsAssets.getManagers().get( path ) != null);
-	    }
-	}
-    }
-
-    public CheckBoxTreeItem<String> getConfigTreeRoot() {
-	return configListRoot;
-    }
-    
-    void loadSelectedConfigs() {
-	vfsAssets.getManagers().clear();
-
-	for (Object vfsPathObject : configListRoot.getChildren()) {
-	    CheckBoxTreeItem<String> vfsPathNode = (CheckBoxTreeItem<String>) vfsPathObject;
-
-	    for (TreeItem<String> vfsConfigItem : vfsPathNode.getChildren()) {
-		CheckBoxTreeItem<String> vfsConfigNode = (CheckBoxTreeItem<String>) vfsConfigItem;
-		if (vfsConfigNode.isSelected()) {
-		    String vfsName = vfsPathNode.getValue();
-		    String configName = vfsConfigNode.getValue();
-
-		    VirtualFileSystem vfs = vfsAssets.getConfigs().get(vfsName);
-		    VFSConfig config = vfs.getConfig(configName);
-		    AssetManager assets = new AssetManager(config);
-
-		    vfsAssets.getManagers().put(assets.getVfs().getPath().toAbsolutePath().toString(), assets);
-		}
-	    }
-
-	}
-
-	vfsAssets.publish(VfsAssetScope.UPDATE_MAP_SCREEN);
-    }
-
-    void configSelected(boolean b) {
-	precondition.set(b);
-    }
-    
 }

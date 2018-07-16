@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -34,100 +34,100 @@ import thebob.ja2maptool.util.compositor.SnippetPlacement;
 
 public class MapCompositorScope implements Scope {
 
-    public static final String PLACEMENT_PICKED = "PLACEMENT_PICKED";
-    public static final String PLACEMENT_HOVER_ON = "PLACEMENT_HOVER_ON";
-    public static final String PLACEMENT_HOVER_OFF = "PLACEMENT_HOVER_OFF";
-    public static final String PLACEMENT_SELECT = "PLACEMENT_SELECT";
-    public static final String PLACEMENT_LAYERS_CHANGED = "PLACEMENT_LAYERS_CHANGED";
-    public static final String PLACEMENT_LAYER_SWITCHED = "PLACEMENT_LAYER_SWITCHED";
-    public static final String PLACEMENT_LIST_CHANGED = "PLACEMENT_LIST_CHANGED";
+  public static final String PLACEMENT_PICKED = "PLACEMENT_PICKED";
+  public static final String PLACEMENT_HOVER_ON = "PLACEMENT_HOVER_ON";
+  public static final String PLACEMENT_HOVER_OFF = "PLACEMENT_HOVER_OFF";
+  public static final String PLACEMENT_SELECT = "PLACEMENT_SELECT";
+  public static final String PLACEMENT_LAYERS_CHANGED = "PLACEMENT_LAYERS_CHANGED";
+  public static final String PLACEMENT_LAYER_SWITCHED = "PLACEMENT_LAYER_SWITCHED";
+  public static final String PLACEMENT_LIST_CHANGED = "PLACEMENT_LIST_CHANGED";
 
-    MapScope map = new MapScope();
-    MapSnippetScope loadedSnippets = null;
-    ObservableList<SnippetPlacement> placedSnippets = FXCollections.observableArrayList();
-    ListMultimap<String, SelectedTiles> loadedSnippetLibs = ArrayListMultimap.create();
+  MapScope map = new MapScope();
+  MapSnippetScope loadedSnippets = null;
+  ObservableList<SnippetPlacement> placedSnippets = FXCollections.observableArrayList();
+  ListMultimap<String, SelectedTiles> loadedSnippetLibs = ArrayListMultimap.create();
 
-    CompositorTabViewModel viewModel = null;
+  CompositorTabViewModel viewModel = null;
 
-    public MapScope getMap() {
-        return map;
+  public MapScope getMap() {
+    return map;
+  }
+
+  public void setMap(MapScope map) {
+    this.map = map;
+  }
+
+  public CompositorTabViewModel getViewModel() {
+    return viewModel;
+  }
+
+  public void setViewModel(CompositorTabViewModel viewModel) {
+    this.viewModel = viewModel;
+  }
+
+  public MapSnippetScope getLoadedSnippets() {
+    return loadedSnippets;
+  }
+
+  public void setLoadedSnippets(MapSnippetScope loadedSnippets) {
+    this.loadedSnippets = loadedSnippets;
+  }
+
+  public ListMultimap<String, SelectedTiles> getLoadedSnippetLibs() {
+    return loadedSnippetLibs;
+  }
+
+  public ObservableList<SnippetPlacement> getPlacedSnippets() {
+    return placedSnippets;
+  }
+
+  public void setPlacedSnippets(ObservableList<SnippetPlacement> placedSnippets) {
+    this.placedSnippets = placedSnippets;
+  }
+
+  public void addPlacement(SnippetPlacement placement) {
+    placedSnippets.add(placement);
+    System.out.println("thebob.ja2maptool.scopes.map.MapCompositorScope.addPlacement() " + placement);
+  }
+
+  public void deletePlacement(SnippetPlacement placement) {
+    placedSnippets.remove(placement);
+    System.out.println("thebob.ja2maptool.scopes.map.MapCompositorScope.deletePlacement()");
+  }
+
+  public void pickPlacement(SnippetPlacement placement) {
+    publish(PLACEMENT_PICKED, placement);
+    System.out.println("thebob.ja2maptool.scopes.map.MapCompositorScope.pickPlacement()");
+  }
+
+  public void cancelPlacement() {
+    publish(PLACEMENT_PICKED, null);
+  }
+
+  public void hoverPlacement(SnippetPlacement placement) {
+    if (placement != null) {
+      publish(PLACEMENT_HOVER_ON, placement);
+    } else {
+      publish(PLACEMENT_HOVER_OFF);
     }
+  }
 
-    public void setMap(MapScope map) {
-        this.map = map;
+  public void selectPlacement(SnippetPlacement placement) {
+    if (placement != null) {
+      publish(PLACEMENT_SELECT, placement);
     }
+  }
 
-    public CompositorTabViewModel getViewModel() {
-        return viewModel;
-    }
+  public void updateLayers() {
+    publish(PLACEMENT_LAYERS_CHANGED);
+  }
 
-    public void setViewModel(CompositorTabViewModel viewModel) {
-        this.viewModel = viewModel;
-    }
+  public void updateList() {
+    publish(PLACEMENT_LIST_CHANGED);
+  }
 
-    public MapSnippetScope getLoadedSnippets() {
-        return loadedSnippets;
-    }
-
-    public ListMultimap<String, SelectedTiles> getLoadedSnippetLibs() {
-        return loadedSnippetLibs;
-    }
-
-    public void setLoadedSnippets(MapSnippetScope loadedSnippets) {
-        this.loadedSnippets = loadedSnippets;
-    }
-
-    public ObservableList<SnippetPlacement> getPlacedSnippets() {
-        return placedSnippets;
-    }
-
-    public void setPlacedSnippets(ObservableList<SnippetPlacement> placedSnippets) {
-        this.placedSnippets = placedSnippets;
-    }
-
-    public void addPlacement(SnippetPlacement placement) {
-        placedSnippets.add(placement);
-        System.out.println("thebob.ja2maptool.scopes.map.MapCompositorScope.addPlacement() " + placement);
-    }
-
-    public void deletePlacement(SnippetPlacement placement) {
-        placedSnippets.remove(placement);
-        System.out.println("thebob.ja2maptool.scopes.map.MapCompositorScope.deletePlacement()");
-    }
-
-    public void pickPlacement(SnippetPlacement placement) {
-        publish(PLACEMENT_PICKED, placement);
-        System.out.println("thebob.ja2maptool.scopes.map.MapCompositorScope.pickPlacement()");
-    }
-
-    public void cancelPlacement() {
-        publish(PLACEMENT_PICKED, null);
-    }
-
-    public void hoverPlacement(SnippetPlacement placement) {
-        if (placement != null) {
-            publish(PLACEMENT_HOVER_ON, placement);
-        } else {
-            publish(PLACEMENT_HOVER_OFF);
-        }
-    }
-
-    public void selectPlacement(SnippetPlacement placement) {
-        if (placement != null) {
-            publish(PLACEMENT_SELECT, placement);
-        }
-    }
-
-    public void updateLayers() {
-        publish(PLACEMENT_LAYERS_CHANGED);
-    }
-
-    public void updateList() {
-        publish(PLACEMENT_LIST_CHANGED);
-    }
-
-    public void layerSwitched() {
-        publish(PLACEMENT_LAYER_SWITCHED);
-    }
+  public void layerSwitched() {
+    publish(PLACEMENT_LAYER_SWITCHED);
+  }
 
 }

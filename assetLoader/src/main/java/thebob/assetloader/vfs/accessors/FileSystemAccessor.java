@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 the_bob.
@@ -23,6 +23,8 @@
  */
 package thebob.assetloader.vfs.accessors;
 
+import thebob.assetloader.slf.SlfLoader;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -34,70 +36,68 @@ import java.nio.channels.FileChannel;
 import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import thebob.assetloader.slf.SlfLoader;
 
 /**
- *
  * @author the_bob
  */
 public class FileSystemAccessor extends VFSAccessor {
 
-    String filePath;	// file name in file system
-    String vfsPath;	// file name in VFS tree
-    MappedByteBuffer byteBuffer;
-    FileChannel fc;
+  String filePath;  // file name in file system
+  String vfsPath;  // file name in VFS tree
+  MappedByteBuffer byteBuffer;
+  FileChannel fc;
 
-    public FileSystemAccessor(String filePath,String vfsPath) {
-        this.filePath = filePath;
-        this.vfsPath = vfsPath;
-    }
+  public FileSystemAccessor(String filePath, String vfsPath) {
+    this.filePath = filePath;
+    this.vfsPath = vfsPath;
+  }
 
-    @Override
-    public ByteBuffer getBytes() {	
-	if( byteBuffer == null ){
-	    return getBuffer();
-	} else {
-	    byteBuffer.rewind(); // when accessing via buffer make sure to rewind between use!
-	    return byteBuffer;
-	}
+  @Override
+  public ByteBuffer getBytes() {
+    if (byteBuffer == null) {
+      return getBuffer();
+    } else {
+      byteBuffer.rewind(); // when accessing via buffer make sure to rewind between use!
+      return byteBuffer;
     }
+  }
 
-    @Override
-    public FileInputStream getStream() {
-        try {
-            return new FileInputStream(filePath);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(FileSystemAccessor.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
+  @Override
+  public FileInputStream getStream() {
+    try {
+      return new FileInputStream(filePath);
+    } catch (FileNotFoundException ex) {
+      Logger.getLogger(FileSystemAccessor.class.getName()).log(Level.SEVERE, null, ex);
     }
+    return null;
+  }
 
-    private ByteBuffer getBuffer() {
-        try (final RandomAccessFile file = new RandomAccessFile(filePath, "r")) {
-            fc = file.getChannel();
-            byteBuffer = fc.map(FileChannel.MapMode.READ_ONLY, 0, file.length());
-            byteBuffer.order(ByteOrder.LITTLE_ENDIAN);
-            return byteBuffer;
-        } catch (IOException ex) {
-            Logger.getLogger(SlfLoader.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
+  private ByteBuffer getBuffer() {
+    try (final RandomAccessFile file = new RandomAccessFile(filePath, "r")) {
+      fc = file.getChannel();
+      byteBuffer = fc.map(FileChannel.MapMode.READ_ONLY, 0, file.length());
+      byteBuffer.order(ByteOrder.LITTLE_ENDIAN);
+      return byteBuffer;
+    } catch (IOException ex) {
+      Logger.getLogger(SlfLoader.class.getName()).log(Level.SEVERE, null, ex);
     }
+    return null;
+  }
 
-    @Override
-    public String toString() {
-	String file = Paths.get(filePath).toAbsolutePath().normalize().toString();
-        return "[ FileSystemAccessor: " + file + " ]";
-    }
+  @Override
+  public String toString() {
+    String file = Paths.get(filePath).toAbsolutePath().normalize().toString();
+    return "[ FileSystemAccessor: " + file + " ]";
+  }
 
-    @Override
-    public String getPath() {
-        return filePath;
-    }
+  @Override
+  public String getPath() {
+    return filePath;
+  }
 
-    @Override
-    public String getVFSPath() {
-	return vfsPath;
-    }
+  @Override
+  public String getVFSPath() {
+    return vfsPath;
+  }
 
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -23,115 +23,114 @@
  */
 package thebob.ja2maptool.util.map.layers.placement;
 
+import thebob.assetloader.map.core.components.IndexedElement;
+import thebob.assetloader.tileset.Tileset;
+import thebob.ja2maptool.util.compositor.SelectedTiles;
+import thebob.ja2maptool.util.map.events.MapEvent;
+import thebob.ja2maptool.util.map.layers.base.TileLayer;
+import thebob.ja2maptool.util.map.layers.base.TileLayerGroup;
+import thebob.ja2maptool.util.map.layers.cursor.MapCursor;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import thebob.assetloader.map.core.components.IndexedElement;
-import thebob.assetloader.tileset.Tileset;
-import thebob.ja2maptool.util.compositor.SelectedTiles;
-import thebob.ja2maptool.util.map.layers.base.TileLayer;
-import thebob.ja2maptool.util.map.layers.base.TileLayerGroup;
-import thebob.ja2maptool.util.map.events.MapEvent;
-import thebob.ja2maptool.util.map.layers.cursor.MapCursor;
 
 /**
- *
  * @author the_bob
  */
 public class PlacementLayer extends TileLayerGroup {
 
-    Map<Integer, SelectedTiles> placementContents = new HashMap<Integer, SelectedTiles>();
-    Map<Integer, MapCursor> placements = new HashMap<Integer, MapCursor>();
-    Map<Integer, Integer> placementRadius = new HashMap<Integer, Integer>();
+  Map<Integer, SelectedTiles> placementContents = new HashMap<Integer, SelectedTiles>();
+  Map<Integer, MapCursor> placements = new HashMap<Integer, MapCursor>();
+  Map<Integer, Integer> placementRadius = new HashMap<Integer, Integer>();
 
-    private List<TileLayer> layers = new ArrayList<>();
-    private IndexedElement[][] placementLayer = null;
-    private TileLayer placementLayerWrapper = null;
+  private List<TileLayer> layers = new ArrayList<>();
+  private IndexedElement[][] placementLayer = null;
+  private TileLayer placementLayerWrapper = null;
 
-    @Override
-    public Iterator<TileLayer> iterator() {
-	return layers.iterator();
+  @Override
+  public Iterator<TileLayer> iterator() {
+    return layers.iterator();
+  }
+
+  public void init(int mapRows, int mapCols, Tileset tileset) {
+    setLayerSize(mapCols, mapRows);
+    setTileset(tileset);
+
+    placementLayer = new IndexedElement[mapSize][0];
+    placementLayerWrapper = new TileLayer(true, 0, 0, placementLayer);
+    layers.clear();
+    layers.add(placementLayerWrapper);
+  }
+
+  @Override
+  public boolean limitDrawArea() {
+    return false;
+  }
+
+  @Override
+  public boolean trimEdges() {
+    return false;
+  }
+
+  public boolean togglePlacement(MapCursor placement, SelectedTiles previewTiles) {
+    int placementCell = placement.getCell();
+
+    if (placements.containsKey(placementCell)) {
+      System.out.println("thebob.ja2maptool.util.renderer.layers.placement.PlacementLayer.pinPlacement(): unpin");
+      placements.remove(placementCell);
+      placementContents.remove(placementCell);
+      bakePlacementLayer();
+      return false;
+    } else {
+      System.out.println("thebob.ja2maptool.util.renderer.layers.placement.PlacementLayer.pinPlacement(): pin");
+      placements.put(placementCell, placement);
+      placementContents.put(placementCell, previewTiles);
+      bakePlacementLayer();
+      return true;
     }
 
-    public void init(int mapRows, int mapCols, Tileset tileset) {
-	setLayerSize(mapCols, mapRows);
-	setTileset(tileset);
+  }
 
-	placementLayer = new IndexedElement[mapSize][0];
-	placementLayerWrapper = new TileLayer(true, 0, 0, placementLayer);
-	layers.clear();
-	layers.add(placementLayerWrapper);
+  public SelectedTiles pickPlacement(MapCursor cursor) {
+    if (placements.containsKey(cursor.getCell())) {
+      System.out.println("thebob.ja2maptool.util.renderer.layers.placement.PlacementLayer.pinPlacement(): unpin");
+
+      placements.remove(cursor.getCell());
+      SelectedTiles placement = placementContents.remove(cursor.getCell());
+
+      bakePlacementLayer();
+      return placement;
     }
+    return null;
+  }
 
-	@Override
-	public boolean limitDrawArea() {
-		return false;
-	}
+  //
 
-	@Override
-	public boolean trimEdges() {
-		return false;
-	}
-
-	public boolean togglePlacement(MapCursor placement, SelectedTiles previewTiles) {
-	int placementCell = placement.getCell();
-
-	if (placements.containsKey(placementCell)) {
-	    System.out.println("thebob.ja2maptool.util.renderer.layers.placement.PlacementLayer.pinPlacement(): unpin");
-	    placements.remove(placementCell);
-	    placementContents.remove(placementCell);
-	    bakePlacementLayer();
-	    return false;
-	} else {
-	    System.out.println("thebob.ja2maptool.util.renderer.layers.placement.PlacementLayer.pinPlacement(): pin");
-	    placements.put(placementCell, placement);
-	    placementContents.put(placementCell, previewTiles);
-	    bakePlacementLayer();
-	    return true;
-	}
-
+  private void initPlacementLayer() {
+    for (int i = 0; i < mapSize; i++) {
+      placementLayer[i] = new IndexedElement[0];
     }
-    
-    public SelectedTiles pickPlacement(MapCursor cursor) {
-	if (placements.containsKey(cursor.getCell())) {
-	    System.out.println("thebob.ja2maptool.util.renderer.layers.placement.PlacementLayer.pinPlacement(): unpin");
-	    
-	    placements.remove(cursor.getCell());
-	    SelectedTiles placement = placementContents.remove(cursor.getCell());
-	    
-	    bakePlacementLayer();
-	    return placement;
-	}
-	return null;
+    placementLayerWrapper.setTiles(placementLayer);
+  }
+
+  private void bakePlacementLayer() {
+    initPlacementLayer();
+
+    if (placements.size() > 0) {
+      for (MapCursor cursor : placements.values()) {
+        placementLayer[cursor.getCell()] = cursor.getCursor();
+      }
     }
-    
-    //
+    notifySubscribers(new MapEvent(MapEvent.ChangeType.LAYER_ALTERED));
+  }
 
-    private void initPlacementLayer() {
-	for (int i = 0; i < mapSize; i++) {
-	    placementLayer[i] = new IndexedElement[0];
-	}
-	placementLayerWrapper.setTiles(placementLayer);
-    }
+  @Override
+  public String toString() {
+    return "PlacementLayer{" + super.toString() + '}';
+  }
 
-    private void bakePlacementLayer() {
-	initPlacementLayer();
 
-	if (placements.size() > 0) {
-	    for (MapCursor cursor : placements.values()) {
-		placementLayer[cursor.getCell()] = cursor.getCursor();
-	    }
-	}
-	notifySubscribers(new MapEvent(MapEvent.ChangeType.LAYER_ALTERED));
-    }
-
-    @Override
-    public String toString() {
-	return "PlacementLayer{" +super.toString()+ '}';
-    }
-
-    
-    
 }

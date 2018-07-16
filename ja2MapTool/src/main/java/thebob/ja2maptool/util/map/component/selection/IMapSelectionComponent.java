@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -27,45 +27,40 @@ import thebob.ja2maptool.util.compositor.SelectedTiles;
 import thebob.ja2maptool.util.map.controller.base.IMapController;
 
 /**
- *
  * @author the_bob
  */
 public interface IMapSelectionComponent extends IMapController {
 
-    /**
-     *
-     * @return cell id of selection start marker
-     */
-    Integer getSelectionStart();
+  /**
+   * @return cell id of selection start marker
+   */
+  Integer getSelectionStart();
 
-    /**
-     *
-     * @return cell id of selection end marker
-     */
-    Integer getSelectionEnd();
+  /**
+   * @return cell id of selection end marker
+   */
+  Integer getSelectionEnd();
 
-    /**
-     *
-     * @return true if there is valid selection
-     */
-    boolean hasSelection();
+  /**
+   * @return true if there is valid selection
+   */
+  boolean hasSelection();
 
-    /**
-     *
-     * @return selection object with cell id array populated
-     */
-    SelectedTiles getSelection();
+  /**
+   * @return selection object with cell id array populated
+   */
+  SelectedTiles getSelection();
 
-    void clearSelection();
+  void clearSelection();
 
-    /**
-     * Places either the selection start or selection end marker, if the former
-     * is already present. If this results in a valid selection, sends out a
-     * notification
-     *
-     * @param mouseCellX
-     * @param mouseCellY
-     */
-    void placeMarker(int mouseCellX, int mouseCellY);
+  /**
+   * Places either the selection start or selection end marker, if the former
+   * is already present. If this results in a valid selection, sends out a
+   * notification
+   *
+   * @param mouseCellX
+   * @param mouseCellY
+   */
+  void placeMarker(int mouseCellX, int mouseCellY);
 
 }

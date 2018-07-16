@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -26,37 +26,36 @@ package thebob.ja2maptool.util.mapping;
 import thebob.assetmanager.managers.items.Item;
 
 /**
- *
  * @author the_bob
  */
 public class ItemMapping {
 
-    Item srcItem;
-    Item dstItem;
+  Item srcItem;
+  Item dstItem;
 
-    public ItemMapping(Item srcItem, Item dstItem) {
-	this.srcItem = srcItem;
-	this.dstItem = dstItem;
-    }
+  public ItemMapping(Item srcItem, Item dstItem) {
+    this.srcItem = srcItem;
+    this.dstItem = dstItem;
+  }
 
-    public Item getSrcItem() {
-	return srcItem;
-    }
+  public Item getSrcItem() {
+    return srcItem;
+  }
 
-    public void setSrcItem(Item srcItem) {
-	this.srcItem = srcItem;
-    }
+  public void setSrcItem(Item srcItem) {
+    this.srcItem = srcItem;
+  }
 
-    public Item getDstItem() {
-	return dstItem;
-    }
+  public Item getDstItem() {
+    return dstItem;
+  }
 
-    public void setDstItem(Item dstItem) {
-	this.dstItem = dstItem;
-    }
-    
-    public String toString(){
-	return srcItem.getName() + " -> " + dstItem.getName();
-    }
-    
+  public void setDstItem(Item dstItem) {
+    this.dstItem = dstItem;
+  }
+
+  public String toString() {
+    return srcItem.getName() + " -> " + dstItem.getName();
+  }
+
 }

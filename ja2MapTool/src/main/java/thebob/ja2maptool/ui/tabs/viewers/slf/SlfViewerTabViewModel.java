@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -26,9 +26,8 @@ package thebob.ja2maptool.ui.tabs.viewers.slf;
 import de.saxsys.mvvmfx.ViewModel;
 
 /**
- *
  * @author the_bob
  */
 public class SlfViewerTabViewModel implements ViewModel {
-    
+
 }

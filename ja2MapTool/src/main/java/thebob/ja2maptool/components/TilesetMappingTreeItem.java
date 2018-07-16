@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -27,27 +27,26 @@ import javafx.scene.control.TreeItem;
 import thebob.assetmanager.AssetManager;
 
 /**
- *
  * @author the_bob
  */
 public class TilesetMappingTreeItem extends TreeItem<String> {
-    
-    public static final int MAP_ITEMS = -1;
-    Integer tilesetId;
-    AssetManager manager;
 
-    public TilesetMappingTreeItem(String label, Integer tilesetId, AssetManager manager) {
-	super(label);
-	this.tilesetId = tilesetId;
-	this.manager = manager;
-    }
+  public static final int MAP_ITEMS = -1;
+  Integer tilesetId;
+  AssetManager manager;
 
-    public Integer getTilesetId() {
-	return tilesetId;
-    }
+  public TilesetMappingTreeItem(String label, Integer tilesetId, AssetManager manager) {
+    super(label);
+    this.tilesetId = tilesetId;
+    this.manager = manager;
+  }
 
-    public AssetManager getManager() {
-	return manager;
-    }
-    
+  public Integer getTilesetId() {
+    return tilesetId;
+  }
+
+  public AssetManager getManager() {
+    return manager;
+  }
+
 }

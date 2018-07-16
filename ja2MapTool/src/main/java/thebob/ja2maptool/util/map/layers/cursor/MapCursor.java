@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -25,65 +25,62 @@ package thebob.ja2maptool.util.map.layers.cursor;
 
 import thebob.assetloader.map.core.components.IndexedElement;
 import thebob.ja2maptool.util.map.layers.base.TileLayerGroup;
-import thebob.ja2maptool.util.map.old.OldMapRenderer;
 
 /**
- *
  * @author the_bob
  */
 public class MapCursor {
 
-    TileLayerGroup parent = null;
+  TileLayerGroup parent = null;
 
-    int cellX;
-    int cellY;
-    int cell;
+  int cellX;
+  int cellY;
+  int cell;
 
-    IndexedElement[] cursor = new IndexedElement[]{new IndexedElement(131, 14)};
+  IndexedElement[] cursor = new IndexedElement[]{new IndexedElement(131, 14)};
 
-    public MapCursor(MapCursor src, IndexedElement cursor) {
-	this.parent = src.parent;
+  public MapCursor(MapCursor src, IndexedElement cursor) {
+    this.parent = src.parent;
 
-	this.cellX = src.cellX;
-	this.cellY = src.cellY;
-	this.cell = src.cell;
+    this.cellX = src.cellX;
+    this.cellY = src.cellY;
+    this.cell = src.cell;
 
-	this.cursor = new IndexedElement[]{cursor};
+    this.cursor = new IndexedElement[]{cursor};
+  }
+
+  public MapCursor(TileLayerGroup parent, int x, int y, IndexedElement cursor) {
+    this.parent = parent;
+    cellX = x;
+    cellY = y;
+
+    cell = parent.rowColToPos(this.cellY, this.cellX);
+
+    if (cursor != null) {
+      this.cursor = new IndexedElement[]{cursor};
     }
+  }
 
-    public MapCursor(TileLayerGroup parent, int x, int y, IndexedElement cursor) {
-	this.parent = parent;
-	cellX = x;
-	cellY = y;
+  public int getCellX() {
+    return cellX;
+  }
 
-	cell = parent.rowColToPos(this.cellY, this.cellX);
+  public int getCellY() {
+    return cellY;
+  }
 
-	if (cursor != null) {
-	    this.cursor = new IndexedElement[]{cursor};
-	}
-    }
+  public int getCell() {
+    return cell;
+  }
 
-    public int getCellX() {
-	return cellX;
-    }
+  public IndexedElement[] getCursor() {
+    return cursor;
+  }
 
-    public int getCellY() {
-	return cellY;
-    }
 
-    public int getCell() {
-	return cell;
-    }
-
-    public IndexedElement[] getCursor() {
-	return cursor;
-    }
-
-    
-    
-    @Override
-    public String toString() {
-	return "MapCursor{" + "cellX=" + cellX + ", cellY=" + cellY + '}';
-    }
+  @Override
+  public String toString() {
+    return "MapCursor{" + "cellX=" + cellX + ", cellY=" + cellY + '}';
+  }
 
 }

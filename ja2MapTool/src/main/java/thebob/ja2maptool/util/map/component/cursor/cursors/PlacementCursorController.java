@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -29,57 +29,57 @@ import thebob.assetloader.map.core.components.IndexedElement;
 import thebob.ja2maptool.util.map.component.cursor.cursors.base.CursorControllerBase;
 import thebob.ja2maptool.util.map.component.placement.base.IMapPlacementComponent;
 import thebob.ja2maptool.util.map.layers.cursor.CursorLayer;
+
 import static thebob.ja2maptool.util.map.layers.cursor.CursorLayer.LAYER_CURSOR;
 
 /**
- *
  * @author the_bob
  */
 public class PlacementCursorController extends CursorControllerBase {
 
-    private static final IndexedElement PLACEMENT_CURSOR = new IndexedElement(131, 17);
-    private static final IndexedElement PLACEMENT_CURSOR_ACTIVE = new IndexedElement(131, 19);
-    private static final IndexedElement PLACEMENT_TILES_CURSOR = new IndexedElement(131, 6);
-    private static final IndexedElement PLACEMENT_CORNERS_CURSOR = new IndexedElement(131, 8);
-    private static final IndexedElement PLACEMENT_MARKERS_CURSOR = new IndexedElement(131, 12);
-    private final IMapPlacementComponent placementController;
+  private static final IndexedElement PLACEMENT_CURSOR = new IndexedElement(131, 17);
+  private static final IndexedElement PLACEMENT_CURSOR_ACTIVE = new IndexedElement(131, 19);
+  private static final IndexedElement PLACEMENT_TILES_CURSOR = new IndexedElement(131, 6);
+  private static final IndexedElement PLACEMENT_CORNERS_CURSOR = new IndexedElement(131, 8);
+  private static final IndexedElement PLACEMENT_MARKERS_CURSOR = new IndexedElement(131, 12);
+  private final IMapPlacementComponent placementController;
 
-    public PlacementCursorController(IMapPlacementComponent placementController) {
-        this.placementController = placementController;
+  public PlacementCursorController(IMapPlacementComponent placementController) {
+    this.placementController = placementController;
+  }
+
+  @Override
+  public void mouseEvent(MouseEvent e) {
+    super.mouseEvent(e);
+    if (e.getEventType() == MouseEvent.MOUSE_CLICKED) {
+      if (e.getButton() == MouseButton.PRIMARY) {
+        placementController.setPlacementLocation(getCursors().getCursor(getMouseCellX(), getMouseCellY(), PLACEMENT_CURSOR));
+      } else if (e.getButton() == MouseButton.SECONDARY) {
+        placementController.setPlacementLocation(null);
+      }
+      updateCursor();
+    }
+  }
+
+  @Override
+  public void updateCursor() {
+    getCursors().clearLayer(LAYER_CURSOR);
+
+    if (placementController.getPayload() != null) {
+      int width = placementController.getPayload().getWidth();
+      int height = placementController.getPayload().getHeight();
+
+      Integer placementCell = placementController.hoverPlacement(getMouseCell());
+      if (placementCell != null) {    // different cursor for hovering over a placement
+        getCursors().placeCursor(LAYER_CURSOR, getMouseCell(), PLACEMENT_CURSOR_ACTIVE);
+      } else {
+        getCursors().placeCursorCenterRect(LAYER_CURSOR, getMouseCellX(), getMouseCellY(), width, height, PLACEMENT_TILES_CURSOR, CursorLayer.CursorFillMode.Border);
+        getCursors().placeCursorCenterRect(LAYER_CURSOR, getMouseCellX(), getMouseCellY(), width + 2, height + 2, PLACEMENT_CORNERS_CURSOR, CursorLayer.CursorFillMode.Corners);
+      }
+    } else {
+      getCursors().placeCursor(LAYER_CURSOR, getMouseCell(), PLACEMENT_CURSOR);
     }
 
-    @Override
-    public void mouseEvent(MouseEvent e) {
-        super.mouseEvent(e);
-        if (e.getEventType() == MouseEvent.MOUSE_CLICKED) {
-            if (e.getButton() == MouseButton.PRIMARY) {
-                placementController.setPlacementLocation(getCursors().getCursor(getMouseCellX(), getMouseCellY(), PLACEMENT_CURSOR));
-            } else if (e.getButton() == MouseButton.SECONDARY) {
-                placementController.setPlacementLocation(null);
-            }
-            updateCursor();
-        }
-    }
-
-    @Override
-    public void updateCursor() {
-        getCursors().clearLayer(LAYER_CURSOR);
-
-        if (placementController.getPayload() != null) {
-            int width = placementController.getPayload().getWidth();
-            int height = placementController.getPayload().getHeight();
-
-            Integer placementCell = placementController.hoverPlacement(getMouseCell());
-            if (placementCell != null) {    // different cursor for hovering over a placement
-                getCursors().placeCursor(LAYER_CURSOR, getMouseCell(), PLACEMENT_CURSOR_ACTIVE);
-            } else {
-                getCursors().placeCursorCenterRect(LAYER_CURSOR, getMouseCellX(), getMouseCellY(), width, height, PLACEMENT_TILES_CURSOR, CursorLayer.CursorFillMode.Border);
-                getCursors().placeCursorCenterRect(LAYER_CURSOR, getMouseCellX(), getMouseCellY(), width + 2, height + 2, PLACEMENT_CORNERS_CURSOR, CursorLayer.CursorFillMode.Corners);
-            }
-        } else {
-            getCursors().placeCursor(LAYER_CURSOR, getMouseCell(), PLACEMENT_CURSOR);
-        }
-
-    }
+  }
 
 }

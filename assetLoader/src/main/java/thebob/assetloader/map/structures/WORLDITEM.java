@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 the_bob.
@@ -24,7 +24,6 @@
 package thebob.assetloader.map.structures;
 
 import thebob.assetloader.map.helpers.AutoLoadingMapStruct;
-import java.nio.ByteOrder;
 import thebob.assetloader.map.helpers.GridPos;
 import thebob.assetloader.map.structures.legacy.OLD_WORLDITEM;
 import thebob.assetloader.map.structures.legacy.OLD_WORLDITEM_101;
@@ -33,49 +32,49 @@ import thebob.assetloader.map.structures.legacy.OLD_WORLDITEM_101;
 // for loading and saving the worldItem header data
 public class WORLDITEM extends AutoLoadingMapStruct {
 
-    public final Bool fExists = new Bool();
-    public final Signed32 sGridNo = new Signed32();
-    public final Signed8 ubLevel = new Signed8();
-    public final Unsigned16 usFlags = new Unsigned16();
-    public final Signed8 bRenderZHeightAboveLevel = new Signed8();
-    public final Signed8 bVisible = new Signed8();
-    public final Unsigned8 ubNonExistChance = new Unsigned8();
-    public final Signed8 soldierID = new Signed8();
+  public final Bool fExists = new Bool();
+  public final Signed32 sGridNo = new Signed32();
+  public final Signed8 ubLevel = new Signed8();
+  public final Unsigned16 usFlags = new Unsigned16();
+  public final Signed8 bRenderZHeightAboveLevel = new Signed8();
+  public final Signed8 bVisible = new Signed8();
+  public final Unsigned8 ubNonExistChance = new Unsigned8();
+  public final Signed8 soldierID = new Signed8();
 
-    @Override
-    public String toString() {
-     return  "WORLDITEM:\n"
-                + "fExists: " + fExists.get() + " @" + fExists.offset() + "\n\t"
-                + "sGridNo: " + new GridPos(sGridNo.get()) + " @" + sGridNo.offset() + "\n\t"
-                + "ubLevel: " + ubLevel.get() + " @" + ubLevel.offset() + "\n\t"
-                + "usFlags: " + usFlags.get() + " @" + usFlags.offset() + "\n\t"
-                + "bRenderZHeightAboveLevel: " + bRenderZHeightAboveLevel.get() + " @" + bRenderZHeightAboveLevel.offset() + "\n\t"
-                + "bVisible: " + bVisible.get() + " @" + bVisible.offset() + "\n\t"
-                + "ubNonExistChance: " + ubNonExistChance.get() + " @" + ubNonExistChance.offset() + "\n\t"
-                + "soldierID: " + soldierID.get() + " @" + soldierID.offset() + "\n-----------------------------\n\t"
-                + super.toString();
-    }
+  @Override
+  public String toString() {
+    return "WORLDITEM:\n"
+        + "fExists: " + fExists.get() + " @" + fExists.offset() + "\n\t"
+        + "sGridNo: " + new GridPos(sGridNo.get()) + " @" + sGridNo.offset() + "\n\t"
+        + "ubLevel: " + ubLevel.get() + " @" + ubLevel.offset() + "\n\t"
+        + "usFlags: " + usFlags.get() + " @" + usFlags.offset() + "\n\t"
+        + "bRenderZHeightAboveLevel: " + bRenderZHeightAboveLevel.get() + " @" + bRenderZHeightAboveLevel.offset() + "\n\t"
+        + "bVisible: " + bVisible.get() + " @" + bVisible.offset() + "\n\t"
+        + "ubNonExistChance: " + ubNonExistChance.get() + " @" + ubNonExistChance.offset() + "\n\t"
+        + "soldierID: " + soldierID.get() + " @" + soldierID.offset() + "\n-----------------------------\n\t"
+        + super.toString();
+  }
 
-    public void loadOld(OLD_WORLDITEM old) {
-        fExists.set(old.fExists.get());
-        sGridNo.set(old.sGridNo.get());
-        ubLevel.set(old.ubLevel.get());
-        usFlags.set(old.usFlags.get());
-        bRenderZHeightAboveLevel.set(old.bRenderZHeightAboveLevel.get());
-        bVisible.set(old.bVisible.get());
-        ubNonExistChance.set(old.ubNonExistChance.get());
-        soldierID.set(old.soldierID.get());
-    }
+  public void loadOld(OLD_WORLDITEM old) {
+    fExists.set(old.fExists.get());
+    sGridNo.set(old.sGridNo.get());
+    ubLevel.set(old.ubLevel.get());
+    usFlags.set(old.usFlags.get());
+    bRenderZHeightAboveLevel.set(old.bRenderZHeightAboveLevel.get());
+    bVisible.set(old.bVisible.get());
+    ubNonExistChance.set(old.ubNonExistChance.get());
+    soldierID.set(old.soldierID.get());
+  }
 
-    public void loadOld(OLD_WORLDITEM_101 old) {
-        fExists.set(old.fExists.get());
-        sGridNo.set(old.sGridNo.get());
-        ubLevel.set(old.ubLevel.get());
-        usFlags.set(old.usFlags.get());
-        bRenderZHeightAboveLevel.set(old.bRenderZHeightAboveLevel.get());
-        bVisible.set(old.bVisible.get());
-        ubNonExistChance.set(old.ubNonExistChance.get());
-        soldierID.set((byte) 0);
-    }
+  public void loadOld(OLD_WORLDITEM_101 old) {
+    fExists.set(old.fExists.get());
+    sGridNo.set(old.sGridNo.get());
+    ubLevel.set(old.ubLevel.get());
+    usFlags.set(old.usFlags.get());
+    bRenderZHeightAboveLevel.set(old.bRenderZHeightAboveLevel.get());
+    bVisible.set(old.bVisible.get());
+    ubNonExistChance.set(old.ubNonExistChance.get());
+    soldierID.set((byte) 0);
+  }
 
 }

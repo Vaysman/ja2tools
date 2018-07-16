@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 the_bob.
@@ -39,273 +39,264 @@ import thebob.assetloader.sti.StiLoader;
 import thebob.assetmanager.managers.items.categories.ItemCategory;
 
 /**
- *
  * @author the_bob
  */
 public class Item {
 
-	int id;
-	String name;
-	long itemType;
-	int itemTypeId;
-	
-	private int nasAttachmentClass;
+  int id;
+  String name;
+  long itemType;
+  int itemTypeId;
+  int coolness;
+  int imageType;
+  int imageId;
+  Image image = null;
+  int clothesType;
+  int foodType;
+  int drugType;
+  MAGAZINELIST.MAGAZINE magazineData = null;
+  AMMO CaliberData = null;
+  AMMOTYPELIST.AMMOTYPE AmmoTypeData = null;
+  WEAPONLIST.WEAPON WeaponData = null;
+  EXPLOSIVELIST.EXPLOSIVE explosiveData = null;
+  ARMOURLIST.ARMOUR armorData = null;
+  LOADBEARINGEQUIPMENTLIST.LOADBEARINGEQUIPMENT lbeData = null;
+  StiLoader loader = null;
+  ITEMTYPE itemDef = null;
+  DRUG drugData;
+  FOOD foodData;
+  private int nasAttachmentClass;
+  private ItemCategory parentCategory;
 
-	int coolness;
+  Item(int uiIndex, String szItemName) {
+    id = uiIndex;
+    name = szItemName;
+  }
 
-	int imageType;
-	int imageId;
-	Image image = null;
+  public Item(int id, String name, long itemType, int itemTypeId, int imageType, int imageId, int coolness, int nasAttachmentClass) {
+    this.id = id;
+    this.name = name;
+    this.itemType = itemType;
+    this.itemTypeId = itemTypeId;
+    this.imageType = imageType;
+    this.imageId = imageId;
+    this.coolness = coolness;
+    this.nasAttachmentClass = nasAttachmentClass;
+  }
 
-	int clothesType;
-	int foodType;
-	int drugType;
+  public Item(ITEMTYPE itemDef) {
+    this(itemDef.getUiIndex(),
+        itemDef.getSzLongItemName(),
+        itemDef.getUsItemClass(),
+        itemDef.getUbClassIndex(),
+        itemDef.getUbGraphicType(),
+        itemDef.getUbGraphicNum(),
+        itemDef.getUbCoolness(),
+        itemDef.getNasAttachmentClass());
 
-	MAGAZINELIST.MAGAZINE magazineData = null;
-	AMMO CaliberData = null;
-	AMMOTYPELIST.AMMOTYPE AmmoTypeData = null;
-	WEAPONLIST.WEAPON WeaponData = null;
-	EXPLOSIVELIST.EXPLOSIVE explosiveData = null;
-	ARMOURLIST.ARMOUR armorData = null;
-	LOADBEARINGEQUIPMENTLIST.LOADBEARINGEQUIPMENT lbeData = null;
+    this.itemDef = itemDef;
+  }
 
-	StiLoader loader = null;
-	ITEMTYPE itemDef = null;
-	private ItemCategory parentCategory;
-	
+  public Image getImage() {
+    if (image == null) {
+      loadImage();
+    }
+    return image;
+  }
 
-	Item(int uiIndex, String szItemName) {
-		id = uiIndex;
-		name = szItemName;
-	}
+  private void loadImage() {
+    int width = loader.getImageWidth(imageId);
+    int height = loader.getImageHeight(imageId);
+    // TODO: do this once per file, in stiloader or tileloader (right now we're createing multiple JavaFX Images per STI subimage instance)
+    image = ImageAdapter.convertStiImage(width, height, loader.getImage(imageId), loader.getPalette());
+  }
 
-	public Item(int id, String name, long itemType, int itemTypeId, int imageType, int imageId, int coolness, int nasAttachmentClass) {
-		this.id = id;
-		this.name = name;
-		this.itemType = itemType;
-		this.itemTypeId = itemTypeId;
-		this.imageType = imageType;
-		this.imageId = imageId;
-		this.coolness = coolness;
-		this.nasAttachmentClass = nasAttachmentClass;
-	}
+  public int getId() {
+    return id;
+  }
 
-	public Item(ITEMTYPE itemDef) {
-		this(itemDef.getUiIndex(), 
-			itemDef.getSzLongItemName(), 
-			itemDef.getUsItemClass(), 
-			itemDef.getUbClassIndex(), 
-			itemDef.getUbGraphicType(), 
-			itemDef.getUbGraphicNum(), 
-			itemDef.getUbCoolness(), 
-			itemDef.getNasAttachmentClass());
-		
-		this.itemDef = itemDef;
-	}
+  public void setId(int id) {
+    this.id = id;
+  }
 
-	public Image getImage() {
-		if (image == null) {
-			loadImage();
-		}
-		return image;
-	}
+  public String getName() {
+    return name;
+  }
 
-	private void loadImage() {
-		int width = loader.getImageWidth(imageId);
-		int height = loader.getImageHeight(imageId);
-		// TODO: do this once per file, in stiloader or tileloader (right now we're createing multiple JavaFX Images per STI subimage instance)
-		image = ImageAdapter.convertStiImage(width, height, loader.getImage(imageId), loader.getPalette());
-	}
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	public int getId() {
-		return id;
-	}
+  public long getItemType() {
+    return itemType;
+  }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+  public void setItemType(long itemType) {
+    this.itemType = itemType;
+  }
 
-	public String getName() {
-		return name;
-	}
+  public int getItemTypeId() {
+    return itemTypeId;
+  }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public void setItemTypeId(int itemTypeId) {
+    this.itemTypeId = itemTypeId;
+  }
 
-	public long getItemType() {
-		return itemType;
-	}
+  public int getImageType() {
+    return imageType;
+  }
 
-	public void setItemType(long itemType) {
-		this.itemType = itemType;
-	}
+  public void setImageType(int imageType) {
+    this.imageType = imageType;
+  }
 
-	public int getItemTypeId() {
-		return itemTypeId;
-	}
+  public int getImageId() {
+    return imageId;
+  }
 
-	public void setItemTypeId(int itemTypeId) {
-		this.itemTypeId = itemTypeId;
-	}
+  public void setImageId(int imageId) {
+    this.imageId = imageId;
+  }
 
-	public int getImageType() {
-		return imageType;
-	}
+  public int getClothesType() {
+    return clothesType;
+  }
 
-	public void setImageType(int imageType) {
-		this.imageType = imageType;
-	}
+  public void setClothesType(int clothesType) {
+    this.clothesType = clothesType;
+  }
 
-	public int getImageId() {
-		return imageId;
-	}
+  public int getFoodType() {
+    return foodType;
+  }
 
-	public void setImageId(int imageId) {
-		this.imageId = imageId;
-	}
+  public void setFoodType(int foodType) {
+    this.foodType = foodType;
+  }
 
-	public int getClothesType() {
-		return clothesType;
-	}
+  public int getDrugType() {
+    return drugType;
+  }
 
-	public void setClothesType(int clothesType) {
-		this.clothesType = clothesType;
-	}
+  public void setDrugType(int drugType) {
+    this.drugType = drugType;
+  }
 
-	public int getFoodType() {
-		return foodType;
-	}
+  public MAGAZINELIST.MAGAZINE getMagazineData() {
+    return magazineData;
+  }
 
-	public void setFoodType(int foodType) {
-		this.foodType = foodType;
-	}
+  public void setMagazineData(MAGAZINELIST.MAGAZINE magazineData) {
+    this.magazineData = magazineData;
+  }
 
-	public int getDrugType() {
-		return drugType;
-	}
+  public AMMO getCaliberData() {
+    return CaliberData;
+  }
 
-	public void setDrugType(int drugType) {
-		this.drugType = drugType;
-	}
+  public void setCaliberData(AMMO CaliberData) {
+    this.CaliberData = CaliberData;
+  }
 
-	public MAGAZINELIST.MAGAZINE getMagazineData() {
-		return magazineData;
-	}
+  public AMMOTYPELIST.AMMOTYPE getAmmoTypeData() {
+    return AmmoTypeData;
+  }
 
-	public void setMagazineData(MAGAZINELIST.MAGAZINE magazineData) {
-		this.magazineData = magazineData;
-	}
+  public void setAmmoTypeData(AMMOTYPELIST.AMMOTYPE AmmoTypeData) {
+    this.AmmoTypeData = AmmoTypeData;
+  }
 
-	public AMMO getCaliberData() {
-		return CaliberData;
-	}
+  public WEAPONLIST.WEAPON getWeaponData() {
+    return WeaponData;
+  }
 
-	public void setCaliberData(AMMO CaliberData) {
-		this.CaliberData = CaliberData;
-	}
+  public void setWeaponData(WEAPONLIST.WEAPON WeaponData) {
+    this.WeaponData = WeaponData;
+  }
 
-	public AMMOTYPELIST.AMMOTYPE getAmmoTypeData() {
-		return AmmoTypeData;
-	}
+  public EXPLOSIVELIST.EXPLOSIVE getExplosiveData() {
+    return explosiveData;
+  }
 
-	public void setAmmoTypeData(AMMOTYPELIST.AMMOTYPE AmmoTypeData) {
-		this.AmmoTypeData = AmmoTypeData;
-	}
+  public void setExplosiveData(EXPLOSIVELIST.EXPLOSIVE explosiveData) {
+    this.explosiveData = explosiveData;
+  }
 
-	public WEAPONLIST.WEAPON getWeaponData() {
-		return WeaponData;
-	}
+  public ARMOURLIST.ARMOUR getArmorData() {
+    return armorData;
+  }
 
-	public void setWeaponData(WEAPONLIST.WEAPON WeaponData) {
-		this.WeaponData = WeaponData;
-	}
+  public void setArmorData(ARMOURLIST.ARMOUR armorData) {
+    this.armorData = armorData;
+  }
 
-	public EXPLOSIVELIST.EXPLOSIVE getExplosiveData() {
-		return explosiveData;
-	}
+  public LOADBEARINGEQUIPMENTLIST.LOADBEARINGEQUIPMENT getLbeData() {
+    return lbeData;
+  }
 
-	public void setExplosiveData(EXPLOSIVELIST.EXPLOSIVE explosiveData) {
-		this.explosiveData = explosiveData;
-	}
+  public void setLbeData(LOADBEARINGEQUIPMENTLIST.LOADBEARINGEQUIPMENT lbeData) {
+    this.lbeData = lbeData;
+  }
 
-	public ARMOURLIST.ARMOUR getArmorData() {
-		return armorData;
-	}
+  public DRUG getDrugData() {
+    return drugData;
+  }
 
-	public void setArmorData(ARMOURLIST.ARMOUR armorData) {
-		this.armorData = armorData;
-	}
+  public void setDrugData(DRUG drugData) {
+    this.drugData = drugData;
+  }
 
-	public LOADBEARINGEQUIPMENTLIST.LOADBEARINGEQUIPMENT getLbeData() {
-		return lbeData;
-	}
+  public FOOD getFoodData() {
+    return foodData;
+  }
 
-	public void setLbeData(LOADBEARINGEQUIPMENTLIST.LOADBEARINGEQUIPMENT lbeData) {
-		this.lbeData = lbeData;
-	}
+  public void setFoodData(FOOD foodData) {
+    this.foodData = foodData;
+  }
 
-	DRUG drugData;
-	FOOD foodData;
+  public void setImageSource(StiLoader get) {
+    loader = get;
+  }
 
-	public DRUG getDrugData() {
-		return drugData;
-	}
+  public int getCoolness() {
+    return coolness;
+  }
 
-	public void setDrugData(DRUG drugData) {
-		this.drugData = drugData;
-	}
+  public void setCoolness(int coolness) {
+    this.coolness = coolness;
+  }
 
-	public FOOD getFoodData() {
-		return foodData;
-	}
+  public int getNasAttachmentClass() {
+    return nasAttachmentClass;
+  }
 
-	public void setFoodData(FOOD foodData) {
-		this.foodData = foodData;
-	}
+  public void setNasAttachmentClass(int nasAttachmentClass) {
+    this.nasAttachmentClass = nasAttachmentClass;
+  }
 
-	public void setImageSource(StiLoader get) {
-		loader = get;
-	}
+  // ---
 
-	public int getCoolness() {
-		return coolness;
-	}
+  public ITEMTYPE getItemDef() {
+    return itemDef;
+  }
 
-	public void setCoolness(int coolness) {
-		this.coolness = coolness;
-	}
+  public void setItemDef(ITEMTYPE itemDef) {
+    this.itemDef = itemDef;
+  }
 
-	public int getNasAttachmentClass() {
-		return nasAttachmentClass;
-	}
+  public ItemCategory getParentCategory() {
+    return parentCategory;
+  }
 
-	public void setNasAttachmentClass(int nasAttachmentClass) {
-		this.nasAttachmentClass = nasAttachmentClass;
-	}
+  public void setParentCategory(ItemCategory aThis) {
+    parentCategory = aThis;
+  }
 
-	// ---
-	
-	public ITEMTYPE getItemDef() {
-		return itemDef;
-	}
+  @Override
+  public String toString() {
+    return "Item{" + "id=" + id + ", name=" + name + ", parentCategory=" + parentCategory.getName() + '}';
+  }
 
-	public void setItemDef(ITEMTYPE itemDef) {
-		this.itemDef = itemDef;
-	}
 
-	public ItemCategory getParentCategory() {
-		return parentCategory;
-	}
-
-	public void setParentCategory(ItemCategory aThis) {
-		parentCategory = aThis;
-	}
-
-	@Override
-	public String toString() {
-		return "Item{" + "id=" + id + ", name=" + name + ", parentCategory=" + parentCategory.getName() + '}';
-	}
-
-	
 }

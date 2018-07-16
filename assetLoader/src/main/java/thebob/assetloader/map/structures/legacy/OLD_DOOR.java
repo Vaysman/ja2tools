@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 the_bob.
@@ -23,26 +23,24 @@
  */
 package thebob.assetloader.map.structures.legacy;
 
-import java.nio.ByteOrder;
 import thebob.assetloader.map.helpers.AutoLoadingMapStruct;
 
 /**
- *
  * @author the_bob
  */
 public class OLD_DOOR extends AutoLoadingMapStruct {
-    
-    public final Signed16 sGridNo = new Signed16();
-    public final Bool fLocked = new Bool(); // is the door locked
-    public final Unsigned8 ubTrapLevel = new Unsigned8(); // difficulty of finding the trap, 0-10
-    public final Unsigned8 ubTrapID = new Unsigned8(); // the trap type (0 is no trap)
-    public final Unsigned8 ubLockID = new Unsigned8(); // the lock (0 is no lock)
-    public final Signed8 bPerceivedLocked = new Signed8(); // The perceived lock value can be different than the fLocked.
-    // Values for this include the fact that we don't know the status of
-    // the door, etc
-    public final Signed8 bPerceivedTrapped = new Signed8(); // See above, but with respect to traps rather than locked status
-    public final Signed8 bLockDamage = new Signed8(); // Damage to the lock
-    
-    Signed8[] bPadding = array(new Signed8[4]); // extra bytes 4
-    
+
+  public final Signed16 sGridNo = new Signed16();
+  public final Bool fLocked = new Bool(); // is the door locked
+  public final Unsigned8 ubTrapLevel = new Unsigned8(); // difficulty of finding the trap, 0-10
+  public final Unsigned8 ubTrapID = new Unsigned8(); // the trap type (0 is no trap)
+  public final Unsigned8 ubLockID = new Unsigned8(); // the lock (0 is no lock)
+  public final Signed8 bPerceivedLocked = new Signed8(); // The perceived lock value can be different than the fLocked.
+  // Values for this include the fact that we don't know the status of
+  // the door, etc
+  public final Signed8 bPerceivedTrapped = new Signed8(); // See above, but with respect to traps rather than locked status
+  public final Signed8 bLockDamage = new Signed8(); // Damage to the lock
+
+  Signed8[] bPadding = array(new Signed8[4]); // extra bytes 4
+
 }

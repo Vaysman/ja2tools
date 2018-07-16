@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 the_bob.
@@ -23,90 +23,91 @@
  */
 package thebob.assetloader.map.wrappers;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import thebob.assetloader.map.MapLoader;
 import thebob.assetloader.map.structures.WORLDITEM;
 import thebob.assetloader.map.structures.legacy.OLD_WORLDITEM;
 import thebob.assetloader.map.structures.legacy.OLD_WORLDITEM_101;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 // holds the worldItem and its contents
 public class WorldItemStack extends MapLoaderWrapperBase {
 
-    WORLDITEM item = new WORLDITEM();
-    ObjectStack stack = new ObjectStack();
+  WORLDITEM item = new WORLDITEM();
+  ObjectStack stack = new ObjectStack();
 
-    protected void load(ByteBuffer source) {
-        float dMajorMapVersion = map.getSettings().dMajorMapVersion;
-        int ubMinorMapVersion = map.getSettings().ubMinorMapVersion;
+  protected void load(ByteBuffer source) {
+    float dMajorMapVersion = map.getSettings().dMajorMapVersion;
+    int ubMinorMapVersion = map.getSettings().ubMinorMapVersion;
 
-        if (dMajorMapVersion >= 6.0 && ubMinorMapVersion > 26) {
-            if (dMajorMapVersion < 7.0) {
-                if (MapLoader.logEverything) {
-                    System.out.println("loader.wrappers.WorldItem.load(): loading <<OLD>> WorldItemData...");
-                }
-
-                OLD_WORLDITEM oldWorldItem = new OLD_WORLDITEM();
-                oldWorldItem.setSource(source);
-
-                if (MapLoader.logEverything) System.out.println("loader.wrappers.WorldItem.load(): " + oldWorldItem);
-
-                item.loadOld(oldWorldItem);
-            } else {
-                if (MapLoader.logEverything) {
-                    System.out.println("loader.wrappers.WorldItem.load(): loading WorldItemData...");
-                }
-                item.setSource(source);
-            }
-
-            // Load the OO OBJECTTYPE
-            if (MapLoader.logEverything) {
-                System.out.println("loader.wrappers.WorldItem.load(): loading ObjectStack...");
-            }
-            stack.loadAsset(map);
-        } else {
-
-            if (MapLoader.logEverything) {
-                System.out.println("loader.wrappers.WorldItem.load(): loading !!VERY OLD!!! WorldItemData...");
-            }
-            // Load the old item into a suitable structure, it's just POD
-            OLD_WORLDITEM_101 oldWorldItem = new OLD_WORLDITEM_101();
-            oldWorldItem.setSource(source);
-
-            if (MapLoader.logEverything) {
-                System.out.println("loader.wrappers.WorldItem.load() oldWorldItem (" + oldWorldItem.size() + "):" + oldWorldItem);
-            }
-
-            item.loadOld(oldWorldItem);
-            stack.loadOld(oldWorldItem.oldObject);
+    if (dMajorMapVersion >= 6.0 && ubMinorMapVersion > 26) {
+      if (dMajorMapVersion < 7.0) {
+        if (MapLoader.logEverything) {
+          System.out.println("loader.wrappers.WorldItem.load(): loading <<OLD>> WorldItemData...");
         }
-    }
 
-    public void saveTo(ByteBuffer outputBuffer) {
-        try {
-            ByteArrayOutputStream itemAsBytes = new ByteArrayOutputStream();
-            item.write(itemAsBytes);
-            
-            if(MapLoader.logFileIO) System.out.println("loader.wrappers.WorldItemStack.saveTo(): save WorldItemStack @"+outputBuffer.position());
-            outputBuffer.put(itemAsBytes.toByteArray());
+        OLD_WORLDITEM oldWorldItem = new OLD_WORLDITEM();
+        oldWorldItem.setSource(source);
 
-            stack.saveTo(outputBuffer);
-        } catch (IOException ex) {
-            Logger.getLogger(WorldItemStack.class.getName()).log(Level.SEVERE, null, ex);
+        if (MapLoader.logEverything) System.out.println("loader.wrappers.WorldItem.load(): " + oldWorldItem);
+
+        item.loadOld(oldWorldItem);
+      } else {
+        if (MapLoader.logEverything) {
+          System.out.println("loader.wrappers.WorldItem.load(): loading WorldItemData...");
         }
-    }
+        item.setSource(source);
+      }
 
-    public WORLDITEM getItem() {
-	return item;
-    }
+      // Load the OO OBJECTTYPE
+      if (MapLoader.logEverything) {
+        System.out.println("loader.wrappers.WorldItem.load(): loading ObjectStack...");
+      }
+      stack.loadAsset(map);
+    } else {
 
-    public ObjectStack getStack() {
-	return stack;
+      if (MapLoader.logEverything) {
+        System.out.println("loader.wrappers.WorldItem.load(): loading !!VERY OLD!!! WorldItemData...");
+      }
+      // Load the old item into a suitable structure, it's just POD
+      OLD_WORLDITEM_101 oldWorldItem = new OLD_WORLDITEM_101();
+      oldWorldItem.setSource(source);
+
+      if (MapLoader.logEverything) {
+        System.out.println("loader.wrappers.WorldItem.load() oldWorldItem (" + oldWorldItem.size() + "):" + oldWorldItem);
+      }
+
+      item.loadOld(oldWorldItem);
+      stack.loadOld(oldWorldItem.oldObject);
     }
-    
-    
-    
+  }
+
+  public void saveTo(ByteBuffer outputBuffer) {
+    try {
+      ByteArrayOutputStream itemAsBytes = new ByteArrayOutputStream();
+      item.write(itemAsBytes);
+
+      if (MapLoader.logFileIO)
+        System.out.println("loader.wrappers.WorldItemStack.saveTo(): save WorldItemStack @" + outputBuffer.position());
+      outputBuffer.put(itemAsBytes.toByteArray());
+
+      stack.saveTo(outputBuffer);
+    } catch (IOException ex) {
+      Logger.getLogger(WorldItemStack.class.getName()).log(Level.SEVERE, null, ex);
+    }
+  }
+
+  public WORLDITEM getItem() {
+    return item;
+  }
+
+  public ObjectStack getStack() {
+    return stack;
+  }
+
+
 }

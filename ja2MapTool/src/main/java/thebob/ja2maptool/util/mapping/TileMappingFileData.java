@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -23,103 +23,101 @@
  */
 package thebob.ja2maptool.util.mapping;
 
+import thebob.ja2maptool.model.TileCategoryMapping;
+
 import java.util.HashMap;
 import java.util.Map;
-import javafx.collections.ObservableList;
-import thebob.ja2maptool.model.TileCategoryMapping;
-import thebob.ja2maptool.model.TileMapping;
 
 /**
- *
  * @author the_bob
  */
 public class TileMappingFileData {
 
-    Map<Integer, TileCategoryMapping> mappings = new HashMap<Integer, TileCategoryMapping>();
-    int sourceTilesetId;
-    int targetTilesetId;
-    int tileCategoryCount;
-    String srcConfDir;
-    String srcConf;
-    String dstConfDir;
-    String dstConf;
+  Map<Integer, TileCategoryMapping> mappings = new HashMap<Integer, TileCategoryMapping>();
+  int sourceTilesetId;
+  int targetTilesetId;
+  int tileCategoryCount;
+  String srcConfDir;
+  String srcConf;
+  String dstConfDir;
+  String dstConf;
 
-    public TileMappingFileData() {
-    }
+  public TileMappingFileData() {
+  }
 
-    public TileMappingFileData(Map<Integer, TileCategoryMapping> mappings, int srcTilesetId, int dstTilesetId, int tileCategoryCount, String srcConfDir, String srcConf, String dstConfDir, String dstConf) {
-	this.mappings = mappings;
-	this.sourceTilesetId = srcTilesetId;
-	this.targetTilesetId = dstTilesetId;
-	this.tileCategoryCount = tileCategoryCount;
-	this.srcConfDir = srcConfDir;
-	this.srcConf = srcConf;
-	this.dstConfDir = dstConfDir;
-	this.dstConf = dstConf;
-    }
+  public TileMappingFileData(Map<Integer, TileCategoryMapping> mappings, int srcTilesetId, int dstTilesetId, int tileCategoryCount, String srcConfDir, String srcConf, String dstConfDir, String dstConf) {
+    this.mappings = mappings;
+    this.sourceTilesetId = srcTilesetId;
+    this.targetTilesetId = dstTilesetId;
+    this.tileCategoryCount = tileCategoryCount;
+    this.srcConfDir = srcConfDir;
+    this.srcConf = srcConf;
+    this.dstConfDir = dstConfDir;
+    this.dstConf = dstConf;
+  }
 
-    public Map<Integer, TileCategoryMapping> getMappingList() {
-	return mappings;
-    }
+  public Map<Integer, TileCategoryMapping> getMappingList() {
+    return mappings;
+  }
 
-    public int getSourceTilesetId() {
-	return sourceTilesetId;
-    }
+  public int getSourceTilesetId() {
+    return sourceTilesetId;
+  }
 
-    public int getTargetTilesetId() {
-	return targetTilesetId;
-    }
+  public void setSourceTilesetId(int sourceTilesetId) {
+    this.sourceTilesetId = sourceTilesetId;
+  }
 
-    public int getTileCategoryCount() {
-	return tileCategoryCount;
-    }
+  public int getTargetTilesetId() {
+    return targetTilesetId;
+  }
 
-    public String getSrcConfDir() {
-	return srcConfDir;
-    }
+  public void setTargetTilesetId(int targetTilesetId) {
+    this.targetTilesetId = targetTilesetId;
+  }
 
-    public String getSrcConf() {
-	return srcConf;
-    }
+  public int getTileCategoryCount() {
+    return tileCategoryCount;
+  }
 
-    public String getDstConfDir() {
-	return dstConfDir;
-    }
+  public void setTileCategoryCount(int tileCategoryCount) {
+    this.tileCategoryCount = tileCategoryCount;
+  }
 
-    public String getDstConf() {
-	return dstConf;
-    }
+  public String getSrcConfDir() {
+    return srcConfDir;
+  }
 
-    public void setMappings(Map<Integer, TileCategoryMapping> mappings) {
-	this.mappings = mappings;
-    }
+  public void setSrcConfDir(String srcConfDir) {
+    this.srcConfDir = srcConfDir;
+  }
 
-    public void setSourceTilesetId(int sourceTilesetId) {
-	this.sourceTilesetId = sourceTilesetId;
-    }
+  public String getSrcConf() {
+    return srcConf;
+  }
 
-    public void setTargetTilesetId(int targetTilesetId) {
-	this.targetTilesetId = targetTilesetId;
-    }
+  public void setSrcConf(String srcConf) {
+    this.srcConf = srcConf;
+  }
 
-    public void setTileCategoryCount(int tileCategoryCount) {
-	this.tileCategoryCount = tileCategoryCount;
-    }
+  public String getDstConfDir() {
+    return dstConfDir;
+  }
 
-    public void setSrcConfDir(String srcConfDir) {
-	this.srcConfDir = srcConfDir;
-    }
+  public void setDstConfDir(String dstConfDir) {
+    this.dstConfDir = dstConfDir;
+  }
 
-    public void setSrcConf(String srcConf) {
-	this.srcConf = srcConf;
-    }
+  public String getDstConf() {
+    return dstConf;
+  }
 
-    public void setDstConfDir(String dstConfDir) {
-	this.dstConfDir = dstConfDir;
-    }
+  public void setDstConf(String dstConf) {
+    this.dstConf = dstConf;
+  }
 
-    public void setDstConf(String dstConf) {
-	this.dstConf = dstConf;
-    }
-    
+  public void setMappings(Map<Integer, TileCategoryMapping> mappings) {
+    this.mappings = mappings;
+  }
+
 }

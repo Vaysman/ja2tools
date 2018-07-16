@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -30,134 +30,134 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import thebob.assetloader.tileset.Tileset;
 import thebob.ja2maptool.scopes.map.MapScope;
-import static thebob.ja2maptool.ui.tabs.convert.ConvertMapTabViewModel.MAP_LOADED;
 import thebob.ja2maptool.util.map.IMapDisplayManager;
 import thebob.ja2maptool.util.map.MapDisplayManager;
 import thebob.ja2maptool.util.map.controller.viewer.base.IMapViewerController;
 
+import static thebob.ja2maptool.ui.tabs.convert.ConvertMapTabViewModel.MAP_LOADED;
+
 /**
- *
  * @author the_bob
  */
 public class MapViewerTabViewModel implements ViewModel {
 
-    public static final String VIEWER_MODE_SET = "VIEWER_MODE_SET";
-    public static final String TOOLBAR_SWITCH = "TOOLBAR_SWITCH";
-    public static final String FOCUS_WINDOW = "FOCUS_WINDOW";
+  public static final String VIEWER_MODE_SET = "VIEWER_MODE_SET";
+  public static final String TOOLBAR_SWITCH = "TOOLBAR_SWITCH";
+  public static final String FOCUS_WINDOW = "FOCUS_WINDOW";
 
-    @InjectScope
-    MapScope mapScope;
+  @InjectScope
+  MapScope mapScope;
 
-    IMapDisplayManager renderer = new MapDisplayManager();
-    IMapViewerController viewer = null;
+  IMapDisplayManager renderer = new MapDisplayManager();
+  IMapViewerController viewer = null;
 
-    StringProperty mapNameProperty = new SimpleStringProperty();
-	private BooleanProperty[] displayButtons;
+  StringProperty mapNameProperty = new SimpleStringProperty();
+  private BooleanProperty[] displayButtons;
 
-	public void shutdownRenderer() {
-        renderer.shutdown();
+  public void shutdownRenderer() {
+    renderer.shutdown();
+  }
+
+  public BooleanProperty[] getDisplayButtons() {
+    return displayButtons;
+  }
+
+  public void setDisplayButtons(BooleanProperty[] displayButtons) {
+    this.displayButtons = displayButtons;
+    renderer.setMapDisplayButtons(displayButtons);
+  }
+
+  public void initialize() {
+    if (viewer == null) {
+      setViewerMode(MapViewerMode.Browser);
+    }
+    mapScope.subscribe(MapScope.MAP_UPDATED, (key, values) -> {
+      updateRenderer(true);
+    });
+  }
+
+  public void updateRenderer(boolean centerMap) {
+    if (mapScope == null || mapScope.getMapData() == null) {
+      return;
     }
 
-    public void setDisplayButtons(BooleanProperty[] displayButtons) {
-        this.displayButtons = displayButtons;
-		renderer.setMapDisplayButtons(displayButtons);
+    mapNameProperty.set(mapScope.getMapName());
+    int mapTilesetId = mapScope.getTilesetId();
+    Tileset tileset = mapScope.getTileset();
+
+    if (tileset == null) {
+      System.err.println("Original tileset could not be loaded! (" + mapTilesetId + ")");
+      tileset = mapScope.getMapAssets().getTilesets().getTileset(0);
     }
 
-    public BooleanProperty[] getDisplayButtons() {
-        return displayButtons;
+    int oldX = viewer.getWindowOffsetX();
+    int oldY = viewer.getWindowOffsetY();
+
+    renderer.setMapTileset(tileset);
+    renderer.loadMap(mapScope.getMapData());
+
+    if (!centerMap) {
+      viewer.setWindowOffsetX(oldX);
+      viewer.setWindowOffsetY(oldY);
     }
 
-    public enum MapViewerMode {
-	Browser,
-	Editor
+    // viewModel.scrollPreview(0, 0); // <- renderer should update itself
+    publish(MAP_LOADED);
+  }
+
+  public IMapDisplayManager getRenderer() {
+    return renderer;
+  }
+
+  public MapScope getMapScope() {
+    return mapScope;
+  }
+
+  public void setMapScope(MapScope mapScope) {
+    this.mapScope = mapScope;
+  }
+
+  void scrollPreview(int xDelta, int yDelta) {
+    viewer.moveWindow(xDelta, yDelta);
+  }
+
+  public StringProperty getMapNameProperty() {
+    return mapNameProperty;
+  }
+
+  void setViewerButtons(BooleanProperty[] viewerButtons) {
+    renderer.setMapLayerButtons(viewerButtons);
+  }
+
+  public IMapViewerController getViewer() {
+    return viewer;
+  }
+
+  public void setViewerMode(MapViewerMode mode) {
+    switch (mode) {
+      case Browser:
+        viewer = renderer.connectBasicViewer(this);
+        break;
+      case Editor:
+        viewer = renderer.connectEditorViewer(this);
+        break;
+      default:
+        throw new AssertionError(mode.name());
     }
+    publish(VIEWER_MODE_SET, mode);
+  }
 
-    public void initialize() {
-	if (viewer == null) {
-	    setViewerMode(MapViewerMode.Browser);
-	}
-	mapScope.subscribe(MapScope.MAP_UPDATED, (key, values) -> {
-	    updateRenderer(true);
-	});
-    }
+  public void focusWindow() {
+    publish(FOCUS_WINDOW);
+  }
 
-    public void updateRenderer(boolean centerMap) {
-	if (mapScope == null || mapScope.getMapData() == null) {
-	    return;
-	}
+  public void toggleToolbars() {
+    publish(TOOLBAR_SWITCH);
+  }
 
-	mapNameProperty.set(mapScope.getMapName());
-	int mapTilesetId = mapScope.getTilesetId();
-	Tileset tileset = mapScope.getTileset();
+  public enum MapViewerMode {
+    Browser,
+    Editor
+  }
 
-	if (tileset == null) {
-	    System.err.println("Original tileset could not be loaded! (" + mapTilesetId + ")");
-	    tileset = mapScope.getMapAssets().getTilesets().getTileset(0);
-	}
-
-	int oldX = viewer.getWindowOffsetX();
-	int oldY = viewer.getWindowOffsetY();
-
-	renderer.setMapTileset(tileset);
-	renderer.loadMap(mapScope.getMapData());
-
-	if (!centerMap) {
-	    viewer.setWindowOffsetX(oldX);
-	    viewer.setWindowOffsetY(oldY);
-	}
-
-	// viewModel.scrollPreview(0, 0); // <- renderer should update itself
-	publish(MAP_LOADED);
-    }
-
-    public IMapDisplayManager getRenderer() {
-	return renderer;
-    }
-
-    public MapScope getMapScope() {
-	return mapScope;
-    }
-
-    public void setMapScope(MapScope mapScope) {
-	this.mapScope = mapScope;
-    }
-
-    void scrollPreview(int xDelta, int yDelta) {
-	viewer.moveWindow(xDelta, yDelta);
-    }
-
-    public StringProperty getMapNameProperty() {
-	return mapNameProperty;
-    }
-
-    void setViewerButtons(BooleanProperty[] viewerButtons) {
-	renderer.setMapLayerButtons(viewerButtons);
-    }
-
-    public IMapViewerController getViewer() {
-	return viewer;
-    }
-
-    public void setViewerMode(MapViewerMode mode) {
-	switch (mode) {
-	    case Browser:
-		viewer = renderer.connectBasicViewer(this);
-		break;
-	    case Editor:
-		viewer = renderer.connectEditorViewer(this);
-		break;
-	    default:
-		throw new AssertionError(mode.name());
-	}
-	publish(VIEWER_MODE_SET, mode);
-    }
-
-    public void focusWindow() {
-        publish(FOCUS_WINDOW);
-    }
-    
-    public void toggleToolbars() {
-	publish(TOOLBAR_SWITCH);
-    }
-    
 }

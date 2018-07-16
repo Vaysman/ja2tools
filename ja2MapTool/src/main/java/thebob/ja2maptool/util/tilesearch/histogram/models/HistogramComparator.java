@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -24,9 +24,8 @@
 package thebob.ja2maptool.util.tilesearch.histogram.models;
 
 /**
- *
  * @author the_bob
  */
 public interface HistogramComparator {
-    double compareHistograms(double[][] h1, double[][]h2);
+  double compareHistograms(double[][] h1, double[][] h2);
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -24,9 +24,10 @@
 package thebob.ja2maptool.util.map.component.cursor.cursors;
 
 import thebob.assetloader.map.core.components.IndexedElement;
+import thebob.ja2maptool.util.map.component.cursor.cursors.base.CursorControllerBase;
+
 import static thebob.ja2maptool.util.map.MapUtils.screenXYtoCellX;
 import static thebob.ja2maptool.util.map.MapUtils.screenXYtoCellY;
-import thebob.ja2maptool.util.map.component.cursor.cursors.base.CursorControllerBase;
 import static thebob.ja2maptool.util.map.layers.cursor.CursorLayer.LAYER_CURSOR;
 
 /**
@@ -38,32 +39,32 @@ import static thebob.ja2maptool.util.map.layers.cursor.CursorLayer.LAYER_CURSOR;
  */
 public class BasicCursorController extends CursorControllerBase {
 
-    private static final IndexedElement STD_CURSOR = new IndexedElement(131, 1);
-    private static final IndexedElement VIEW_EDGE_TILES_CURSOR = new IndexedElement(131, 8);
+  private static final IndexedElement STD_CURSOR = new IndexedElement(131, 1);
+  private static final IndexedElement VIEW_EDGE_TILES_CURSOR = new IndexedElement(131, 8);
 
-    private void updateCorners() {
-        double scaledCanvasX = getRenderer().getCanvasX() / getRenderer().getScale();
-        double scaledCanvasY = getRenderer().getCanvasY() / getRenderer().getScale();
+  private void updateCorners() {
+    double scaledCanvasX = getRenderer().getCanvasX() / getRenderer().getScale();
+    double scaledCanvasY = getRenderer().getCanvasY() / getRenderer().getScale();
 
-        int width = (int) (scaledCanvasX / 10);
-        int height = (int) (scaledCanvasY / 10);
+    int width = (int) (scaledCanvasX / 10);
+    int height = (int) (scaledCanvasY / 10);
 
-        int sX1 = getWindowScreenX() + 4;
-        int sY1 = getWindowScreenY() + 2;
-        int sX2 = sX1 + width - 3;
-        int sY2 = sY1 + height - 1;
-        
-        getCursors().placeCursor(LAYER_CURSOR, screenXYtoCellX(sX1, sY1), screenXYtoCellY(sX1, sY1), VIEW_EDGE_TILES_CURSOR);
-        getCursors().placeCursor(LAYER_CURSOR, screenXYtoCellX(sX1, sY2), screenXYtoCellY(sX1, sY2), VIEW_EDGE_TILES_CURSOR);
-        getCursors().placeCursor(LAYER_CURSOR, screenXYtoCellX(sX2, sY2), screenXYtoCellY(sX2, sY2), VIEW_EDGE_TILES_CURSOR);
-        getCursors().placeCursor(LAYER_CURSOR, screenXYtoCellX(sX2, sY1), screenXYtoCellY(sX2, sY1), VIEW_EDGE_TILES_CURSOR);
-    }
+    int sX1 = getWindowScreenX() + 4;
+    int sY1 = getWindowScreenY() + 2;
+    int sX2 = sX1 + width - 3;
+    int sY2 = sY1 + height - 1;
 
-    @Override
-    public void updateCursor() {
-        getCursors().clearLayer(LAYER_CURSOR);
-        getCursors().placeCursor(LAYER_CURSOR, getMouseCell(), STD_CURSOR);
-        updateCorners();
-    }
+    getCursors().placeCursor(LAYER_CURSOR, screenXYtoCellX(sX1, sY1), screenXYtoCellY(sX1, sY1), VIEW_EDGE_TILES_CURSOR);
+    getCursors().placeCursor(LAYER_CURSOR, screenXYtoCellX(sX1, sY2), screenXYtoCellY(sX1, sY2), VIEW_EDGE_TILES_CURSOR);
+    getCursors().placeCursor(LAYER_CURSOR, screenXYtoCellX(sX2, sY2), screenXYtoCellY(sX2, sY2), VIEW_EDGE_TILES_CURSOR);
+    getCursors().placeCursor(LAYER_CURSOR, screenXYtoCellX(sX2, sY1), screenXYtoCellY(sX2, sY1), VIEW_EDGE_TILES_CURSOR);
+  }
+
+  @Override
+  public void updateCursor() {
+    getCursors().clearLayer(LAYER_CURSOR);
+    getCursors().placeCursor(LAYER_CURSOR, getMouseCell(), STD_CURSOR);
+    updateCorners();
+  }
 
 }

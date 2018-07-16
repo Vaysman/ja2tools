@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -24,31 +24,31 @@
 package thebob.ja2maptool.scopes.view;
 
 import de.saxsys.mvvmfx.Scope;
+
 import java.nio.ByteBuffer;
 
 /**
- *
  * @author the_bob
  */
 public class StiViewerScope implements Scope {
-    String filePath = null;
-    ByteBuffer fileBytes = null;
+  String filePath = null;
+  ByteBuffer fileBytes = null;
 
-    public String getFilePath() {
-	return filePath;
-    }
+  public String getFilePath() {
+    return filePath;
+  }
 
-    public void setFilePath(String filePath) {
-	this.filePath = filePath;
-    }
+  public void setFilePath(String filePath) {
+    this.filePath = filePath;
+  }
 
-    public ByteBuffer getFileBytes() {
-	return fileBytes;
-    }
+  public ByteBuffer getFileBytes() {
+    return fileBytes;
+  }
 
-    public void setFileBytes(ByteBuffer fileBytes) {
-	this.fileBytes = fileBytes;
-    }
-    
-    
+  public void setFileBytes(ByteBuffer fileBytes) {
+    this.fileBytes = fileBytes;
+  }
+
+
 }

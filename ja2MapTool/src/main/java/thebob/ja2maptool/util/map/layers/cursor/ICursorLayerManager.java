@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -34,10 +34,10 @@ import thebob.ja2maptool.util.map.layers.base.TileLayer;
  */
 public interface ICursorLayerManager extends ICursorLayerControls, ITileLayerGroup {
 
-    MapCursor getCursor(int x, int y, IndexedElement cursor);
+  MapCursor getCursor(int x, int y, IndexedElement cursor);
 
-    MapCursor getCursor(double x, double y, IndexedElement cursor);
+  MapCursor getCursor(double x, double y, IndexedElement cursor);
 
-    TileLayer getLayer(int n);
+  TileLayer getLayer(int n);
 
 }

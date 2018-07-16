@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 the_bob.
@@ -23,43 +23,43 @@
  */
 package thebob.assetloader.map.structures.legacy;
 
-import java.nio.ByteOrder;
 import javolution.io.Struct;
-import thebob.assetloader.map.helpers.GridPos;
 import thebob.assetloader.map.helpers.AutoLoadingMapStruct;
+import thebob.assetloader.map.helpers.GridPos;
+
+import java.nio.ByteOrder;
 
 /**
- *
  * @author the_bob
  */
-public class OLD_WORLDITEM  extends AutoLoadingMapStruct {
+public class OLD_WORLDITEM extends AutoLoadingMapStruct {
 
-    public final Struct.Bool fExists = new Struct.Bool();
-    public final Struct.Signed16 sGridNo = new Struct.Signed16();
-    public final Struct.Signed8 ubLevel = new Struct.Signed8();
-    public final Struct.Unsigned16 usFlags = new Struct.Unsigned16();
-    public final Struct.Signed8 bRenderZHeightAboveLevel = new Struct.Signed8();
-    public final Struct.Signed8 bVisible = new Struct.Signed8();
-    public final Struct.Unsigned8 ubNonExistChance = new Struct.Unsigned8();
-    public final Struct.Signed8 soldierID = new Struct.Signed8();
+  public final Struct.Bool fExists = new Struct.Bool();
+  public final Struct.Signed16 sGridNo = new Struct.Signed16();
+  public final Struct.Signed8 ubLevel = new Struct.Signed8();
+  public final Struct.Unsigned16 usFlags = new Struct.Unsigned16();
+  public final Struct.Signed8 bRenderZHeightAboveLevel = new Struct.Signed8();
+  public final Struct.Signed8 bVisible = new Struct.Signed8();
+  public final Struct.Unsigned8 ubNonExistChance = new Struct.Unsigned8();
+  public final Struct.Signed8 soldierID = new Struct.Signed8();
 
-    @Override
-    public ByteOrder byteOrder() {
-        return ByteOrder.LITTLE_ENDIAN;
-    }  
+  @Override
+  public ByteOrder byteOrder() {
+    return ByteOrder.LITTLE_ENDIAN;
+  }
 
-    @Override
-    public String toString() {        
-        return  "OLD_WORLDITEM:\n"
-                + "fExists: " + fExists.get() + " @" + fExists.offset() + "\n\t"
-                + "sGridNo: " + new GridPos(sGridNo.get()) + " @" + sGridNo.offset() + "\n\t"
-                + "ubLevel: " + ubLevel.get() + " @" + ubLevel.offset() + "\n\t"
-                + "usFlags: " + usFlags.get() + " @" + usFlags.offset() + "\n\t"
-                + "bRenderZHeightAboveLevel: " + bRenderZHeightAboveLevel.get() + " @" + bRenderZHeightAboveLevel.offset() + "\n\t"
-                + "bVisible: " + bVisible.get() + " @" + bVisible.offset() + "\n\t"
-                + "ubNonExistChance: " + ubNonExistChance.get() + " @" + ubNonExistChance.offset() + "\n\t"
-                + "soldierID: " + soldierID.get() + " @" + soldierID.offset() + "\n-----------------------------\n\t"
-                + super.toString();
-    }
-    
+  @Override
+  public String toString() {
+    return "OLD_WORLDITEM:\n"
+        + "fExists: " + fExists.get() + " @" + fExists.offset() + "\n\t"
+        + "sGridNo: " + new GridPos(sGridNo.get()) + " @" + sGridNo.offset() + "\n\t"
+        + "ubLevel: " + ubLevel.get() + " @" + ubLevel.offset() + "\n\t"
+        + "usFlags: " + usFlags.get() + " @" + usFlags.offset() + "\n\t"
+        + "bRenderZHeightAboveLevel: " + bRenderZHeightAboveLevel.get() + " @" + bRenderZHeightAboveLevel.offset() + "\n\t"
+        + "bVisible: " + bVisible.get() + " @" + bVisible.offset() + "\n\t"
+        + "ubNonExistChance: " + ubNonExistChance.get() + " @" + ubNonExistChance.offset() + "\n\t"
+        + "soldierID: " + soldierID.get() + " @" + soldierID.offset() + "\n-----------------------------\n\t"
+        + super.toString();
+  }
+
 }

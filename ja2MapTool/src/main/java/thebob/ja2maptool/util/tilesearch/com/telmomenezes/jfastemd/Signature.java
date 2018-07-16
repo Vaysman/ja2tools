@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -26,34 +26,33 @@ package thebob.ja2maptool.util.tilesearch.com.telmomenezes.jfastemd;
 
 /**
  * @author Telmo Menezes (telmo@telmomenezes.com)
- *
  */
 public class Signature {
-    private int numberOfFeatures;
-    private Feature[] features;
-    private double[] weights;
-    
-    public int getNumberOfFeatures() {
-        return numberOfFeatures;
-    }
-    
-    public void setNumberOfFeatures(int numberOfFeatures) {
-        this.numberOfFeatures = numberOfFeatures;
-    }
+  private int numberOfFeatures;
+  private Feature[] features;
+  private double[] weights;
 
-    public Feature[] getFeatures() {
-        return features;
-    }
+  public int getNumberOfFeatures() {
+    return numberOfFeatures;
+  }
 
-    public void setFeatures(Feature[] features) {
-        this.features = features;
-    }
+  public void setNumberOfFeatures(int numberOfFeatures) {
+    this.numberOfFeatures = numberOfFeatures;
+  }
 
-    public double[] getWeights() {
-        return weights;
-    }
+  public Feature[] getFeatures() {
+    return features;
+  }
 
-    public void setWeights(double[] weights) {
-        this.weights = weights;
-    }
+  public void setFeatures(Feature[] features) {
+    this.features = features;
+  }
+
+  public double[] getWeights() {
+    return weights;
+  }
+
+  public void setWeights(double[] weights) {
+    this.weights = weights;
+  }
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -30,76 +30,75 @@ import javafx.beans.property.SimpleDoubleProperty;
 import thebob.assetloader.map.core.components.IndexedElement;
 
 /**
- *
  * @author the_bob
  */
 public class TileLayer {
 
-    BooleanProperty enabled = new SimpleBooleanProperty(true);
-    DoubleProperty opacity = new SimpleDoubleProperty(1.0d);
+  BooleanProperty enabled = new SimpleBooleanProperty(true);
+  DoubleProperty opacity = new SimpleDoubleProperty(1.0d);
 
-    int displayOffsetX;
-    int displayOffsetY;
+  int displayOffsetX;
+  int displayOffsetY;
 
-    IndexedElement tiles[][];
+  IndexedElement tiles[][];
 
-    public TileLayer(boolean displayLayer, int displayOffsetX, int displayOffsetY, IndexedElement[][] tiles) {
-        this.enabled.set(displayLayer);
-        this.displayOffsetX = displayOffsetX;
-        this.displayOffsetY = displayOffsetY;
-        this.tiles = tiles;
-    }
+  public TileLayer(boolean displayLayer, int displayOffsetX, int displayOffsetY, IndexedElement[][] tiles) {
+    this.enabled.set(displayLayer);
+    this.displayOffsetX = displayOffsetX;
+    this.displayOffsetY = displayOffsetY;
+    this.tiles = tiles;
+  }
 
-    public BooleanProperty getEnabledProperty() {
-        return enabled;
-    }
+  public BooleanProperty getEnabledProperty() {
+    return enabled;
+  }
 
-    public boolean isEnabled() {
-        return enabled.get();
-    }
+  public boolean isEnabled() {
+    return enabled.get();
+  }
 
-    public void setEnabled(boolean enabled) {
-        this.enabled.set(enabled);
-    }
+  public void setEnabled(boolean enabled) {
+    this.enabled.set(enabled);
+  }
 
-    public int getDisplayOffsetX() {
-        return displayOffsetX;
-    }
+  public int getDisplayOffsetX() {
+    return displayOffsetX;
+  }
 
-    public void setDisplayOffsetX(int displayOffsetX) {
-        this.displayOffsetX = displayOffsetX;
-    }
+  public void setDisplayOffsetX(int displayOffsetX) {
+    this.displayOffsetX = displayOffsetX;
+  }
 
-    public int getDisplayOffsetY() {
-        return displayOffsetY;
-    }
+  public int getDisplayOffsetY() {
+    return displayOffsetY;
+  }
 
-    public void setDisplayOffsetY(int displayOffsetY) {
-        this.displayOffsetY = displayOffsetY;
-    }
+  public void setDisplayOffsetY(int displayOffsetY) {
+    this.displayOffsetY = displayOffsetY;
+  }
 
-    public IndexedElement[][] getTiles() {
-        return tiles;
-    }
+  public IndexedElement[][] getTiles() {
+    return tiles;
+  }
 
-    public void setTiles(IndexedElement[][] tiles) {
-        this.tiles = tiles;
-    }
+  public void setTiles(IndexedElement[][] tiles) {
+    this.tiles = tiles;
+  }
 
-    public void clearTiles() {
-        this.tiles = new IndexedElement[tiles.length][0];
-    }
+  public void clearTiles() {
+    this.tiles = new IndexedElement[tiles.length][0];
+  }
 
-    public DoubleProperty getOpacityProprty() {
-        return opacity;
-    }
+  public DoubleProperty getOpacityProprty() {
+    return opacity;
+  }
 
-    public double getOpacity() {
-        return opacity.get();
-    }
+  public double getOpacity() {
+    return opacity.get();
+  }
 
-    public void setOpacity(double opacity) {
-        this.opacity.set(opacity);
-    }
+  public void setOpacity(double opacity) {
+    this.opacity.set(opacity);
+  }
 
 }

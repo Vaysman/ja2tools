@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -34,39 +34,42 @@ import thebob.ja2maptool.util.map.layers.cursor.CursorLayer.CursorFillMode;
  */
 public interface ICursorLayerControls {
 
-    void clearLayer(int layer);
+  void clearLayer(int layer);
 
-    void clearLayers();
+  void clearLayers();
 
-    void placeCursor(int layer, int cell, IndexedElement cursor);
+  void placeCursor(int layer, int cell, IndexedElement cursor);
 
-    void placeCursor(int layer, int cursorX, int cursorY, IndexedElement cursor);
+  void placeCursor(int layer, int cursorX, int cursorY, IndexedElement cursor);
 
-    /**
-     * Draws a cursor spanning a rectangular area from start(x,y) to end(x,y), following map grid lines (diagonal)
-     * @param layer
-     * @param startX
-     * @param startY
-     * @param endX
-     * @param endY
-     * @param cursor
-     * @param mode 
-     */
-    void placeCursorRect(int layer, int startX, int startY, int endX, int endY, IndexedElement cursor, CursorFillMode mode);
-    
-    /**
-     * Draws a cursor spanning a rectangular area centered at cursor(x,y)
-     * @param layer
-     * @param cursorX
-     * @param cursorY
-     * @param cursorWidth
-     * @param cursorHeight
-     * @param cursor
-     * @param mode 
-     */
-    void placeCursorCenterRect(int layer, int cursorX, int cursorY, int cursorWidth, int cursorHeight, IndexedElement cursor, CursorFillMode mode);
+  /**
+   * Draws a cursor spanning a rectangular area from start(x,y) to end(x,y), following map grid lines (diagonal)
+   *
+   * @param layer
+   * @param startX
+   * @param startY
+   * @param endX
+   * @param endY
+   * @param cursor
+   * @param mode
+   */
+  void placeCursorRect(int layer, int startX, int startY, int endX, int endY, IndexedElement cursor, CursorFillMode mode);
 
-    int[] getCellNumbersForRadius(int cursorX, int cursorY, int cursorWidth, int cursorHeight, CursorFillMode mode);
-    int[] getCellNumbersForRect(int startX, int startY, int endX, int endY, CursorFillMode mode);
+  /**
+   * Draws a cursor spanning a rectangular area centered at cursor(x,y)
+   *
+   * @param layer
+   * @param cursorX
+   * @param cursorY
+   * @param cursorWidth
+   * @param cursorHeight
+   * @param cursor
+   * @param mode
+   */
+  void placeCursorCenterRect(int layer, int cursorX, int cursorY, int cursorWidth, int cursorHeight, IndexedElement cursor, CursorFillMode mode);
+
+  int[] getCellNumbersForRadius(int cursorX, int cursorY, int cursorWidth, int cursorHeight, CursorFillMode mode);
+
+  int[] getCellNumbersForRect(int startX, int startY, int endX, int endY, CursorFillMode mode);
 
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 starcatter.
@@ -28,11 +28,9 @@ package thebob.ja2maptool.ui.tabs.vfs;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
-import java.io.File;
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -43,6 +41,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.DirectoryChooser;
 import org.controlsfx.control.CheckTreeView;
 
+import java.io.File;
+import java.net.URL;
+import java.util.ResourceBundle;
+
 /**
  * FXML Controller class
  *
@@ -50,53 +52,52 @@ import org.controlsfx.control.CheckTreeView;
  */
 public class VfsSetupTabView implements FxmlView<VfsSetupTabViewModel>, Initializable {
 
-    @FXML
-    private Button config_add_dir;
+  @FXML
+  private Button config_add_dir;
 
-    @FXML
-    private Button config_load;
+  @FXML
+  private Button config_load;
 
-    @FXML
-    private ProgressBar progress;
+  @FXML
+  private ProgressBar progress;
 
-    @FXML
-    private CheckTreeView<String> config_main;
+  @FXML
+  private CheckTreeView<String> config_main;
+  // MVVMFX inject
+  @InjectViewModel
+  private VfsSetupTabViewModel viewModel;
 
-    @FXML
-    void config_add_dir_click(MouseEvent event) {
-	DirectoryChooser chooser = new DirectoryChooser();
-	chooser.setTitle("Select directory containing VFS configs");
-	File defaultDirectory = new File(".");
-	chooser.setInitialDirectory(defaultDirectory);
-	File selectedDirectory = chooser.showDialog(config_add_dir.getScene().getWindow());
-	viewModel.addConfig(selectedDirectory.getPath());
-    }
+  @FXML
+  void config_add_dir_click(MouseEvent event) {
+    DirectoryChooser chooser = new DirectoryChooser();
+    chooser.setTitle("Select directory containing VFS configs");
+    File defaultDirectory = new File(".");
+    chooser.setInitialDirectory(defaultDirectory);
+    File selectedDirectory = chooser.showDialog(config_add_dir.getScene().getWindow());
+    viewModel.addConfig(selectedDirectory.getPath());
+  }
 
-    @FXML
-    void config_load_click(MouseEvent event) {
-	//viewModel.loadSelectedConfigs();
-	viewModel.getLoadSelectedConfigsCommand().execute();
-    }
+  @FXML
+  void config_load_click(MouseEvent event) {
+    //viewModel.loadSelectedConfigs();
+    viewModel.getLoadSelectedConfigsCommand().execute();
+  }
 
-    // MVVMFX inject
-    @InjectViewModel
-    private VfsSetupTabViewModel viewModel;
+  @Override
+  public void initialize(URL location, ResourceBundle resources) {
+    config_main.setRoot(viewModel.getConfigTreeRoot());
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-	config_main.setRoot(viewModel.getConfigTreeRoot());
+    config_load.disableProperty().bind(viewModel.getLoadSelectedConfigsCommand().executableProperty().not());
+    progress.visibleProperty().bind(viewModel.getLoadSelectedConfigsCommand().runningProperty());
+    //progress.progressProperty().bind(viewModel.getLoadSelectedConfigsCommand().progressProperty());
+    progress.setProgress(ProgressBar.INDETERMINATE_PROGRESS);
 
-	config_load.disableProperty().bind(viewModel.getLoadSelectedConfigsCommand().executableProperty().not());
-	progress.visibleProperty().bind(viewModel.getLoadSelectedConfigsCommand().runningProperty());
-	//progress.progressProperty().bind(viewModel.getLoadSelectedConfigsCommand().progressProperty());
-	progress.setProgress(ProgressBar.INDETERMINATE_PROGRESS);
-	
-	config_main.getCheckModel().getCheckedItems().addListener( new ListChangeListener<TreeItem<String>>(){
-	    @Override
-	    public void onChanged(ListChangeListener.Change<? extends TreeItem<String>> c) {
-		viewModel.configSelected( config_main.getCheckModel().getCheckedItems().size() > 0 );
-	    }	    
-	});
-    }
+    config_main.getCheckModel().getCheckedItems().addListener(new ListChangeListener<TreeItem<String>>() {
+      @Override
+      public void onChanged(ListChangeListener.Change<? extends TreeItem<String>> c) {
+        viewModel.configSelected(config_main.getCheckModel().getCheckedItems().size() > 0);
+      }
+    });
+  }
 
 }
