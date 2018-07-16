@@ -61,9 +61,9 @@ public interface ITileRendererManager extends ITileRendererControls, Observer {
 
   void removeRenderLayer(int index);
 
-  public int getCanvasX();
+  int getCanvasX();
 
-  public int getCanvasY();
+  int getCanvasY();
 
   // -- view window manipulation methods
 

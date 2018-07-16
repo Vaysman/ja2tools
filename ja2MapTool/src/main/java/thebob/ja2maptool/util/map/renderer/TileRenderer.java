@@ -23,7 +23,9 @@
  */
 package thebob.ja2maptool.util.map.renderer;
 
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import thebob.assetloader.map.core.components.IndexedElement;
 import thebob.assetloader.tileset.Tile;
@@ -40,6 +42,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
+
 
 /**
  * @author the_bob
