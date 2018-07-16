@@ -18,7 +18,6 @@
       <plugin>
         <groupId>org.jvnet.jaxb2.maven2</groupId>
         <artifactId>maven-jaxb2-plugin</artifactId>
-        <version>0.13.1</version>
         <executions>
           <execution>
             <id>xsd-generate</id>
@@ -50,7 +49,6 @@
           <bindingIncludes>
             <bindingInclude>**/*.xjb</bindingInclude>
           </bindingIncludes>
-          <!--<strict>true</strict>-->
           <verbose>true</verbose>
           <extension>true</extension>
           <removeOldOutput>true</removeOldOutput>
